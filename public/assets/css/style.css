@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+:root {
+	--text-color: #0b0a0a;
+
+	--very-small-size: 400 0.833rem/1.5 "Roboto", sans-serif;
+	--small-size: 400 1rem/1.5 "Roboto", sans-serif;
+	--link-size: 500 1.2rem/1.5 "Roboto", sans-serif;
+	--medium-size: 400 1.2rem/1.5 "Roboto", sans-serif;
+	--large-size: 500 1.44rem/1.5 "Roboto", sans-serif;
+	--very-large-size: 500 1.728rem/1.75 "Roboto", sans-serif;
+	--very-very-large-size: 700 2.074rem/1.75 "Roboto", sans-serif;
+}
+
+html {
+	font-size: 112.5%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+	color: var(--text-color);
+}
+
+h1 {
+	font: var(--very-very-large-size);
+}
+
+h2 {
+	font: var(--very-large-size);
+}
+
+h3 {
+	font: var(--large-size);
+}
+
+h4 {
+	font: var(--medium-size);
+}
+
+p {
+	font: var(--small-size);
+}
