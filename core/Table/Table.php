@@ -7,13 +7,17 @@ use App;
 class Table
 {
     protected $table;
-    protected $join;
     protected $db;
 
-    public function __construct($join = null)
-    {
+    public function __construct(
+        protected $join = []
+    ) {
         $this->db = App::getInstance()->getDb();
-        $this->join = $join;
+        if (!empty($join)) {
+            foreach ($join as $cle => $value) {
+                $this->setJoin($cle);
+            }
+        }
     }
 
     private function getQuestionMarks(array $array)
@@ -61,12 +65,12 @@ class Table
 
     public function findAll()
     {
-        return $this->db->query("SELECT * FROM " . $this->table . "", get_class($this), $this->join);
+        return $this->db->query("SELECT * FROM " . $this->table . "", get_class($this), [$this->join]);
     }
 
     public function findAllBy($attributes = null)
     {
-        return $this->db->prepare("SELECT * FROM " . $this->table . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this), $this->join);
+        return $this->db->prepare("SELECT * FROM " . $this->table . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this), $this->join, true);
     }
 
     public function findOne()
@@ -76,7 +80,7 @@ class Table
 
     public function findOneBy($attributes = null)
     {
-        return $this->db->prepare("SELECT * FROM " . $this->table . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this), true);
+        return $this->db->prepare("SELECT * FROM " . $this->table . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this), $this->join, true);
     }
 
     public function update($structure, $attributes = null)
@@ -99,11 +103,30 @@ class Table
         return $this->db->lastInsertId();
     }
 
+    /**
+     * Get the value of join
+     */
+    public function getJoin($table)
+    {
+        return $this->join[$table];
+    }
+
+    /**
+     * Set the value of join
+     *
+     * @return  self
+     */
+    public function setJoin($join)
+    {
+        $Table = new $join();
+        $this->join[$join] = $Table;
+        return $this;
+    }
+
     public function join($table)
     {
-        $this->join = new $table();
-        $Table = new $table();
-        $this->table = $this->table . " INNER JOIN " . $Table->table . "";
+        $this->setJoin($table);
+        $this->table = $this->table . " INNER JOIN " . $this->getJoin($table)->table . "";
         return $this;
     }
 
@@ -123,26 +146,6 @@ class Table
 
     public function __set($name, $value)
     {
-        $this->getJoinValues([$this->join], $name, $value);
-    }
-
-    /**
-     * Get the value of join
-     */
-    public function getJoin()
-    {
-        return $this->join;
-    }
-
-    /**
-     * Set the value of join
-     *
-     * @return  self
-     */
-    public function setJoin($join)
-    {
-        $this->join = $join;
-
-        return $this;
+        $this->getJoinValues($this->join, $name, $value);
     }
 }

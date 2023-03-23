@@ -44,3 +44,8 @@ h4 {
 p {
 	font: var(--small-size);
 }
+
+input,
+textarea {
+	border: 2px solid #000;
+}

@@ -23,10 +23,10 @@ class Login
             if (password_verify($password, $user->getPassword())) {
                 $_SESSION['admin'] = $user->getId();
             } else {
-                $error->danger("Incorrect Password");
+                // $error->danger("Incorrect Password");
             }
         } else {
-            $error->danger("Unknown user");
+            // $error->danger("Unknown user");
         }
     }
 
@@ -36,22 +36,22 @@ class Login
         $emailTaken = $this->db->findAllBy(['email' => $email]);
 
         if ($emailTaken) {
-            $error->danger("Email already taken");
+            // $error->danger("Email already taken");
         } else {
             if (7 > strlen($password)) { //check if string meets 8 or more characters
-                $error->danger("Password is short");
+                // $error->danger("Password is short");
             }
             if (strcspn($password, '0123456789') == strlen($password)) { //check if string has numbers
-                $error->danger("No number");
+                // $error->danger("No number");
             }
             if (strcspn($password, 'abcdefghijklmnopqrstuvwxyz') == strlen($password)) { //check if string has small letters
-                $error->danger("No small letter");
+                // $error->danger("No small letter");
             }
             if (strcspn($password, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') == strlen($password)) { //check if string has capital letters
-                $error->danger("No capital letter");
+                // $error->danger("No capital letter");
             }
             if (strcspn($password, '{}[]|()_\/?§!$£') == strlen($password)) {
-                $error->danger("No special character");
+                // $error->danger("No special character");
             }
         }
 

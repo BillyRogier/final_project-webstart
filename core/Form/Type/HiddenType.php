@@ -4,8 +4,13 @@ namespace Core\Form\Type;
 
 class HiddenType extends Type
 {
-    public function getType()
+    public function label($name)
     {
-        return 'hidden';
+        return "";
+    }
+
+    public function getTag($name, $options)
+    {
+        return parent::input($name, 'hidden', $options);
     }
 }

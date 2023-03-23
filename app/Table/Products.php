@@ -5,9 +5,6 @@ namespace App\Table;
 use Core\Table\Table;
 use Core\Table\Properties;
 
-// add construct for fetchClass add array with join class
-// query add $arg for class how will be this->join
-
 class Products extends Table
 {
     protected $table = "products";

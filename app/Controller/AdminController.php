@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App;
+use App\Table\Category;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\EmailType;
 use Core\Form\Type\HiddenType;
 use Core\Form\Type\NumberType;
 use Core\Form\Type\PasswordType;
 use Core\Form\Type\SubmitType;
+use Core\Form\Type\TextareaType;
 use Core\Form\Type\TextType;
 use Core\Route\Route;
 
@@ -46,13 +48,104 @@ class AdminController extends AbstarctController
                 if ($_SESSION['message'] == "") {
                     exit;
                 }
+                $this->headLocation("/admin");
             }
             return $_SESSION['message'];
         }
 
-        return $this->render('/pages/admin/login.php', '', [
+        return $this->render('/login.php', '/login.php', [
             'title' => 'admin | login',
             'form' => $formBuilder->createView(),
+        ]);
+    }
+
+    #[Route('/register', name: 'register')]
+    public function register()
+    {
+        if (!$this->isAdmin()) {
+            $this->headLocation("/login");
+        }
+
+        $formBuilder = $this
+            ->createForm()
+            ->add("email", EmailType::class)
+            ->add("password", PasswordType::class)
+            ->add("submit", SubmitType::class, ['value' => 'register'])
+            ->getForm();
+
+        if ($formBuilder->isSubmit()) {
+            if ($formBuilder->isValid('Users')) {
+                $data = $formBuilder->getData();
+
+                $this->getLogin()
+                    ->register($data['email'], $data['password']);
+
+                if ($_SESSION['message'] == "") {
+                    exit;
+                }
+            }
+            return $_SESSION['message'];
+        }
+
+        return $this->render('/login.php', '/login.php', [
+            'title' => 'admin | login',
+            'form' => $formBuilder->createView(),
+        ]);
+    }
+
+    #[Route('/admin', name: 'admin')]
+    public function admin()
+    {
+        if (!$this->isAdmin()) {
+            $this->headLocation("/login");
+        }
+
+        $productsTable = $this->app->getTable('Products');
+        $productsTable
+            ->join(Category::class)
+            ->on("products.category_id = category.category_id");
+
+        $products = $productsTable->findAll();
+
+        $form_delete = $this
+            ->createForm()
+            ->add("id", HiddenType::class)
+            ->add("submit", SubmitType::class)
+            ->getForm();
+
+        return $this->render('/admin/index.php', '/admin.php', [
+            'title' => 'admin | Accueil',
+            'products' => $products,
+            'form_delete' => $form_delete,
+        ]);
+    }
+
+    #[Route('/admin/update/{id}', name: 'update')]
+    public function update(int $id)
+    {
+        if (!$this->isAdmin()) {
+            $this->headLocation("/login");
+        }
+
+        $productsTable = $this->app->getTable('Products');
+        $productsTable
+            ->join(Category::class)
+            ->on("products.category_id = category.category_id");
+
+        $product = $productsTable->findOneBy(['products.id' => $id]);
+
+        $form_update = $this
+            ->createForm()
+            ->add("id", HiddenType::class, ['value' => $product->getId()])
+            ->add("name", TextType::class, ['value' => $product->getName()])
+            ->add("description", TextareaType::class, ['value' => $product->getDescription()])
+            ->add("price", TextType::class, ['value' => $product->getPrice()])
+            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->getForm();
+
+        return $this->render('/admin/update.php', '/admin.php', [
+            'title' => 'admin | Update | ' . $product->getName(),
+            'form_update' => $form_update->createView(),
         ]);
     }
 }

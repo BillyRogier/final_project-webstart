@@ -18,19 +18,19 @@ class Type
     {
         return
             "<input 
-                name=\"" . $name . "\" 
-                id=\"" . $name . "\" 
+                name=\"$name\" 
+                id=\"$name\" 
                 type=\"$type\" 
-                " . $options . "
+                $options
             >";
     }
 
-    function textarea($name, $options)
+    function textarea($name, $value, $options)
     {
         return
             "<textarea
-                name=\"" . $name . "\" 
-                id=\"" . $name . "\" 
-                " . $options . "></textarea>";
+                name=\"$name\" 
+                id=\"$name\" 
+                $options>$value</textarea>";
     }
 }

@@ -36,7 +36,7 @@ class Database
         if ($class_name === null) {
             $stmt->setFetchMode(PDO::FETCH_OBJ);
         } else {
-            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $class_name, [$arg]);
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $class_name, $arg);
         }
         if ($one) {
             return $stmt->fetch();

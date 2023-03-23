@@ -9,6 +9,6 @@ return array(
     ],
     "app" => [
         "name" => "Final project",
-        "base_url" => "http://localhost/final_project/public/"
+        "base_url" => "http://localhost/final_project/public"
     ]
 );
