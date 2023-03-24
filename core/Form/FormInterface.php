@@ -27,7 +27,9 @@ interface FormInterface
     /**
      * Renvoie boolean si le formulaire est valid
      */
-    public function isValid(string $table = ""): bool;
+    public function isXmlValid(string $table = "");
+
+    public function isValid(string $table = "");
 
     /**
      * Renvoie une array contenant les informations reçues

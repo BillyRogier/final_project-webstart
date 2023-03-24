@@ -9,5 +9,5 @@ interface FormErrorInterface extends FormInterface
     /**
      * Retourne Un boolean si les informations sont correctes
      */
-    public function getError(): bool;
+    public function getError(bool $xml);
 }

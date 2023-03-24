@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App;
 use App\Table\Category;
+use App\Table\Products;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\EmailType;
 use Core\Form\Type\HiddenType;
@@ -45,12 +46,8 @@ class AdminController extends AbstarctController
                 $this->getLogin()
                     ->verify($data['email'], $data['password']);
 
-                if ($_SESSION['message'] == "") {
-                    exit;
-                }
                 $this->headLocation("/admin");
             }
-            return $_SESSION['message'];
         }
 
         return $this->render('/login.php', '/login.php', [
@@ -143,8 +140,19 @@ class AdminController extends AbstarctController
             ->add("submit", SubmitType::class, ['value' => 'Save'])
             ->getForm();
 
+        if ($form_update->isSubmit()) {
+            $error = $form_update->isXmlValid('Products');
+            if (empty($error->getErrorMessage())) {
+                $data = $form_update->getData();
+
+                $error->success("success", "error_container");
+                $error->getXmlMessage($this->app->getProperties(Products::class));
+            }
+            $error->getXmlMessage($this->app->getProperties(Products::class));
+        }
+
         return $this->render('/admin/update.php', '/admin.php', [
-            'title' => 'admin | Update | ' . $product->getName(),
+            'title' => 'Admin | Update | ' . $product->getName(),
             'form_update' => $form_update->createView(),
         ]);
     }

@@ -1,31 +1,44 @@
-const filters = document.querySelectorAll(".filter");
-
-filters.forEach((filter) => {
-	filter.addEventListener("click", () => {
-		filters.forEach((filterActive) => {
-			filterActive.classList.remove("active");
-		});
-		filter.classList.add("active");
-		fetch(filter.getAttribute("data-link"))
-			.then((response) => response.text())
-			.then((data) => {
-				const sliderContainer = document.querySelector(
-					"#project > .data > .slider-container"
-				);
-				sliderContainer.innerHTML = "";
-				sliderContainer.innerHTML = data;
-				const slider = sliderContainer.querySelector(".slider");
-				sliderCreation(slider);
-			});
-	});
-});
-
-const formContact = document.querySelector(".form-contact");
+const formContact = document.querySelector("form");
+let send = false;
+var propertie = "";
+let valid = false;
 
 const getValid = (elt) => {
 	eltParent = elt.parentNode;
 	error = elt.parentNode.querySelector(".error-message");
 	error.innerHTML = "";
+	valid = false;
+	prop = propertie["properties"];
+	console.log(propertie);
+	if (prop[elt.name]) {
+		if (prop[elt.name]["length"]) {
+			if (elt.value.length > prop[elt.name]["length"]) {
+				error.innerHTML =
+					"<li>Le champs " +
+					elt.name +
+					" doit contenir maximum " +
+					prop[elt.name]["length"] +
+					" characters</li>";
+			}
+		}
+		if (prop[elt.name]["type"]) {
+			if (prop[elt.name]["type"] == "int") {
+				if (!/^-?[0-9]+$/.test(elt.value)) {
+					error.innerHTML +=
+						"<li>Le champs " +
+						elt.name +
+						" doit contenir seulement des chiffres </li>";
+				}
+			} else if (prop[elt.name]["type"] == "float") {
+				if (!/^-?[0-9-.]+$/.test(elt.value)) {
+					error.innerHTML +=
+						"<li>Le champs " +
+						elt.name +
+						" doit contenir seulement des chiffres </li>";
+				}
+			}
+		}
+	}
 	if (elt.type == "email") {
 		var emailTest =
 			/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
@@ -36,6 +49,7 @@ const getValid = (elt) => {
 	if (error.innerHTML == "" && elt.value != "") {
 		eltParent.classList.remove("invalid");
 		eltParent.classList.add("active");
+		valid = true;
 	} else if (elt.value == "") {
 		error.innerHTML =
 			"<li>Veuillez remplir le champs " + elt.name + "</li>";
@@ -55,25 +69,16 @@ const formSend = async (form) => {
 		method: "POST",
 		body: formData,
 	})
-		.then((response) => {
-			return response.json();
-		})
+		.then((response) => response.json())
 		.then((data) => {
-			errorContainer = document.querySelector(".error-container");
-			errorContainer.innerHTML = "";
-			Object.keys(data).forEach(function (elt) {
-				input = form.querySelector("#" + elt);
-				if (!input) {
-					errorContainer.innerHTML = "error occured";
-				}
-				if (elt == "error") {
-					errorContainer.innerHTML = data[elt];
-				}
-			});
+			if (data.error_container) {
+				document.querySelector(".error-container").innerHTML =
+					data.error_container;
+			}
 			return data;
 		});
 
-	return apiResponse;
+	propertie = apiResponse;
 };
 
 const inputEvent = (elements) => {
@@ -88,11 +93,14 @@ const inputEvent = (elements) => {
 const formSubmit = (form) => {
 	form.addEventListener("submit", function (event) {
 		event.preventDefault();
-		const inputForm = form.querySelectorAll("input");
-		const textareaForm = form.querySelectorAll("textarea");
-		formSend(this);
-		inputEvent(inputForm);
-		inputEvent(textareaForm);
+		if (send === false || valid === true) {
+			send = true;
+			const inputForm = form.querySelectorAll("input");
+			const textareaForm = form.querySelectorAll("textarea");
+			formSend(this);
+			inputEvent(inputForm);
+			inputEvent(textareaForm);
+		}
 	});
 };
 

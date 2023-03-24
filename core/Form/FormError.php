@@ -3,7 +3,9 @@
 namespace Core\Form;
 
 use App;
+use App\Table\Products;
 use Core\Error\Error;
+use Core\Error\ErrorJson;
 use Core\Form\Type\SubmitType;
 
 class FormError extends Form implements FormErrorInterface
@@ -21,45 +23,22 @@ class FormError extends Form implements FormErrorInterface
         $this->form = $form;
     }
 
-    public function getTableError()
+    private function returnError($error)
     {
-        $error = new Error();
-        $properties = $this->app->getProperties($this->table::class);
-
-        foreach ($this->form['input'] as $input => $value) {
-            $inputType = $value['type'];
-            if ($input == "id") {
-                if (!isset($_POST['id']) || !$this->table->findOneBy(['id' => $_POST['id']])) {
-                    $error->danger("error occured", $input);
-                    return false;
-                }
-            } else if (!isset($_POST[$input]) || empty($_POST[$input])) {
-                if ($inputType == SubmitType::class) {
-                    continue;
-                }
-                $error->danger("veuillez remplir le champs $input", $input);
-            } else {
-                $classType = new $inputType();
-                if (!$classType->isValid($_POST[$input])) {
-                    $error->danger("le champs $input doit être de type " . $properties[$input]->getType() . "", $input);
-                }
-                if (isset($properties[$input]) && !empty($properties[$input]->getLenght())) {
-                    if (strlen($_POST[$input]) > $properties[$input]->getLenght()) {
-                        $error->danger("le champs $input doit contenir maximum " . $properties[$input]->getLenght() . "", $input);
-                    }
-                }
-            }
-        }
-
-        if ($_SESSION['message'] != "") {
-            return false;
-        }
-        return true;
+        return $error;
     }
 
-    public function getError(): bool
+    public function getError($xml)
     {
-        $error = new Error();
+        if ($xml === true) {
+            $error = new ErrorJson();
+        } else {
+            $error = new Error();
+        }
+
+        if (!empty($this->table)) {
+            $properties = $this->app->getProperties($this->table::class);
+        }
 
         foreach ($this->form['input'] as $input => $value) {
             $inputType = $value['type'];
@@ -67,25 +46,32 @@ class FormError extends Form implements FormErrorInterface
                 if ($inputType == SubmitType::class) {
                     continue;
                 }
-                $error->danger("error occured", $input);
-            } else if (empty($_POST[$input])) {
+                $error->danger("error occured", "error_container");
+            }
+            if (empty($_POST[$input])) {
                 if ($inputType == SubmitType::class) {
                     continue;
                 }
-                $error->danger("Veuillez remplir le $input", $input);
-            } else {
-                $classType = new $inputType();
-                if (!$classType->isValid($_POST[$input])) {
-                    $error->danger($classType->getMessage(), $input);
+                $error->danger("veuillez remplir le champs $input", $input);
+            } else if (!empty($this->table)) {
+                if ($input == "id") {
+                    if (!isset($_POST['id']) || !$this->table->findOneBy(['id' => $_POST['id']])) {
+                        $error->danger("error occured", "error_container");
+                    }
+                } else {
+                    $classType = new $inputType();
+                    if (!$classType->isValid($_POST[$input])) {
+                        $error->danger("le champs $input doit être de type " . $properties[$input]->getType() . "", $input);
+                    }
+                    if (isset($properties[$input]) && !empty($properties[$input]->getLenght())) {
+                        if (strlen($_POST[$input]) > $properties[$input]->getLenght()) {
+                            $error->danger("le champs $input doit contenir maximum " . $properties[$input]->getLenght() . "", $input);
+                        }
+                    }
                 }
             }
         }
 
-        if (!empty($error->getErrorMessage())) {
-            echo $error->getView();
-            $error->setError("");
-            exit;
-        }
-        return true;
+        return $this->returnError($error);
     }
 }
