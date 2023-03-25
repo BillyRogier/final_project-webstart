@@ -33,4 +33,20 @@ class Type
                 id=\"$name\" 
                 $options>$value</textarea>";
     }
+
+    function options($name, $value)
+    {
+        return
+            "<option
+                value=\"$value\">$name</option>";
+    }
+
+    function select($name, $select_option, $options)
+    {
+        return
+            "<select
+                name=\"$name\" 
+                id=\"$name\" 
+                $select_option>$options</select>";
+    }
 }

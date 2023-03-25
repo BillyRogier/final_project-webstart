@@ -122,9 +122,9 @@ class Products extends Table
     public function flush()
     {
         if (isset($this->id)) {
-            parent::update(['name', 'description', 'price', 'category_id'], [$this->name, $this->description, $this->price, $this->category_id, $this->id]);
+            parent::update(['name', 'description', 'price', 'products.category_id'], [$this->name, $this->description, $this->price, $this->category_id, $this->id]);
         } else {
-            parent::insert(['name', 'description', 'price', 'category_id'], [$this->name, $this->description, $this->price, $this->category_id]);
+            parent::insert(['name', 'description', 'price', 'products.category_id'], [$this->name, $this->description, $this->price, $this->category_id]);
         }
     }
 }

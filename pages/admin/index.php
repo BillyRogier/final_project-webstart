@@ -1,4 +1,9 @@
 <h1>Admin page</h1>
+
+<div class="error-container"><?= isset($_SESSION['message']) ?  $_SESSION['message'] : "" ?></div>
+
+<a href="<?= URL ?>/admin/insert">add</a>
+
 <?php
 
 use App\Table\Category;

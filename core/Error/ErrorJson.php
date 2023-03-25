@@ -18,9 +18,15 @@ class ErrorJson
         return $this;
     }
 
-    public function success($message, $name)
+
+    public function success($message)
     {
-        $this->error[$name] = ["<li class='success'>$message</li>"];
+        return "<li class='success'>$message</li>";
+    }
+
+    public function location($message, $name)
+    {
+        $this->error[$name] = [$message];
         return $this;
     }
 
@@ -50,10 +56,17 @@ class ErrorJson
         return json_encode($this->error);
     }
 
+    public function noError()
+    {
+        if (empty($this->error)) {
+            return true;
+        }
+        return false;
+    }
 
     public function getXmlMessage($properties)
     {
-        echo json_encode(["properties" => $properties, 'error_container' => isset($this->error['error_container']) ? $this->error['error_container'] : ""]);
+        echo json_encode(["properties" => $properties, 'error_container' => isset($this->error['error_container']) ? $this->error['error_container'] : "", 'success_location' => isset($this->error['success_location']) ? $this->error['success_location'] : ""]);
         exit;
     }
 }

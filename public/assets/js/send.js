@@ -1,15 +1,20 @@
 const formContact = document.querySelector("form");
 let send = false;
-var propertie = "";
 let valid = false;
 
-const getValid = (elt) => {
-	eltParent = elt.parentNode;
-	error = elt.parentNode.querySelector(".error-message");
+const successRedirection = (data) => {
+	if (data.success_location) {
+		window.location.href = data.success_location;
+	}
+	return false;
+};
+
+const getValid = (elt, propertie) => {
+	const eltParent = elt.parentNode;
+	const error = elt.parentNode.querySelector(".error-message");
 	error.innerHTML = "";
 	valid = false;
-	prop = propertie["properties"];
-	console.log(propertie);
+	const prop = propertie["properties"];
 	if (prop[elt.name]) {
 		if (prop[elt.name]["length"]) {
 			if (elt.value.length > prop[elt.name]["length"]) {
@@ -61,32 +66,25 @@ const getValid = (elt) => {
 	}
 };
 
-const formSend = async (form) => {
+async function formSend(form) {
 	var action = form.action;
 	var formData = new FormData(form);
 
-	let apiResponse = await fetch(action, {
+	const response = await fetch(action, {
 		method: "POST",
 		body: formData,
-	})
-		.then((response) => response.json())
-		.then((data) => {
-			if (data.error_container) {
-				document.querySelector(".error-container").innerHTML =
-					data.error_container;
-			}
-			return data;
-		});
+	});
+	if (response.ok === true) {
+		return response.json();
+	}
+}
 
-	propertie = apiResponse;
-};
-
-const inputEvent = (elements) => {
+const inputEvent = (elements, prop) => {
 	elements.forEach((elt) => {
 		elt.addEventListener("input", () => {
-			getValid(elt);
+			getValid(elt, prop);
 		});
-		getValid(elt);
+		getValid(elt, prop);
 	});
 };
 
@@ -94,12 +92,17 @@ const formSubmit = (form) => {
 	form.addEventListener("submit", function (event) {
 		event.preventDefault();
 		if (send === false || valid === true) {
-			send = true;
 			const inputForm = form.querySelectorAll("input");
 			const textareaForm = form.querySelectorAll("textarea");
-			formSend(this);
-			inputEvent(inputForm);
-			inputEvent(textareaForm);
+			send = true;
+			formSend(this).then((data) => {
+				if (!successRedirection(data)) {
+					inputEvent(inputForm, data);
+					inputEvent(textareaForm, data);
+					document.querySelector(".error-container").innerHTML =
+						data.error_container;
+				}
+			});
 		}
 	});
 };

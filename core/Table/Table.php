@@ -7,6 +7,7 @@ use App;
 class Table
 {
     protected $table;
+    protected $tableJoin;
     protected $db;
 
     public function __construct(
@@ -18,6 +19,7 @@ class Table
                 $this->setJoin($cle);
             }
         }
+        $this->tableJoin = $this->table;
     }
 
     private function getQuestionMarks(array $array)
@@ -65,22 +67,22 @@ class Table
 
     public function findAll()
     {
-        return $this->db->query("SELECT * FROM " . $this->table . "", get_class($this), [$this->join]);
+        return $this->db->query("SELECT * FROM " . $this->tableJoin . "", get_class($this), [$this->join]);
     }
 
     public function findAllBy($attributes = null)
     {
-        return $this->db->prepare("SELECT * FROM " . $this->table . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this), $this->join, true);
+        return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this), $this->join, true);
     }
 
     public function findOne()
     {
-        return $this->db->query("SELECT * FROM " . $this->table . " WHERE 1", get_class($this), true);
+        return $this->db->query("SELECT * FROM " . $this->tableJoin . " WHERE 1", get_class($this), true);
     }
 
     public function findOneBy($attributes = null)
     {
-        return $this->db->prepare("SELECT * FROM " . $this->table . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this), $this->join, true);
+        return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this), $this->join, true);
     }
 
     public function update($structure, $attributes = null)
@@ -126,13 +128,13 @@ class Table
     public function join($table)
     {
         $this->setJoin($table);
-        $this->table = $this->table . " INNER JOIN " . $this->getJoin($table)->table . "";
+        $this->tableJoin = $this->tableJoin . " INNER JOIN " . $this->getJoin($table)->table . "";
         return $this;
     }
 
     public function on($condition)
     {
-        $this->table = $this->table . " ON $condition";
+        $this->tableJoin = $this->tableJoin . " ON $condition";
         return $this;
     }
 

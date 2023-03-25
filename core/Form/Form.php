@@ -31,13 +31,13 @@ class Form implements FormInterface
         return true;
     }
 
-    public function isXmlValid(string $table = "")
+    public function isXmlValid($table = "")
     {
         $error = new FormError($this->form, $table);
         return $error->getError(true);
     }
 
-    public function isValid(string $table = "")
+    public function isValid($table = "")
     {
         $error = new FormError($this->form, $table);
         return $error->getError(false);

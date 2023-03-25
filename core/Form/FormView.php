@@ -2,6 +2,7 @@
 
 namespace Core\Form;
 
+use Core\Form\Type\ChoiceType;
 use Core\Form\Type\TextareaType;
 
 class FormView extends Form implements FormViewInterface
@@ -15,7 +16,7 @@ class FormView extends Form implements FormViewInterface
     {
         $array_transform = "";
         foreach ($array as $cle => $value) {
-            if ($textarea == true) {
+            if ($textarea == true && ($cle == "value" || $cle == "choices" || $cle == "table")) {
                 continue;
             } else {
                 $array_transform .= $cle . " = " . "\"$value\"";
@@ -43,6 +44,9 @@ class FormView extends Form implements FormViewInterface
             if (isset($input['options']['value']) && $type::class == TextareaType::class) {
                 $options = $this->getOptions($input['options'], true);
                 $input = $type->getTag($name, $input['options']['value'], $options);
+            } else if (isset($input['options']['choices']) && $type::class == ChoiceType::class) {
+                $options = $this->getOptions($input['options'], true);
+                $input = $type->getTag($name, $options, $input['options']['choices']);
             } else {
                 $options = $this->getOptions($input['options']);
                 $input = $type->getTag($name, $options);

@@ -6,6 +6,7 @@ use App;
 use App\Table\Products;
 use Core\Error\Error;
 use Core\Error\ErrorJson;
+use Core\Form\Type\ChoiceType;
 use Core\Form\Type\SubmitType;
 
 class FormError extends Form implements FormErrorInterface
@@ -18,23 +19,14 @@ class FormError extends Form implements FormErrorInterface
     {
         $this->app = App::getInstance();
         if (!empty($table)) {
-            $this->table = $this->app->getTable($table);
+            $this->table = $table;
         }
         $this->form = $form;
     }
 
-    private function returnError($error)
-    {
-        return $error;
-    }
-
     public function getError($xml)
     {
-        if ($xml === true) {
-            $error = new ErrorJson();
-        } else {
-            $error = new Error();
-        }
+        $error = new ErrorJson();
 
         if (!empty($this->table)) {
             $properties = $this->app->getProperties($this->table::class);
@@ -54,12 +46,16 @@ class FormError extends Form implements FormErrorInterface
                 }
                 $error->danger("veuillez remplir le champs $input", $input);
             } else if (!empty($this->table)) {
+                $classType = new $inputType();
                 if ($input == "id") {
                     if (!isset($_POST['id']) || !$this->table->findOneBy(['id' => $_POST['id']])) {
                         $error->danger("error occured", "error_container");
                     }
+                } else if ($inputType == ChoiceType::class) {
+                    if (!$classType->isInTable($_POST[$input], isset($value['options']['table']) ? $value['options']['table'] : "")) {
+                        $error->danger("error occured", "error_container");
+                    }
                 } else {
-                    $classType = new $inputType();
                     if (!$classType->isValid($_POST[$input])) {
                         $error->danger("le champs $input doit être de type " . $properties[$input]->getType() . "", $input);
                     }
@@ -72,6 +68,6 @@ class FormError extends Form implements FormErrorInterface
             }
         }
 
-        return $this->returnError($error);
+        return $error;
     }
 }

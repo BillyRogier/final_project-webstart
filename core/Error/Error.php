@@ -18,10 +18,9 @@ class Error
         return $this;
     }
 
-    public function success($message, $name)
+    public function success($message)
     {
-        $this->error .= "\"$name\": \"<li class='success'>$message</li>\",";
-        return $this;
+        return "<li class='success'>$message</li>";
     }
 
     public function toJson($array)
