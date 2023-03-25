@@ -3,9 +3,7 @@
 namespace Core\Form;
 
 use App;
-use App\Table\Products;
 use Core\Error\Error;
-use Core\Error\ErrorJson;
 use Core\Form\Type\ChoiceType;
 use Core\Form\Type\SubmitType;
 
@@ -26,7 +24,7 @@ class FormError extends Form implements FormErrorInterface
 
     public function getError($xml)
     {
-        $error = new ErrorJson();
+        $error = new Error();
 
         if (!empty($this->table)) {
             $properties = $this->app->getProperties($this->table::class);

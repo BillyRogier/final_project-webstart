@@ -1,4 +1,4 @@
-const formContact = document.querySelector("form");
+const form = document.querySelector("form");
 let send = false;
 let valid = false;
 
@@ -107,4 +107,6 @@ const formSubmit = (form) => {
 	});
 };
 
-formSubmit(formContact);
+if (form) {
+	formSubmit(form);
+}

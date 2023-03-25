@@ -21,12 +21,16 @@ class Login
 
         if ($user) {
             if (password_verify($password, $user->getPassword())) {
-                $_SESSION['admin'] = $user->getId();
+                if ($user->getType() == 1) {
+                    $_SESSION['admin'] = $user->getId();
+                } else {
+                    $_SESSION['user'] = $user->getId();
+                }
             } else {
-                // $error->danger("Incorrect Password");
+                $error->danger("Incorrect Password", 'password');
             }
         } else {
-            // $error->danger("Unknown user");
+            $error->danger("Unknown user", 'email');
         }
     }
 

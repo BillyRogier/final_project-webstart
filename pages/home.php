@@ -1,4 +1,7 @@
 <h1>Home page</h1>
+
+<div class="error_container"><?= isset($_SESSION['message']) ? $_SESSION['message'] : "" ?></div>
+
 <?php
 
 use App\Table\Category;

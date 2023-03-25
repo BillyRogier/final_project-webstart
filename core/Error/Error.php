@@ -4,17 +4,17 @@ namespace Core\Error;
 
 class Error
 {
-    private $error;
+    private $error = [];
 
-    public function danger($message)
+    public function danger($message, $name)
     {
-        $this->error .= "<li class='danger'>$message</li>";
+        $this->error[$name] = ["<li class='danger'>$message</li>"];
         return $this;
     }
 
-    public function alert($message)
+    public function alert($message, $name)
     {
-        $this->error .= "<li class='alert'>$message</li>";
+        $this->error[$name] = ["<li class='alert'>$message</li>"];
         return $this;
     }
 
@@ -23,14 +23,18 @@ class Error
         return "<li class='success'>$message</li>";
     }
 
+    public function location($message, $name)
+    {
+        $this->error[$name] = [$message];
+        return $this;
+    }
+
     public function toJson($array)
     {
         foreach ($array as $name => $propertie) {
-            $this->error .= "\"$name\": {";
             foreach ($propertie as $cle => $value) {
-                $this->error .= "\"$cle\": \"$value\",";
+                $this->error[$name][$cle] = $value;
             }
-            $this->error = substr($this->error, 0, -1) . "},";
         }
         return $this;
     }
@@ -42,12 +46,26 @@ class Error
 
     public function setError($error)
     {
-        $this->error = "";
+        $this->error = $error;
         return $this->error;
     }
 
     public function getView()
     {
-        return "{" . substr($this->error, 0, -1) . "}";
+        return json_encode($this->error);
+    }
+
+    public function noError()
+    {
+        if (empty($this->error)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getXmlMessage($properties)
+    {
+        echo json_encode(["properties" => $properties, 'error_container' => isset($this->error['error_container']) ? $this->error['error_container'] : "", 'success_location' => isset($this->error['success_location']) ? $this->error['success_location'] : ""]);
+        exit;
     }
 }

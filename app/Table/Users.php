@@ -22,8 +22,10 @@ class Users extends Table
     private string $num = "";
     #[Properties(type: 'string', length: 255)]
     private string $adress = "";
+    #[Properties(type: 'int', length: 1)]
+    private int $type = 0;
     #[Properties(type: 'string')]
-    private string $creation_date;
+    private $creation_date;
 
     /**
      * Get the value of first_name
@@ -168,9 +170,9 @@ class Users extends Table
     public function flush()
     {
         if (isset($this->id)) {
-            parent::update(['first_name', 'last_name', 'email', 'password', 'num', 'adress', 'creation_date'], [$this->first_name, $this->last_name, $this->email, $this->password, $this->num, $this->adress, $this->creation_date, $this->id]);
+            parent::update(['first_name', 'last_name', 'email', 'password', 'num', 'adress', 'type', 'creation_date'], [$this->first_name, $this->last_name, $this->email, $this->password, $this->num, $this->adress, $this->type, $this->creation_date, $this->id]);
         } else {
-            parent::insert(['first_name', 'last_name', 'email', 'password', 'num', 'adress'], [$this->first_name, $this->last_name, $this->email, $this->password, $this->num, $this->adress]);
+            parent::insert(['first_name', 'last_name', 'email', 'password', 'num', 'adress', 'type'], [$this->first_name, $this->last_name, $this->email, $this->password, $this->num, $this->adress, $this->type]);
         }
     }
 
@@ -190,6 +192,26 @@ class Users extends Table
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set the value of type
+     *
+     * @return  self
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
 
         return $this;
     }

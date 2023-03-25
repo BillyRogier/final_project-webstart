@@ -181,4 +181,22 @@ class App
         $link = str_replace(" ", "-", $link);
         return $link;
     }
+
+    public function isAdmin()
+    {
+        if (!isset($_SESSION['admin']) || empty($_SESSION['admin'])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function isUser()
+    {
+        if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

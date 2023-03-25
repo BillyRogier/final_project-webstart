@@ -25,78 +25,12 @@ class AdminController extends AbstarctController
         $this->app = App::getInstance();
     }
 
-    #[Route('/login', name: 'login')]
-    public function login()
-    {
-        if ($this->isAdmin()) {
-            $this->headLocation("/admin");
-        }
-
-        $formBuilder = $this
-            ->createForm()
-            ->add("email", EmailType::class)
-            ->add("password", PasswordType::class)
-            ->add("submit", SubmitType::class, ['value' => 'login'])
-            ->getForm();
-
-        if ($formBuilder->isSubmit()) {
-            if ($formBuilder->isValid('Users')) {
-                $data = $formBuilder->getData();
-
-                $this->getLogin()
-                    ->verify($data['email'], $data['password']);
-
-                $this->headLocation("/admin");
-            }
-        }
-
-        return $this->render('/login.php', '/login.php', [
-            'title' => 'admin | login',
-            'form' => $formBuilder->createView(),
-        ]);
-    }
-
-    #[Route('/register', name: 'register')]
-    public function register()
-    {
-        if (!$this->isAdmin()) {
-            $this->headLocation("/login");
-        }
-
-        $formBuilder = $this
-            ->createForm()
-            ->add("email", EmailType::class)
-            ->add("password", PasswordType::class)
-            ->add("submit", SubmitType::class, ['value' => 'register'])
-            ->getForm();
-
-        if ($formBuilder->isSubmit()) {
-            if ($formBuilder->isValid('Users')) {
-                $data = $formBuilder->getData();
-
-                $this->getLogin()
-                    ->register($data['email'], $data['password']);
-
-                if ($_SESSION['message'] == "") {
-                    exit;
-                }
-            }
-            return $_SESSION['message'];
-        }
-
-        return $this->render('/login.php', '/login.php', [
-            'title' => 'admin | login',
-            'form' => $formBuilder->createView(),
-        ]);
-    }
-
     #[Route('/admin', name: 'admin')]
     public function admin()
     {
         if (!$this->isAdmin()) {
             $this->headLocation("/login");
         }
-
         $productsTable = $this->app->getTable('Products');
         $productsTable
             ->join(Category::class)
