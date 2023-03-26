@@ -47,6 +47,8 @@ class Database
 
     public function prepare(string $request, array $value, $class_name = null, $arg = null, $one = false)
     {
+        echo $request;
+        var_dump($value);
         $stmt = $this->getPDO()->prepare($request);
         $stmt->execute($value);
         if ($class_name === null) {

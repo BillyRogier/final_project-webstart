@@ -22,6 +22,7 @@
             <a href="<?= URL ?>/login">login</a>
             <a href="<?= URL ?>/register">register</a>
         <?php endif ?>
+        <a href="<?= URL ?>/cart">cart</a>
     </header>
     <?= $content ?>
 </body>

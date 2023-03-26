@@ -25,6 +25,7 @@ class AdminController extends AbstarctController
         $this->app = App::getInstance();
     }
 
+    // show image
     #[Route('/admin', name: 'admin')]
     public function admin()
     {
@@ -66,6 +67,7 @@ class AdminController extends AbstarctController
         ]);
     }
 
+    // update image
     #[Route('/admin/update/{id}', name: 'update')]
     public function update(int $id)
     {
@@ -123,6 +125,7 @@ class AdminController extends AbstarctController
         ]);
     }
 
+    // insert image
     #[Route('/admin/insert', name: 'insert')]
     public function insert()
     {
@@ -173,4 +176,17 @@ class AdminController extends AbstarctController
             'form_insert' => $form_insert->createView(),
         ]);
     }
+
+    // show all category with update and delete
+    // create category
+    // update category
+
+
+    // show all users with update and delete
+    // update user
+    // insert user
+
+    // show orders
+
+    // update settings
 }

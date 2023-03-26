@@ -39,18 +39,24 @@ class Table
 
     private function getWhere($array)
     {
-        $params = [];
+        $params = "";
         foreach ($array as $cle => $value) {
-            array_push($params, $cle);
+            if ($value == NULL) {
+                $params .= " " . $cle . " IS NULL AND";
+            } else {
+                $params .= " " .  $cle . "= ? AND";
+            }
         }
-        return implode(' = ? AND ', $params) . ' = ?';
+        return substr($params, 0, -3);
     }
 
     private function getValues($array)
     {
         $values = [];
         foreach ($array as $cle => $value) {
-            array_push($values, $value);
+            if (!is_null($value)) {
+                array_push($values, $value);
+            }
         }
         return $values;
     }
@@ -70,9 +76,18 @@ class Table
         return $this->db->query("SELECT * FROM " . $this->tableJoin . "", get_class($this), [$this->join]);
     }
 
-    public function findAllBy($attributes = null)
+    public function findAllBy($attributes = null, $or = null, $and = null, $order = "")
     {
-        return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this), $this->join, true);
+        if (!empty($order)) {
+            $order = "ORDER BY $order";
+        }
+        if (!empty($or)) {
+            $or = "OR " . $this->getWhere($or) . "";
+        }
+        if (!empty($and)) {
+            $and = "AND " . $this->getWhere($and) . "";
+        }
+        return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . "$or $and $order", $this->getValues($attributes), get_class($this), $this->join);
     }
 
     public function findOne()
@@ -125,10 +140,25 @@ class Table
         return $this;
     }
 
-    public function join($table)
+    public function innerJoin($table)
+    {
+        return $this->join($table, "INNER");
+    }
+
+    public function rightJoin($table)
+    {
+        return $this->join($table, "RIGHT");
+    }
+
+    public function leftJoin($table)
+    {
+        return $this->join($table, "LEFT");
+    }
+
+    public function join($table, $type = "")
     {
         $this->setJoin($table);
-        $this->tableJoin = $this->tableJoin . " INNER JOIN " . $this->getJoin($table)->table . "";
+        $this->tableJoin = $this->tableJoin . " $type JOIN " . $this->getJoin($table)->table . "";
         return $this;
     }
 
@@ -142,7 +172,9 @@ class Table
     {
         foreach ($classnames as $class) {
             $method = "set" . ucfirst($name);
-            $class->$method($value);
+            if (method_exists($class, $method)) {
+                $class->$method($value);
+            }
         }
     }
 
