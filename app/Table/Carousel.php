@@ -12,6 +12,8 @@ class Carousel extends Table
     private $carousel_id;
     #[Properties(type: 'string', length: 255)]
     private $img;
+    #[Properties(type: 'int', length: 1)]
+    private $type;
     #[Properties(type: 'int', length: 11)]
     private $product_id;
 
@@ -59,9 +61,9 @@ class Carousel extends Table
     public function flush()
     {
         if (isset($this->carousel_id)) {
-            parent::update(['img', 'product_id'], [$this->img, $this->product_id, $this->carousel_id]);
+            parent::update(['img', 'product_id', 'type'], [$this->img, $this->product_id, $this->type, $this->carousel_id]);
         } else {
-            parent::insert(['img', 'product_id'], [$this->img, $this->product_id]);
+            parent::insert(['img', 'product_id', 'type'], [$this->img, $this->product_id, $this->type]);
         }
     }
 
@@ -81,6 +83,26 @@ class Carousel extends Table
     public function setCarousel_id($carousel_id)
     {
         $this->carousel_id = $carousel_id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set the value of type
+     *
+     * @return  self
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
 
         return $this;
     }

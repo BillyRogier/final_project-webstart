@@ -3,13 +3,13 @@
 namespace App\Controller;
 
 use App;
+use App\Table\Carousel;
 use App\Table\Category;
 use App\Table\Products;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\ChoiceType;
-use Core\Form\Type\EmailType;
+use Core\Form\Type\FileType;
 use Core\Form\Type\HiddenType;
-use Core\Form\Type\PasswordType;
 use Core\Form\Type\SubmitType;
 use Core\Form\Type\TextareaType;
 use Core\Form\Type\TextType;
@@ -25,7 +25,6 @@ class AdminController extends AbstarctController
         $this->app = App::getInstance();
     }
 
-    // show image
     #[Route('/admin', name: 'admin')]
     public function admin()
     {
@@ -34,10 +33,12 @@ class AdminController extends AbstarctController
         }
         $productsTable = $this->app->getTable('Products');
         $productsTable
-            ->join(Category::class)
-            ->on("products.category_id = category.category_id");
+            ->innerJoin(Category::class)
+            ->on("products.category_id = category.category_id")
+            ->leftJoin(Carousel::class)
+            ->on("carousel.product_id = products.id");
 
-        $products = $productsTable->findAll();
+        $products = $productsTable->find("WHERE carousel.type = ? OR carousel.type IS ?", [1, NULL]);
 
         $form_delete = $this
             ->createForm()
@@ -59,7 +60,6 @@ class AdminController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Products::class));
         }
 
-
         return $this->render('/admin/index.php', '/admin.php', [
             'title' => 'admin | Accueil',
             'products' => $products,
@@ -76,6 +76,7 @@ class AdminController extends AbstarctController
         }
 
         $productsTable = $this->app->getTable('Products');
+        $carouselTable = $this->app->getTable('Carousel');
         $categoryTable = $this->app->getTable('Category');
 
         $productsTable
@@ -83,6 +84,7 @@ class AdminController extends AbstarctController
             ->on("products.category_id = category.category_id");
 
         $product = $productsTable->findOneBy(['products.id' => $id]);
+        $carousel = $carouselTable->findAllBy(['product_id' => $id]);
         $categorys = $categoryTable->findAll();
 
         $choice_category = [];
@@ -90,9 +92,14 @@ class AdminController extends AbstarctController
             $choice_category[$category->getCategory_name()] = $category->getCategory_id();
         };
 
+        // foreach carousel create input hidden with link img
+        // xml upload img
+        // post all img in database
+
         $form_update = $this
             ->createForm()
             ->add("id", HiddenType::class, ['value' => $product->getId()])
+            ->add("file[]", FileType::class, ['multiple' => "multiple"])
             ->add("name", TextType::class, ['value' => $product->getName()])
             ->add("description", TextareaType::class, ['value' => $product->getDescription()])
             ->add("price", TextType::class, ['value' => $product->getPrice()])
@@ -104,6 +111,20 @@ class AdminController extends AbstarctController
             $error = $form_update->isXmlValid($productsTable);
             if ($error->noError()) {
                 $data = $form_update->getData();
+
+                $carouselTable->delete(['product_id' => $id]);
+                $uploads_dir = ROOT . '\public\assets\img';
+                foreach ($data["file"]["tmp_name"] as $key => $value) {
+                    $tmp_name = $_FILES["file"]["tmp_name"][$key];
+                    $name = basename($_FILES["file"]["name"][$key]);
+                    move_uploaded_file($tmp_name, "$uploads_dir\\$name");
+                    // insert in base
+                    $carouselTable
+                        ->setProduct_id($id)
+                        ->setImg($data["file"]["name"][$key])
+                        ->setType($key + 1)
+                        ->flush();
+                }
 
                 $product
                     ->setName($data["name"])
@@ -179,11 +200,9 @@ class AdminController extends AbstarctController
 
     // show all category with update and delete
     // create category
-    // update category
 
 
     // show all users with update and delete
-    // update user
     // insert user
 
     // show orders

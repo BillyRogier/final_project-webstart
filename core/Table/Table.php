@@ -61,9 +61,9 @@ class Table
         return $values;
     }
 
-    public function find($array)
+    public function find(string $request, array $values)
     {
-        return $this->db->query("SELECT " . $this->getCle($array) . " FROM " . $this->table . "", get_class($this), $this->join);
+        return $this->db->prepare("SELECT * FROM " .  $this->tableJoin . " " . $request, $values, get_class($this), $this->join);
     }
 
     public function findBy($array, $attributes = null)
@@ -76,18 +76,12 @@ class Table
         return $this->db->query("SELECT * FROM " . $this->tableJoin . "", get_class($this), [$this->join]);
     }
 
-    public function findAllBy($attributes = null, $or = null, $and = null, $order = "")
+    public function findAllBy($attributes = null, $order = "")
     {
         if (!empty($order)) {
             $order = "ORDER BY $order";
         }
-        if (!empty($or)) {
-            $or = "OR " . $this->getWhere($or) . "";
-        }
-        if (!empty($and)) {
-            $and = "AND " . $this->getWhere($and) . "";
-        }
-        return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . "$or $and $order", $this->getValues($attributes), get_class($this), $this->join);
+        return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . " $order", $this->getValues($attributes), get_class($this), $this->join);
     }
 
     public function findOne()
@@ -112,7 +106,7 @@ class Table
 
     public function delete($attributes = null)
     {
-        $this->db->prepare("DELETE FROM " . $this->table . " WHERE id = ?;", [$attributes]);
+        $this->db->prepare("DELETE FROM " . $this->table . " WHERE " . $this->getWhere($attributes) . ";", $this->getValues($attributes));
     }
 
     public function lastInsertId()

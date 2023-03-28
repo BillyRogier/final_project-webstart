@@ -32,16 +32,17 @@ class FormError extends Form implements FormErrorInterface
 
         foreach ($this->form['input'] as $input => $value) {
             $inputType = $value['type'];
-            if (!isset($_POST[$input])) {
+            $input = str_replace("[]", '', $input);
+            if (!isset($_POST[$input]) && !isset($_FILES[$input])) {
                 if ($inputType == SubmitType::class) {
                     continue;
                 }
                 $error->danger("error occured", "error_container");
             }
-            if (empty($_POST[$input])) {
+            if (empty($_POST[$input]) && empty($_FILES[$input])) {
                 if ($inputType == SubmitType::class) {
                     continue;
-                }
+                };
                 $error->danger("veuillez remplir le champs $input", $input);
             } else if (!empty($this->table)) {
                 $classType = new $inputType();
@@ -54,7 +55,7 @@ class FormError extends Form implements FormErrorInterface
                         $error->danger("error occured", "error_container");
                     }
                 } else {
-                    if (!$classType->isValid($_POST[$input])) {
+                    if (!$classType->isValid(isset($_POST[$input]) ? $_POST[$input] : $_FILES[$input])) {
                         $error->danger("le champs $input doit être de type " . $properties[$input]->getType() . "", $input);
                     }
                     if (isset($properties[$input]) && !empty($properties[$input]->getLenght())) {

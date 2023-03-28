@@ -6,7 +6,8 @@ class Type
 {
     public function label($name)
     {
-        return "<label for=\"" . strtolower($name) . "\">$name</label>";
+        $name = strtolower(str_replace("[]", '', $name));
+        return "<label for=\"" . $name . "\">$name</label>";
     }
 
     public function isValid($value)
@@ -19,7 +20,7 @@ class Type
         return
             "<input 
                 name=\"$name\" 
-                id=\"$name\" 
+                id=\"" . strtolower(str_replace("[]", '', $name)) . "\" 
                 type=\"$type\" 
                 $options
             >";
@@ -30,7 +31,7 @@ class Type
         return
             "<textarea
                 name=\"$name\" 
-                id=\"$name\" 
+                id=\"" . strtolower(str_replace("[]", '', $name)) . "\" 
                 $options>$value</textarea>";
     }
 
@@ -46,7 +47,7 @@ class Type
         return
             "<select
                 name=\"$name\" 
-                id=\"$name\" 
+                id=\"" . strtolower(str_replace("[]", '', $name)) . "\" 
                 $select_option>$options</select>";
     }
 }

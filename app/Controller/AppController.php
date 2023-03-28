@@ -38,7 +38,7 @@ class AppController extends AbstarctController
             ->leftJoin(Carousel::class)
             ->on("carousel.product_id = products.id");
 
-        $products = $productsTable->findAllBy(['carousel.type' => 1], ['carousel.type' => NULL]);
+        $products = $productsTable->find("WHERE carousel.type = ? OR carousel.type IS ?", [1, NULL]);
 
         return $this->render('/home.php', '/default.php',  [
             'title' => 'Accueil',
@@ -222,11 +222,31 @@ class AppController extends AbstarctController
             ->leftJoin(Carousel::class)
             ->on("carousel.product_id = products.id");
 
-        $products = $productsTable->findAllBy(['carousel.type' => 1], ['carousel.type' => NULL, 'products.id' => 8]);
-        var_dump($products);
+        $form_delete = $this->createForm()
+            ->add("id", HiddenType::class)
+            ->add("add_to_cart", SubmitType::class, ['value' => 'delete']);
+
+        if ($form_delete->isSubmit()) {
+            $error = $form_delete->isXmlValid($productsTable);
+            if ($error->noError()) {
+                $data = $form_delete->getData();
+
+                $this->cookie_cart->removeFromCart($data["id"]);
+
+                $_SESSION["message"] = $error->success("successfully");
+                $error->location(URL . "/cart", "success_location");
+                $error->getXmlMessage($this->app->getProperties(Users::class));
+            }
+            $error->getXmlMessage($this->app->getProperties(Users::class));
+        }
+
+        $products = $productsTable->find("WHERE carousel.type = ? OR carousel.type IS ?", [1, NULL]);
 
         return $this->render('/cart.php', '/default.php', [
             'title' => 'Cart',
+            'products' => $products,
+            'cart' => $this->cookie_cart->getCart(),
+            'remove_item' => $form_delete,
         ]);
     }
 }

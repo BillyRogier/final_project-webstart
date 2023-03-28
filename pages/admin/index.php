@@ -2,13 +2,15 @@
 
 <div class="error-container"><?= isset($_SESSION['message']) ?  $_SESSION['message'] : "" ?></div>
 
-<a href="<?= URL ?>/admin/insert">add</a>
+<a href="<?= URL ?>/admin/insert">add</a><br>
 
 <?php
 
+use App\Table\Carousel;
 use App\Table\Category;
 
 foreach ($products as $product) : ?>
+    <img src="<?= URL ?>/assets/img/<?= $product->getJoin(Carousel::class)->getImg() ?>" />
     <h3><?= $product->getName() ?></h3>
     <p><?= $product->getDescription() ?></p>
     <p><?= $product->getPrice() ?></p>

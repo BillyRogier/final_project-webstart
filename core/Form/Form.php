@@ -49,6 +49,9 @@ class Form implements FormInterface
         foreach ($_POST as $cle => $value) {
             $array[$cle] = htmlspecialchars($value);
         }
+        foreach ($_FILES as $cle => $value) {
+            $array[$cle] = $value;
+        }
         return $array;
     }
 }
