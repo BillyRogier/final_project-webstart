@@ -1,4 +1,4 @@
-const form = document.querySelector("form");
+const forms = document.querySelectorAll("form");
 let send = false;
 let valid = false;
 
@@ -51,11 +51,11 @@ const getValid = (elt, propertie) => {
 			error.innerHTML += "<li>Veuillez rentrez un email valide</li>";
 		}
 	}
-	if (error.innerHTML == "" && elt.value != "") {
+	if (error.innerHTML == "" && elt.value != "" && elt.type != "file") {
 		eltParent.classList.remove("invalid");
 		eltParent.classList.add("active");
 		valid = true;
-	} else if (elt.value == "") {
+	} else if (elt.value == "" && elt.type != "file") {
 		error.innerHTML =
 			"<li>Veuillez remplir le champs " + elt.name + "</li>";
 		eltParent.classList.remove("active");
@@ -107,6 +107,8 @@ const formSubmit = (form) => {
 	});
 };
 
-if (form) {
-	formSubmit(form);
+if (forms) {
+	forms.forEach((form) => {
+		formSubmit(form);
+	});
 }

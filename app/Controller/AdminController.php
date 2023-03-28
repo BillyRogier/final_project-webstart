@@ -93,10 +93,6 @@ class AdminController extends AbstarctController
             $choice_category[$category->getCategory_name()] = $category->getCategory_id();
         };
 
-        // foreach carousel create input hidden with link img
-        // xml upload img
-        // post all img in database
-
         $form_update = $this
             ->createForm("", "post", ["enctype" => "multipart/form-data"])
             ->add("id", HiddenType::class, ['value' => $product->getId()])
@@ -114,6 +110,8 @@ class AdminController extends AbstarctController
             $error = $form_update->isXmlValid($productsTable);
             if ($error->noError()) {
                 $data = $form_update->getData();
+
+                $carouselTable->delete(['product_id' => $id]);
 
                 if (is_array($data['img'])) {
                     foreach ($data['img'] as $key => $value) {
@@ -152,7 +150,6 @@ class AdminController extends AbstarctController
         ]);
     }
 
-    // insert image
     #[Route('/admin/insert', name: 'insert')]
     public function insert()
     {
@@ -162,6 +159,7 @@ class AdminController extends AbstarctController
 
         $productsTable = $this->app->getTable('Products');
         $categoryTable = $this->app->getTable('Category');
+        $carouselTable = $this->app->getTable('Carousel');
 
         $categorys = $categoryTable->findAll();
 
@@ -172,6 +170,8 @@ class AdminController extends AbstarctController
 
         $form_insert = $this
             ->createForm()
+            ->add("img[]", HiddenType::class)
+            ->add("file[]", FileType::class, ['multiple' => "multiple"])
             ->add("name", TextType::class)
             ->add("description", TextareaType::class)
             ->add("price", TextType::class)
@@ -190,6 +190,24 @@ class AdminController extends AbstarctController
                     ->setPrice($data["price"])
                     ->setCategory_id($data["categorie"])
                     ->flush();
+
+                $product_id = $productsTable->lastInsertId();
+
+                if (is_array($data['img'])) {
+                    foreach ($data['img'] as $key => $value) {
+                        $carouselTable
+                            ->setProduct_id($product_id)
+                            ->setImg($value)
+                            ->setType($key + 1)
+                            ->flush();
+                    }
+                } else {
+                    $carouselTable
+                        ->setProduct_id($product_id)
+                        ->setImg($data['img'])
+                        ->setType(1)
+                        ->flush();
+                }
 
                 $_SESSION["message"] = $error->success("success");
                 $error->location(URL . "/admin", "success_location");
