@@ -11,14 +11,19 @@ class FormBuilder extends Form implements FormBuilderInterface
 
     public function add(string $name, string $type = "text", array $options = []): FormBuilderInterface
     {
-        $this->form['input'][$name] = ['name' => $name, 'type' => $type, 'options' => $options];
+        if (isset($this->form['input'][$name])) {
+            array_push($this->form['input'][$name], ['name' => $name, 'type' => $type, 'options' => $options]);
+        } else {
+            $this->form['input'][$name] = [];
+            array_push($this->form['input'][$name], ['name' => $name, 'type' => $type, 'options' => $options]);
+        }
         return $this;
     }
 
-    public function change(string $name, array $options = []): FormBuilderInterface
+    public function change(string $name, array $options = [], int $key = 0): FormBuilderInterface
     {
-        $previousInput = $this->form['input'][$name];
-        $this->form['input'][$name] = ['name' => $name, 'type' => $previousInput['type'],  'options' => $options];
+        $previousInput = $this->form['input'][$name][$key];
+        $this->form['input'][$name][$key] = ['name' => $name, 'type' => $previousInput['type'],  'options' => $options];
         return $this;
     }
 }

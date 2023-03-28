@@ -47,7 +47,13 @@ class Form implements FormInterface
     {
         $array = [];
         foreach ($_POST as $cle => $value) {
-            $array[$cle] = htmlspecialchars($value);
+            if (is_array($value)) {
+                foreach ($value as $val) {
+                    $array[$cle] = htmlspecialchars($val);
+                }
+            } else {
+                $array[$cle] = htmlspecialchars($value);
+            }
         }
         foreach ($_FILES as $cle => $value) {
             $array[$cle] = $value;

@@ -25,10 +25,10 @@ class FormView extends Form implements FormViewInterface
         return $array_transform;
     }
 
-    public function viewInput($label, $input)
+    public function viewInput($label, $input, $name)
     {
         return
-            "<div class=\"input-container grid\">
+            "<div class=\"input-container $name-container grid\">
                 $label
                 $input
                 <ul class=\"error-message\"></ul>
@@ -39,20 +39,22 @@ class FormView extends Form implements FormViewInterface
     {
         $inputContainer = "";
         foreach ($this->form['input'] as $input) {
-            $type = new $input['type']();
-            $name = $input['name'];
-            if (isset($input['options']['value']) && $type::class == TextareaType::class) {
-                $options = $this->getOptions($input['options'], true);
-                $input = $type->getTag($name, $input['options']['value'], $options);
-            } else if (isset($input['options']['choices']) && $type::class == ChoiceType::class) {
-                $options = $this->getOptions($input['options'], true);
-                $input = $type->getTag($name, $options, $input['options']['choices']);
-            } else {
-                $options = $this->getOptions($input['options']);
-                $input = $type->getTag($name, $options);
+            foreach ($input as $value) {
+                $type = new $value['type']();
+                $name = $value['name'];
+                if (isset($value['options']['value']) && $type::class == TextareaType::class) {
+                    $options = $this->getOptions($value['options'], true);
+                    $value = $type->getTag($name, $value['options']['value'], $options);
+                } else if (isset($value['options']['choices']) && $type::class == ChoiceType::class) {
+                    $options = $this->getOptions($value['options'], true);
+                    $value = $type->getTag($name, $options, $value['options']['choices']);
+                } else {
+                    $options = $this->getOptions($value['options']);
+                    $value = $type->getTag($name, $options);
+                }
+                $label = $type->label(ucfirst($name));
+                $inputContainer .= $this->viewInput($label, $value, strtolower(str_replace("[]", '', $name)));
             }
-            $label = $type->label(ucfirst($name));
-            $inputContainer .= $this->viewInput($label, $input);
         }
         return $inputContainer;
     }

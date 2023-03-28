@@ -20,7 +20,7 @@ class Type
         return
             "<input 
                 name=\"$name\" 
-                id=\"" . strtolower(str_replace("[]", '', $name)) . "\" 
+                class=\"" . strtolower(str_replace("[]", '', $name)) . "\" 
                 type=\"$type\" 
                 $options
             >";
@@ -31,7 +31,7 @@ class Type
         return
             "<textarea
                 name=\"$name\" 
-                id=\"" . strtolower(str_replace("[]", '', $name)) . "\" 
+                class=\"" . strtolower(str_replace("[]", '', $name)) . "\" 
                 $options>$value</textarea>";
     }
 
@@ -47,7 +47,7 @@ class Type
         return
             "<select
                 name=\"$name\" 
-                id=\"" . strtolower(str_replace("[]", '', $name)) . "\" 
+                class=\"" . strtolower(str_replace("[]", '', $name)) . "\" 
                 $select_option>$options</select>";
     }
 }

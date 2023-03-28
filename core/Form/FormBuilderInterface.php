@@ -14,5 +14,5 @@ interface FormBuilderInterface extends FormInterface
     /**
      * Change les informations de l'input ayant le nom renseigné
      */
-    public function change(string $name, array $options = []): FormBuilderInterface;
+    public function change(string $name, array $options = [], int $key = 0): FormBuilderInterface;
 }

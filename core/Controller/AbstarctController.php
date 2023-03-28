@@ -49,4 +49,11 @@ abstract class AbstarctController
         }
         return true;
     }
+
+    public function dump($val)
+    {
+        echo "<pre>";
+        var_dump($val);
+        echo "</pre>";
+    }
 }

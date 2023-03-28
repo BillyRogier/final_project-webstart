@@ -7,7 +7,7 @@
     <meta name="description" content="Description" />
     <link rel="stylesheet" href="<?= URL ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= URL ?>/assets/css/style.css">
-    <script src="<?= URL ?>/assets/js/send.js" defer type="module"></script>
+    <script src="<?= URL ?>/assets/js/send.js" defer></script>
     <title><?= $app->title ?></title>
 </head>
 

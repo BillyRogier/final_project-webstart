@@ -10,18 +10,20 @@ use App\Table\Carousel;
 use App\Table\Category;
 
 foreach ($products as $product) : ?>
-    <img src="<?= URL ?>/assets/img/<?= $product->getJoin(Carousel::class)->getImg() ?>" />
-    <h3><?= $product->getName() ?></h3>
-    <p><?= $product->getDescription() ?></p>
-    <p><?= $product->getPrice() ?></p>
-    <p><?= $product->getJoin(Category::class)->getCategory_name() ?></p>
-    <a href="<?= URL ?>/admin/update/<?= $product->getId() ?>">update</a>
-    <?=
+    <div class="product">
+        <img src="<?= URL ?>/assets/img/<?= $product->getJoin(Carousel::class)->getImg() ?>" />
+        <h3><?= $product->getName() ?></h3>
+        <p><?= $product->getDescription() ?></p>
+        <p><?= $product->getPrice() ?></p>
+        <p><?= $product->getJoin(Category::class)->getCategory_name() ?></p>
+        <a href="<?= URL ?>/admin/update/<?= $product->getId() ?>">update</a>
+        <?=
 
-    $form_delete
-        ->change("id", ['value' => $product->getId()])
-        ->change("submit", ['value' => 'delete'])
-        ->createView()
+        $form_delete
+            ->change("id", ['value' => $product->getId()])
+            ->change("submit", ['value' => 'delete'])
+            ->createView()
 
-    ?>
+        ?>
+    </div>
 <?php endforeach; ?>

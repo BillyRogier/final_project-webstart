@@ -32,6 +32,7 @@ class AdminController extends AbstarctController
             $this->headLocation("/login");
         }
         $productsTable = $this->app->getTable('Products');
+        $carouselTable = $this->app->getTable('Carousel');
         $productsTable
             ->innerJoin(Category::class)
             ->on("products.category_id = category.category_id")
@@ -51,7 +52,8 @@ class AdminController extends AbstarctController
             if ($error->noError()) {
                 $data = $form_delete->getData();
 
-                $productsTable->delete($data['id']);
+                $carouselTable->delete(['product_id' => $data['id']]);
+                $productsTable->delete(['id' => $data['id']]);
 
                 $_SESSION["message"] = $error->success("success");
                 $error->location(URL . "/admin", "success_location");
@@ -67,7 +69,6 @@ class AdminController extends AbstarctController
         ]);
     }
 
-    // update image
     #[Route('/admin/update/{id}', name: 'update')]
     public function update(int $id)
     {
@@ -97,8 +98,9 @@ class AdminController extends AbstarctController
         // post all img in database
 
         $form_update = $this
-            ->createForm()
+            ->createForm("", "post", ["enctype" => "multipart/form-data"])
             ->add("id", HiddenType::class, ['value' => $product->getId()])
+            ->add("img[]", HiddenType::class)
             ->add("file[]", FileType::class, ['multiple' => "multiple"])
             ->add("name", TextType::class, ['value' => $product->getName()])
             ->add("description", TextareaType::class, ['value' => $product->getDescription()])
@@ -107,22 +109,25 @@ class AdminController extends AbstarctController
             ->add("submit", SubmitType::class, ['value' => 'Save'])
             ->getForm();
 
+
         if ($form_update->isSubmit()) {
             $error = $form_update->isXmlValid($productsTable);
             if ($error->noError()) {
                 $data = $form_update->getData();
 
-                $carouselTable->delete(['product_id' => $id]);
-                $uploads_dir = ROOT . '\public\assets\img';
-                foreach ($data["file"]["tmp_name"] as $key => $value) {
-                    $tmp_name = $_FILES["file"]["tmp_name"][$key];
-                    $name = basename($_FILES["file"]["name"][$key]);
-                    move_uploaded_file($tmp_name, "$uploads_dir\\$name");
-                    // insert in base
+                if (is_array($data['img'])) {
+                    foreach ($data['img'] as $key => $value) {
+                        $carouselTable
+                            ->setProduct_id($id)
+                            ->setImg($value)
+                            ->setType($key + 1)
+                            ->flush();
+                    }
+                } else {
                     $carouselTable
                         ->setProduct_id($id)
-                        ->setImg($data["file"]["name"][$key])
-                        ->setType($key + 1)
+                        ->setImg($data['img'])
+                        ->setType(1)
                         ->flush();
                 }
 
@@ -142,7 +147,8 @@ class AdminController extends AbstarctController
 
         return $this->render('/admin/update.php', '/admin.php', [
             'title' => 'Admin | Update | ' . $product->getName(),
-            'form_update' => $form_update->createView(),
+            'carousel' => $carousel,
+            'form_update' => $form_update,
         ]);
     }
 
@@ -197,6 +203,25 @@ class AdminController extends AbstarctController
             'form_insert' => $form_insert->createView(),
         ]);
     }
+
+    #[Route('/get/image', name: 'image_html')]
+    public function getImage()
+    {
+        echo URL . "/assets/img/";
+    }
+
+    #[Route('/get/upload-image', name: 'upload_image')]
+    public function uploadImage()
+    {
+        $uploads_dir = ROOT . '\public\assets\img';
+        if (isset($_FILES["file"])) {
+            $tmp_name = $_FILES["file"]["tmp_name"];
+            $name = basename($_FILES["file"]["name"]);
+            move_uploaded_file($tmp_name, "$uploads_dir\\$name");
+            echo $name;
+        }
+    }
+
 
     // show all category with update and delete
     // create category
