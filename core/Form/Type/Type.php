@@ -17,13 +17,22 @@ class Type
 
     function input($name, $type, $options)
     {
-        return
-            "<input 
+        if (str_contains($name, '[]')) {
+            $name = strtolower(str_replace("[]", '', $name));
+            return  "<div class=\"$name-item\"><input 
+            name=\"$name\" 
+            class=\"$name\" 
+            type=\"$type\" 
+            $options
+        ></div>";
+        } else {
+            return  "<input 
                 name=\"$name\" 
-                class=\"" . strtolower(str_replace("[]", '', $name)) . "\" 
+                class=\"$name\" 
                 type=\"$type\" 
                 $options
             >";
+        }
     }
 
     function textarea($name, $value, $options)

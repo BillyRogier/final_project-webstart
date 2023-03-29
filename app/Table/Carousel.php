@@ -12,7 +12,7 @@ class Carousel extends Table
     private $carousel_id;
     #[Properties(type: 'string', length: 255)]
     private $img;
-    #[Properties(type: 'int', length: 1)]
+    #[Properties(type: 'int', length: 2)]
     private $type;
     #[Properties(type: 'int', length: 11)]
     private $product_id;

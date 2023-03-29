@@ -52,7 +52,15 @@ class AdminController extends AbstarctController
             if ($error->noError()) {
                 $data = $form_delete->getData();
 
+                $carousel = $carouselTable->findAllBy(['product_id' => $data['id']]);
                 $carouselTable->delete(['product_id' => $data['id']]);
+
+                foreach ($carousel as $img) {
+                    if (!$carouselTable->findAllBy(['img' => $img->getImg()])) {
+                        unlink(ROOT . "/public/assets/img/" . $img->getImg());
+                    }
+                }
+
                 $productsTable->delete(['id' => $data['id']]);
 
                 $_SESSION["message"] = $error->success("success");
@@ -235,10 +243,22 @@ class AdminController extends AbstarctController
         if (isset($_FILES["file"])) {
             $tmp_name = $_FILES["file"]["tmp_name"];
             $name = basename($_FILES["file"]["name"]);
-            move_uploaded_file($tmp_name, "$uploads_dir\\$name");
+            if (!file_exists("$uploads_dir\\$name")) {
+                move_uploaded_file($tmp_name, "$uploads_dir\\$name");
+            }
             echo $name;
         }
     }
+
+    #[Route('/get/delete-image', name: 'delete_image')]
+    public function deleteImage()
+    {
+        $uploads_dir = ROOT . '\public\assets\img';
+        if (isset($_POST["src"])) {
+            // if image not for another product
+        }
+    }
+
 
 
     // show all category with update and delete
