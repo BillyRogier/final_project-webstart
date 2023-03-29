@@ -34,7 +34,8 @@ const uploadImage = async () => {
 
 const deleteImage = async (container) => {
     const allInputsImage = document.querySelectorAll('.img')
-    var imageSrc = container.querySelector('.img').value
+    const inputContainer = container.querySelector('.img')
+    var imageSrc = inputContainer.value
     let allSrc = 0
     allInputsImage.forEach((input) => {
         if (input.value == imageSrc) {
@@ -49,7 +50,13 @@ const deleteImage = async (container) => {
             body: formData,
         })
     }
-    container.remove()
+    if (allInputsImage.length <= 1) {
+        container.querySelector('img').remove()
+        container.querySelector('.del').remove()
+        inputContainer.value = ''
+    } else {
+        container.remove()
+    }
 }
 
 const deleteClick = () => {
