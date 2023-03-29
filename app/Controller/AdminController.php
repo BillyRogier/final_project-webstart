@@ -255,7 +255,7 @@ class AdminController extends AbstarctController
     {
         $uploads_dir = ROOT . '\public\assets\img';
         if (isset($_POST["src"])) {
-            // if image not for another product
+            unlink(ROOT . "/public/assets/img/" . $_POST["src"]);
         }
     }
 
