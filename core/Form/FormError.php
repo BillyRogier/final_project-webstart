@@ -37,8 +37,11 @@ class FormError extends Form implements FormErrorInterface
                 if (!isset($_POST[$input]) && !isset($_FILES[$input])) {
                     if ($inputType == SubmitType::class) {
                         continue;
+                    } else if (str_contains($value['name'], "[]")) {
+                        $error->danger("veuillez remplir le champs $input", $input);
+                    } else {
+                        $error->danger("error occured", "error_container");
                     }
-                    $error->danger("error occured", "error_container");
                 }
                 if (empty($_POST[$input]) && empty($_FILES[$input])) {
                     if ($inputType == SubmitType::class && $inputType == FileType::class) {

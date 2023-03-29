@@ -253,12 +253,13 @@ class AdminController extends AbstarctController
     #[Route('/get/delete-image', name: 'delete_image')]
     public function deleteImage()
     {
-        $uploads_dir = ROOT . '\public\assets\img';
         if (isset($_POST["src"])) {
-            unlink(ROOT . "/public/assets/img/" . $_POST["src"]);
+            $carouselTable = $this->app->getTable('Carousel');
+            if (!$carouselTable->findAllBy(['img' => $_POST["src"]])) {
+                unlink(ROOT . "/public/assets/img/" . $_POST["src"]);
+            }
         }
     }
-
 
 
     // show all category with update and delete

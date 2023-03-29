@@ -18,10 +18,10 @@ class Type
     function input($name, $type, $options)
     {
         if (str_contains($name, '[]')) {
-            $name = strtolower(str_replace("[]", '', $name));
-            return  "<div class=\"$name-item\"><input 
+            $nameControl = strtolower(str_replace("[]", '', $name));
+            return  "<div class=\"$nameControl-item\"><input 
             name=\"$name\" 
-            class=\"$name\" 
+            class=\"$nameControl\" 
             type=\"$type\" 
             $options
         ></div>";
