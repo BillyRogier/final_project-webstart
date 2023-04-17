@@ -12,11 +12,12 @@ use App\Table\Users;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\ChoiceType;
 use Core\Form\Type\DateTimeType;
+use Core\Form\Type\EmailType;
 use Core\Form\Type\HiddenType;
+use Core\Form\Type\PasswordType;
 use Core\Form\Type\SubmitType;
 use Core\Form\Type\TextType;
 use Core\Route\Route;
-use DateTime;
 
 class AdminController extends AbstarctController
 {
@@ -77,7 +78,59 @@ class AdminController extends AbstarctController
         ]);
     }
 
-    #[Route('/admin/users', name: 'admin')]
+    #[Route('/admin/insert-user', name: 'insert user')]
+    public function insertUser()
+    {
+        $formBuilder = $this->createForm()
+            ->add("first_name", TextType::class, ['label' => 'First name', 'id' => 'first_name', 'data-req' => true])
+            ->add("last_name", TextType::class, ['label' => 'Last name', 'id' => 'last_name', 'data-req' => true])
+            ->add("email", EmailType::class, ['label' => 'Email', 'id' => 'email'])
+            ->add("password", PasswordType::class, ['label' => 'Password', 'id' => 'password', 'data-pass' => true])
+            ->add("num", TextType::class, ['label' => 'Phone number', 'id' => 'num', 'data-req' => true])
+            ->add("adress", TextType::class, ['label' => 'Adress', 'id' => 'adress', 'data-req' => true])
+            ->add("type", ChoiceType::class, ['choices' => ['Admin' => 2, 'Utilisateur' => 1], 'label' => 'Type', 'id' => 'type'])
+            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->getForm();
+
+        if ($formBuilder->isSubmit()) {
+            $UsersTable = new Users();
+            $error = $formBuilder->isXmlValid($UsersTable);
+            if ($error->noError()) {
+                $data = $formBuilder->getData();
+                $user = $UsersTable->findOneBy(['email' => $data['email']]);
+
+
+                if (!$user) {
+                    if ($data['type'] == 1 || $data['type'] == 2) {
+                        $UsersTable
+                            ->setFirst_name($data['first_name'])
+                            ->setLast_name($data['last_name'])
+                            ->setEmail($data['email'])
+                            ->setPassword(password_hash($data['password'], PASSWORD_DEFAULT))
+                            ->setNum($data['num'])
+                            ->setAdress($data['adress'])
+                            ->setType($data['type'])
+                            ->flush();
+
+                        $_SESSION["message"] = $error->success("successfully register");
+                        $error->location(URL . "/admin/users", "success_location");
+                    } else {
+                        $error->danger("error occured", "error_container");
+                    }
+                } else {
+                    $error->danger("Email déjà utilisé", 'error_container');
+                }
+            }
+            $error->getXmlMessage($this->app->getProperties(Users::class));
+        }
+
+        return $this->render('/app/register.php', '/admin.php', [
+            'title' => 'Admin | Register',
+            'form' => $formBuilder->createView(),
+        ]);
+    }
+
+    #[Route('/admin/users', name: 'show all users')]
     public function showUsers()
     {
         $UsersTable = new Users();
@@ -102,7 +155,7 @@ class AdminController extends AbstarctController
                     $UsersTable->delete(['id' => $data['id']]);
 
                     $_SESSION["message"] = $error->success("delete successfully");
-                    $error->location(URL . "/admin/all-users", "success_location");
+                    $error->location(URL . "/admin/users", "success_location");
                 } else {
                     $error->danger("error occured", "error_container");
                 }
@@ -117,7 +170,7 @@ class AdminController extends AbstarctController
         ]);
     }
 
-    #[Route('/admin/users/update/{id}', name: 'admin')]
+    #[Route('/admin/users/update/{id}', name: 'update user')]
     public function updateUser(int $id)
     {
         $UsersTable = $this->app->getTable('Users');
@@ -129,13 +182,13 @@ class AdminController extends AbstarctController
 
         $form_update = $this->createForm()
             ->add("id", HiddenType::class, ['value' => $id])
-            ->add("first_name", TextType::class, ['value' => $user->getFirst_name(), 'data-req' => true])
-            ->add("last_name", TextType::class, ['value' => $user->getLast_name(), 'data-req' => true])
-            ->add("email", TextType::class, ['value' => $user->getEmail()])
-            ->add("num", TextType::class, ['value' => $user->getNum(), 'data-req' => true])
-            ->add("adress", TextType::class, ['value' => $user->getAdress(), 'data-req' => true])
-            ->add("type", ChoiceType::class, ['choices' => ['Admin' => 1, 'Utilisateur' => 0], 'label' => 'Catégorie', 'id' => 'categorie'])
-            ->add("creation_date", DateTimeType::class, ['value' => $user->getCreation_date()])
+            ->add("first_name", TextType::class, ['value' => $user->getFirst_name(), 'data-req' => true, 'label' => 'Prénom', 'id' => 'first_name'])
+            ->add("last_name", TextType::class, ['value' => $user->getLast_name(), 'data-req' => true, 'label' => 'Nom', 'id' => 'last_name'])
+            ->add("email", EmailType::class, ['value' => $user->getEmail(), 'label' => 'Email', 'id' => 'email'])
+            ->add("num", TextType::class, ['value' => $user->getNum(), 'data-req' => true, 'label' => 'Numéro de téléphone', 'id' => 'num'])
+            ->add("adress", TextType::class, ['value' => $user->getAdress(), 'data-req' => true, 'label' => 'Adresse', 'id' => 'adress'])
+            ->add("type", ChoiceType::class, ['choices' => ['Admin' => 2, 'Utilisateur' => 1], 'label' => 'Type', 'id' => 'type', 'value' => $user->getType()])
+            ->add("creation_date", DateTimeType::class, ['value' => $user->getCreation_date(), 'label' => 'Date de création', 'id' => 'creation_date'])
             ->add("submit", SubmitType::class, ['value' => 'Save'])
             ->getForm();
 
@@ -144,7 +197,7 @@ class AdminController extends AbstarctController
             if ($error->noError()) {
                 $data = $form_update->getData();
 
-                if ($data['type'] < 2) {
+                if ($data['type'] == 1 || $data['type'] == 2) {
                     $user
                         ->setFirst_name($data['first_name'])
                         ->setLast_name($data['last_name'])
@@ -158,10 +211,10 @@ class AdminController extends AbstarctController
                     $_SESSION["message"] = $error->success("update successfully");
                     $error->location(URL . "/admin/users", "success_location");
                 } else {
-                    $error->success("error occured", "error_container");
+                    $error->danger("error occured", "error_container");
                 }
             }
-            $error->getXmlMessage($this->app->getProperties(Products::class));
+            $error->getXmlMessage($this->app->getProperties(Users::class));
         }
 
         return $this->render('/admin/user_update.php', '/admin.php', [

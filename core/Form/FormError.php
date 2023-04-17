@@ -57,7 +57,7 @@ class FormError extends Form implements FormErrorInterface
                 if (empty($_POST[$input]) && empty($_FILES[$input])  && !isset($value['options']['data-req'])) {
                     if ($inputType == SubmitType::class || $inputType == FileType::class || $input == "id") {
                         continue;
-                    };
+                    }
                     $error->danger("veuillez remplir le champs $input", $input);
                 } else if (!empty($this->table)) {
                     if ($inputType != ChoiceType::class) {

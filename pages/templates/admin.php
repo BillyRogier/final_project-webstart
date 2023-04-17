@@ -14,6 +14,7 @@
 <body>
     <header>
         <a href="<?= URL ?>/admin/users">Users</a>
+        <a href="<?= URL ?>/admin/insert-user">Insert user</a>
     </header>
 
     <?= $content ?>

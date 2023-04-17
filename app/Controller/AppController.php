@@ -65,7 +65,7 @@ class AppController extends AbstarctController
                 if ($user) {
                     if (password_verify($data["password"], $user->getPassword())) {
                         $_SESSION["message"] = $error->success("successfully login");
-                        if ($user->getType() == 1) {
+                        if ($user->getType() == 2) {
                             $_SESSION['admin'] = $user->getId();
                         } else {
                             $_SESSION['user'] = $user->getId();

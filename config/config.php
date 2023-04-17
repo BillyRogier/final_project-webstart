@@ -9,6 +9,6 @@ return array(
     ],
     "app" => [
         "name" => "Les Truelles Ardéchoises",
-        "base_url" => "http://localhost/final_project_v2/public"
+        "base_url" => "http://localhost/final_project/public"
     ]
 );

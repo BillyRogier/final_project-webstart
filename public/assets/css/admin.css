@@ -16,6 +16,10 @@ html {
     font-size: 112.5%;
 }
 
+body {
+    margin: 20px;
+}
+
 h1,
 h2,
 h3,
@@ -46,7 +50,8 @@ p {
 }
 
 input,
-textarea {
+textarea,
+select {
     border: 2px solid #000;
 }
 
@@ -70,12 +75,14 @@ tfoot {
 }
 
 .input-container.invalid input,
-.input-container.invalid textarea {
+.input-container.invalid textarea,
+.input-container.invalid select {
     border-color: #9c0b0b;
 }
 
 .input-container.active input,
-.input-container.active textarea {
+.input-container.active textarea,
+.input-container.active select {
     border-color: #4c9c0b;
 }
 
@@ -100,6 +107,7 @@ tfoot {
 }
 
 .error-container {
+    margin-top: 20px;
     width: 100%;
 }
 
@@ -112,4 +120,20 @@ tfoot {
     font: var(--small-size);
     color: #4c9c0b;
     list-style: none;
+}
+
+.danger {
+    width: 100%;
+    padding: 15px 25px;
+    background-color: #9c0b0b40;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font: var(--small-size);
+    color: #9c0b0b;
+    list-style: none;
+}
+form {
+    display: grid;
+    gap: 1rem;
+    margin-top: 20px;
 }

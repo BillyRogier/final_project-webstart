@@ -136,11 +136,13 @@ export class ValidForm {
             .then((data) => {
                 const inputForm = this.form.querySelectorAll('input')
                 const textareaForm = this.form.querySelectorAll('textarea')
+                const selectForm = this.form.querySelectorAll('select')
                 if (!this.successRedirection(data)) {
                     this.errorContainer.innerHTML = data.error_container
                     this.propertie = data
                     this.inputEvent(inputForm)
                     this.inputEvent(textareaForm)
+                    this.inputEvent(selectForm)
                 }
             })
     }
