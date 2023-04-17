@@ -5,271 +5,168 @@ namespace App\Controller;
 use App;
 use App\Table\Carousel;
 use App\Table\Category;
+use App\Table\Orders;
 use App\Table\Products;
+use App\Table\Reviews;
+use App\Table\Users;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\ChoiceType;
-use Core\Form\Type\FileType;
+use Core\Form\Type\DateTimeType;
 use Core\Form\Type\HiddenType;
 use Core\Form\Type\SubmitType;
-use Core\Form\Type\TextareaType;
 use Core\Form\Type\TextType;
 use Core\Route\Route;
-
+use DateTime;
 
 class AdminController extends AbstarctController
 {
-    private $app;
+    private  $app;
 
     public function __construct()
     {
         $this->app = App::getInstance();
+        if (!$this->app->isAdmin()) {
+            $this->headLocation("/account");
+        }
     }
 
     #[Route('/admin', name: 'admin')]
     public function admin()
     {
-        if (!$this->isAdmin()) {
-            $this->headLocation("/login");
-        }
-        $productsTable = $this->app->getTable('Products');
-        $carouselTable = $this->app->getTable('Carousel');
-        $productsTable
+        $ProductsTable = new Products();
+        $ProductsTable
             ->innerJoin(Category::class)
             ->on("products.category_id = category.category_id")
             ->leftJoin(Carousel::class)
             ->on("carousel.product_id = products.id");
 
-        $products = $productsTable->find("WHERE carousel.type = ? OR carousel.type IS ?", [1, NULL]);
+        $products = $ProductsTable->find("WHERE carousel.type = ? OR carousel.type IS ?", [1, NULL]);
 
         $form_delete = $this
             ->createForm()
             ->add("id", HiddenType::class)
-            ->add("submit", SubmitType::class)
+            ->add("submit", SubmitType::class, ['value' => 'supprimer'])
             ->getForm();
 
         if ($form_delete->isSubmit()) {
-            $error = $form_delete->isXmlValid($productsTable);
+            $error = $form_delete->isXmlValid($ProductsTable);
             if ($error->noError()) {
                 $data = $form_delete->getData();
 
-                $carousel = $carouselTable->findAllBy(['product_id' => $data['id']]);
-                $carouselTable->delete(['product_id' => $data['id']]);
+                $carousel = $ProductsTable->getJoin(Carousel::class)->findAllBy(['product_id' => $data['id']]);
+                $ProductsTable->getJoin(Carousel::class)->delete(['product_id' => $data['id']]);
 
                 foreach ($carousel as $img) {
-                    if (!$carouselTable->findAllBy(['img' => $img->getImg()])) {
+                    if (!$ProductsTable->getJoin(Carousel::class)->findAllBy(['img' => $img->getImg()])) {
                         unlink(ROOT . "/public/assets/img/" . $img->getImg());
                     }
                 }
 
-                $productsTable->delete(['id' => $data['id']]);
+                $ProductsTable->delete(['id' => $data['id']]);
 
                 $_SESSION["message"] = $error->success("success");
                 $error->location(URL . "/admin", "success_location");
-                $error->getXmlMessage($this->app->getProperties(Products::class));
             }
             $error->getXmlMessage($this->app->getProperties(Products::class));
         }
 
         return $this->render('/admin/index.php', '/admin.php', [
-            'title' => 'admin | Accueil',
+            'title' => 'Admin | Accueil',
             'products' => $products,
             'form_delete' => $form_delete,
         ]);
     }
 
-    #[Route('/admin/update/{id}', name: 'update')]
-    public function update(int $id)
+    #[Route('/admin/users', name: 'admin')]
+    public function showUsers()
     {
-        if (!$this->isAdmin()) {
-            $this->headLocation("/login");
+        $UsersTable = new Users();
+        $users = $UsersTable->findAll();
+
+        $form_delete = $this->createForm()
+            ->add("id", HiddenType::class)
+            ->add("submit", SubmitType::class, ['value' => 'Supprimer'])
+            ->getForm();
+
+        if ($form_delete->isSubmit()) {
+            $error = $form_delete->isXmlValid($UsersTable);
+            if ($error->noError()) {
+                $data = $form_delete->getData();
+
+                if ($UsersTable->findOneBy(['id' => $data['id']])) {
+                    $OrdersTable = new Orders();
+                    $ReviewsTable = new Reviews();
+
+                    $ReviewsTable->delete(['user_id' => $data['id']]);
+                    $OrdersTable->delete(['user_id' => $data['id']]);
+                    $UsersTable->delete(['id' => $data['id']]);
+
+                    $_SESSION["message"] = $error->success("delete successfully");
+                    $error->location(URL . "/admin/all-users", "success_location");
+                } else {
+                    $error->danger("error occured", "error_container");
+                }
+            }
+            $error->getXmlMessage($this->app->getProperties(Products::class));
         }
 
-        $productsTable = $this->app->getTable('Products');
-        $carouselTable = $this->app->getTable('Carousel');
-        $categoryTable = $this->app->getTable('Category');
+        return $this->render('/admin/users.php', '/admin.php', [
+            'title' => 'Admin | Users',
+            'users' => $users,
+            'form_delete' => $form_delete
+        ]);
+    }
 
-        $productsTable
-            ->join(Category::class)
-            ->on("products.category_id = category.category_id");
+    #[Route('/admin/users/update/{id}', name: 'admin')]
+    public function updateUser(int $id)
+    {
+        $UsersTable = $this->app->getTable('Users');
+        $user = $UsersTable->findOneBy(['id' => $id]);
 
-        $product = $productsTable->findOneBy(['products.id' => $id]);
-        $carousel = $carouselTable->findAllBy(['product_id' => $id]);
-        $categorys = $categoryTable->findAll();
+        if (!$user) {
+            $this->headLocation("/admin/users");
+        }
 
-        $choice_category = [];
-        foreach ($categorys as $category) {
-            $choice_category[$category->getCategory_name()] = $category->getCategory_id();
-        };
-
-        $form_update = $this
-            ->createForm("", "post", ["enctype" => "multipart/form-data"])
-            ->add("id", HiddenType::class, ['value' => $product->getId()])
-            ->add("img[]", HiddenType::class)
-            ->add("file[]", FileType::class, ['multiple' => "multiple"])
-            ->add("name", TextType::class, ['value' => $product->getName()])
-            ->add("description", TextareaType::class, ['value' => $product->getDescription()])
-            ->add("price", TextType::class, ['value' => $product->getPrice()])
-            ->add("categorie", ChoiceType::class, ['choices' => $choice_category, 'table' => $categoryTable])
+        $form_update = $this->createForm()
+            ->add("id", HiddenType::class, ['value' => $id])
+            ->add("first_name", TextType::class, ['value' => $user->getFirst_name(), 'data-req' => true])
+            ->add("last_name", TextType::class, ['value' => $user->getLast_name(), 'data-req' => true])
+            ->add("email", TextType::class, ['value' => $user->getEmail()])
+            ->add("num", TextType::class, ['value' => $user->getNum(), 'data-req' => true])
+            ->add("adress", TextType::class, ['value' => $user->getAdress(), 'data-req' => true])
+            ->add("type", ChoiceType::class, ['choices' => ['Admin' => 1, 'Utilisateur' => 0], 'label' => 'Catégorie', 'id' => 'categorie'])
+            ->add("creation_date", DateTimeType::class, ['value' => $user->getCreation_date()])
             ->add("submit", SubmitType::class, ['value' => 'Save'])
             ->getForm();
 
-
         if ($form_update->isSubmit()) {
-            $error = $form_update->isXmlValid($productsTable);
+            $error = $form_update->isXmlValid($UsersTable);
             if ($error->noError()) {
                 $data = $form_update->getData();
 
-                $carouselTable->delete(['product_id' => $id]);
-
-                if (is_array($data['img'])) {
-                    foreach ($data['img'] as $key => $value) {
-                        $carouselTable
-                            ->setProduct_id($id)
-                            ->setImg($value)
-                            ->setType($key + 1)
-                            ->flush();
-                    }
-                } else {
-                    $carouselTable
-                        ->setProduct_id($id)
-                        ->setImg($data['img'])
-                        ->setType(1)
+                if ($data['type'] < 2) {
+                    $user
+                        ->setFirst_name($data['first_name'])
+                        ->setLast_name($data['last_name'])
+                        ->setEmail($data['email'])
+                        ->setNum($data['num'])
+                        ->setAdress($data['adress'])
+                        ->setType($data['type'])
+                        ->setCreation_date($data['creation_date'])
                         ->flush();
+
+                    $_SESSION["message"] = $error->success("update successfully");
+                    $error->location(URL . "/admin/users", "success_location");
+                } else {
+                    $error->success("error occured", "error_container");
                 }
-
-                $product
-                    ->setName($data["name"])
-                    ->setDescription($data["description"])
-                    ->setPrice($data["price"])
-                    ->setCategory_id($data["categorie"])
-                    ->flush();
-
-                $_SESSION["message"] = $error->success("success");
-                $error->location(URL . "/admin", "success_location");
-                $error->getXmlMessage($this->app->getProperties(Products::class));
             }
             $error->getXmlMessage($this->app->getProperties(Products::class));
         }
 
-        return $this->render('/admin/update.php', '/admin.php', [
-            'title' => 'Admin | Update | ' . $product->getName(),
-            'carousel' => $carousel,
-            'form_update' => $form_update,
+        return $this->render('/admin/user_update.php', '/admin.php', [
+            'title' => 'Admin | Users | Update ' . $user->getFirst_name(),
+            'form_update' => $form_update->createView(),
         ]);
     }
-
-    #[Route('/admin/insert', name: 'insert')]
-    public function insert()
-    {
-        if (!$this->isAdmin()) {
-            $this->headLocation("/login");
-        }
-
-        $productsTable = $this->app->getTable('Products');
-        $categoryTable = $this->app->getTable('Category');
-        $carouselTable = $this->app->getTable('Carousel');
-
-        $categorys = $categoryTable->findAll();
-
-        $choice_category = [];
-        foreach ($categorys as $category) {
-            $choice_category[$category->getCategory_name()] = $category->getCategory_id();
-        };
-
-        $form_insert = $this
-            ->createForm()
-            ->add("img[]", HiddenType::class)
-            ->add("file[]", FileType::class, ['multiple' => "multiple"])
-            ->add("name", TextType::class)
-            ->add("description", TextareaType::class)
-            ->add("price", TextType::class)
-            ->add("categorie", ChoiceType::class, ['choices' => $choice_category, 'table' => $categoryTable])
-            ->add("submit", SubmitType::class, ['value' => 'Insert'])
-            ->getForm();
-
-        if ($form_insert->isSubmit()) {
-            $error = $form_insert->isXmlValid($productsTable);
-            if ($error->noError()) {
-                $data = $form_insert->getData();
-
-                $productsTable
-                    ->setName($data["name"])
-                    ->setDescription($data["description"])
-                    ->setPrice($data["price"])
-                    ->setCategory_id($data["categorie"])
-                    ->flush();
-
-                $product_id = $productsTable->lastInsertId();
-
-                if (is_array($data['img'])) {
-                    foreach ($data['img'] as $key => $value) {
-                        $carouselTable
-                            ->setProduct_id($product_id)
-                            ->setImg($value)
-                            ->setType($key + 1)
-                            ->flush();
-                    }
-                } else {
-                    $carouselTable
-                        ->setProduct_id($product_id)
-                        ->setImg($data['img'])
-                        ->setType(1)
-                        ->flush();
-                }
-
-                $_SESSION["message"] = $error->success("success");
-                $error->location(URL . "/admin", "success_location");
-                $error->getXmlMessage($this->app->getProperties(Products::class));
-            }
-            $error->getXmlMessage($this->app->getProperties(Products::class));
-        }
-
-        return $this->render('/admin/insert.php', '/admin.php', [
-            'title' => 'Admin | Update | Insert',
-            'form_insert' => $form_insert->createView(),
-        ]);
-    }
-
-    #[Route('/get/image', name: 'image_html')]
-    public function getImage()
-    {
-        echo URL . "/assets/img/";
-    }
-
-    #[Route('/get/upload-image', name: 'upload_image')]
-    public function uploadImage()
-    {
-        $uploads_dir = ROOT . '\public\assets\img';
-        if (isset($_FILES["file"])) {
-            $tmp_name = $_FILES["file"]["tmp_name"];
-            $name = basename($_FILES["file"]["name"]);
-            if (!file_exists("$uploads_dir\\$name")) {
-                move_uploaded_file($tmp_name, "$uploads_dir\\$name");
-            }
-            echo $name;
-        }
-    }
-
-    #[Route('/get/delete-image', name: 'delete_image')]
-    public function deleteImage()
-    {
-        if (isset($_POST["src"])) {
-            $carouselTable = $this->app->getTable('Carousel');
-            if (!$carouselTable->findAllBy(['img' => $_POST["src"]])) {
-                unlink(ROOT . "/public/assets/img/" . $_POST["src"]);
-            }
-        }
-    }
-
-
-    // show all category with update and delete
-    // create category
-
-
-    // show all users with update and delete
-    // insert user
-
-    // show orders
-
-    // update settings
 }

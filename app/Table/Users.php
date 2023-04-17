@@ -170,7 +170,7 @@ class Users extends Table
     public function flush()
     {
         if (isset($this->id)) {
-            parent::update(['first_name', 'last_name', 'email', 'password', 'num', 'adress', 'type', 'creation_date'], [$this->first_name, $this->last_name, $this->email, $this->password, $this->num, $this->adress, $this->type, $this->creation_date, $this->id]);
+            parent::update(['first_name', 'last_name', 'email', 'password', 'num', 'adress', 'type', 'creation_date'], "id", [$this->first_name, $this->last_name, $this->email, $this->password, $this->num, $this->adress, $this->type, $this->creation_date, $this->id]);
         } else {
             parent::insert(['first_name', 'last_name', 'email', 'password', 'num', 'adress', 'type'], [$this->first_name, $this->last_name, $this->email, $this->password, $this->num, $this->adress, $this->type]);
         }

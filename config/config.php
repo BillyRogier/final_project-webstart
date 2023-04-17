@@ -8,7 +8,7 @@ return array(
         "db_name" => "final_project"
     ],
     "app" => [
-        "name" => "Final project",
-        "base_url" => "http://localhost/final_project/public"
+        "name" => "Les Truelles Ardéchoises",
+        "base_url" => "http://localhost/final_project_v2/public"
     ]
 );

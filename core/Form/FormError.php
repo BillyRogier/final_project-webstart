@@ -5,6 +5,7 @@ namespace Core\Form;
 use App;
 use Core\Error\Error;
 use Core\Form\Type\ChoiceType;
+use Core\Form\Type\FileType;
 use Core\Form\Type\SubmitType;
 
 class FormError extends Form implements FormErrorInterface
@@ -34,41 +35,32 @@ class FormError extends Form implements FormErrorInterface
             foreach ($inputs as $value) {
                 $inputType = $value['type'];
                 $input = str_replace("[]", '', $value['name']);
+                $classType = new $inputType();
                 if (!isset($_POST[$input]) && !isset($_FILES[$input])) {
                     if ($inputType == SubmitType::class) {
                         continue;
                     }
                     $error->danger("error occured", "error_container");
-                }
-                if ((isset($_POST[$input]) ? is_array($_POST[$input]) : is_array($_FILES[$input]))) {
+                } else if ((isset($_POST[$input]) ? is_array($_POST[$input]) : is_array($_FILES[$input]))) {
                     foreach ((isset($_POST[$input]) ? $_POST[$input] : $_FILES[$input]) as $value) {
-                        if (empty($value)) {
-                            if ($inputType == SubmitType::class && $inputType == FileType::class) {
+                        if (empty($value) && !isset($value['options']['data-req'])) {
+                            if ($inputType == SubmitType::class || $inputType == FileType::class || $input == "id") {
                                 continue;
                             };
                             $error->danger("veuillez remplir le champs $input", $input);
                         }
                     }
                 }
-                if (empty($_POST[$input]) && empty($_FILES[$input])) {
-                    if ($inputType == SubmitType::class && $inputType == FileType::class) {
+                if (!$classType->isValid(isset($_POST[$input]) ? $_POST[$input] : $_FILES[$input])) {
+                    $error->danger($classType->getMessage(), $input);
+                }
+                if (empty($_POST[$input]) && empty($_FILES[$input])  && !isset($value['options']['data-req'])) {
+                    if ($inputType == SubmitType::class || $inputType == FileType::class || $input == "id") {
                         continue;
                     };
                     $error->danger("veuillez remplir le champs $input", $input);
                 } else if (!empty($this->table)) {
-                    $classType = new $inputType();
-                    if ($input == "id") {
-                        if (!isset($_POST['id']) || !$this->table->findOneBy(['id' => $_POST['id']])) {
-                            $error->danger("error occured", "error_container");
-                        }
-                    } else if ($inputType == ChoiceType::class) {
-                        if (!$classType->isInTable($_POST[$input], isset($value['options']['table']) ? $value['options']['table'] : "")) {
-                            $error->danger("error occured", "error_container");
-                        }
-                    } else {
-                        if (!$classType->isValid(isset($_POST[$input]) ? $_POST[$input] : $_FILES[$input])) {
-                            $error->danger("le champs $input doit être de type " . $properties[$input]->getType() . "", $input);
-                        }
+                    if ($inputType != ChoiceType::class) {
                         if (isset($properties[$input]) && !empty($properties[$input]->getLenght())) {
                             if (strlen($_POST[$input]) > $properties[$input]->getLenght()) {
                                 $error->danger("le champs $input doit contenir maximum " . $properties[$input]->getLenght() . "", $input);

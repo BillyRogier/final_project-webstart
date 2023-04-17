@@ -4,10 +4,9 @@ namespace Core\Form\Type;
 
 class Type
 {
-    public function label($name)
+    public function label($name, $for)
     {
-        $name = strtolower(str_replace("[]", '', $name));
-        return "<label for=\"" . $name . "\">$name</label>";
+        return "<label for=\"" . $for . "\">" . ucfirst($name) . "</label>";
     }
 
     public function isValid($value)
@@ -15,48 +14,38 @@ class Type
         return true;
     }
 
-    function input($name, $type, $options)
+    function input($name, $type, $options, $options_html)
     {
-        if (str_contains($name, '[]')) {
-            $nameControl = strtolower(str_replace("[]", '', $name));
-            return  "<div class=\"$nameControl-item\"><input 
-            name=\"$name\" 
-            class=\"$nameControl\" 
-            type=\"$type\" 
-            $options
-        ></div>";
-        } else {
-            return  "<input 
-                name=\"$name\" 
-                class=\"$name\" 
-                type=\"$type\" 
-                $options
-            >";
-        }
+        $nameControl = strtolower(str_replace("[]", '', $name));
+        return
+            "<div class=\"$nameControl-item\">
+                <input name=\"$name\" type=\"$type\" $options> 
+                $options_html
+            </div>";
     }
 
     function textarea($name, $value, $options)
     {
         return
-            "<textarea
+            "<div class=\"$name-item\"><textarea
                 name=\"$name\" 
-                class=\"" . strtolower(str_replace("[]", '', $name)) . "\" 
-                $options>$value</textarea>";
+                $options>$value</textarea></div>";
     }
 
-    function options($name, $value)
+    function options($name, $value, $select = "")
     {
+        if ($select == true) {
+            $select = "selected";
+        }
         return
             "<option
-                value=\"$value\">$name</option>";
+                value=\"$value\" $select>$name</option>";
     }
 
     function select($name, $select_option, $options)
     {
         return
-            "<select
-                name=\"$name\" 
-                class=\"" . strtolower(str_replace("[]", '', $name)) . "\" 
+            "<select name=\"$name\" id=\"$name\"
                 $select_option>$options</select>";
     }
 }

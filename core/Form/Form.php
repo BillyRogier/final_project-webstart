@@ -2,6 +2,10 @@
 
 namespace Core\Form;
 
+use Core\Error\Error;
+use Core\Form\Type\FileType;
+use Core\Form\Type\SubmitType;
+
 class Form implements FormInterface
 {
     protected $form;
@@ -25,10 +29,18 @@ class Form implements FormInterface
 
     public function isSubmit(): bool
     {
-        if (!isset($_POST) || empty($_POST)) {
-            return false;
+        $submit = false;
+        if (isset($_POST) && !empty($_POST)) {
+            $submit = true;
+            // foreach ($this->form['input'] as $input) {
+            //     if ($input[0]['type'] != SubmitType::class && $input[0]['type'] != FileType::class) {
+            //         if (!isset($_POST[$input[0]['name']])) {
+            //             $submit = false;
+            //         }
+            //     }
+            // }
         }
-        return true;
+        return $submit;
     }
 
     public function isXmlValid($table = "")

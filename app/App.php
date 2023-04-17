@@ -49,7 +49,7 @@ class App
 
     public function getTable($name)
     {
-        $class_name = '\\App\\Table\\' . ucfirst($name);
+        $class_name = '\\App\\Table\\' . $name;
         return new $class_name();
     }
 
@@ -172,14 +172,6 @@ class App
             }
         }
         return $array;
-    }
-
-    public function createUrl($url)
-    {
-        $link = htmlentities(strtolower(str_replace("-", " ", $url)), ENT_QUOTES, 'UTF-8');
-        $link = preg_replace('~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', $link);
-        $link = str_replace(" ", "-", $link);
-        return $link;
     }
 
     public function isAdmin()

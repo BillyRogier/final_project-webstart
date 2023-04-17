@@ -16,7 +16,7 @@ class FormView extends Form implements FormViewInterface
     {
         $array_transform = "";
         foreach ($array as $cle => $value) {
-            if ($textarea == true && ($cle == "value" || $cle == "choices" || $cle == "table")) {
+            if (($textarea == true && ($cle == "value" || $cle == "choices" || $cle == "table")) ||  $cle == "html") {
                 continue;
             } else {
                 $array_transform .= $cle . " = " . "\"$value\"";
@@ -25,7 +25,7 @@ class FormView extends Form implements FormViewInterface
         return $array_transform;
     }
 
-    public function viewInput($label, $input, $name)
+    public function viewInput($input, $name, $label = "")
     {
         return
             "<div class=\"input-container $name-container grid\">
@@ -38,15 +38,16 @@ class FormView extends Form implements FormViewInterface
 
     public function createInput($value, $type, $name)
     {
+        $options_html = isset($value['options']['html']) ? $value['options']['html'] : "";
         if (isset($value['options']['value']) && $type::class == TextareaType::class) {
             $options = $this->getOptions($value['options'], true);
-            $value = $type->getTag($name, $value['options']['value'], $options);
+            $value = $type->getTag($name, $options, $options_html, $value['options']['value']);
         } else if (isset($value['options']['choices']) && $type::class == ChoiceType::class) {
             $options = $this->getOptions($value['options'], true);
-            $value = $type->getTag($name, $options, $value['options']['choices']);
+            $value = $type->getTag($name, $options,  $value['options']);
         } else {
             $options = $this->getOptions($value['options']);
-            $value = $type->getTag($name, $options);
+            $value = $type->getTag($name, $options, $options_html);
         }
         return $value;
     }
@@ -58,16 +59,20 @@ class FormView extends Form implements FormViewInterface
         foreach ($this->form['input'] as $input => $value) {
             $type = new $value[0]['type']();
             $name = $value[0]['name'];
-            $label = $type->label(ucfirst($name));
+            $label = "";
+            if (isset($value[0]['options']['label'])) {
+                $label = $type->label($value[0]['options']['label'], $value[0]['options']['id']);
+            }
+            $input_tag = "<div class=\"item-container grid\">";
             if (count($value) > 1) {
-                $input_tag = "";
                 foreach ($value as $val) {
                     $input_tag .= $this->createInput($val, $type, $name);
                 }
             } else {
-                $input_tag = $this->createInput($value[0], $type, $name);
+                $input_tag .= $this->createInput($value[0], $type, $name);
             }
-            $inputContainer .= $this->viewInput($label, $input_tag, strtolower(str_replace("[]", '', $name)));
+            $input_tag .= "</div>";
+            $inputContainer .= $this->viewInput($input_tag, strtolower(str_replace("[]", '', $name)), $label);
         }
         return $inputContainer;
     }

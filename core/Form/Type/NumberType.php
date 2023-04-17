@@ -12,8 +12,8 @@ class NumberType extends Type
         return true;
     }
 
-    public function getType()
+    public function getTag($name, $options, $options_html)
     {
-        return 'text';
+        return parent::input($name, 'text', $options, $options_html);
     }
 }

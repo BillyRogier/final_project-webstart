@@ -3,250 +3,138 @@
 namespace App\Controller;
 
 use App;
-use App\Cart\Cart;
 use App\Table\Carousel;
 use App\Table\Category;
 use App\Table\Products;
 use App\Table\Users;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\EmailType;
-use Core\Form\Type\HiddenType;
 use Core\Form\Type\PasswordType;
 use Core\Form\Type\SubmitType;
 use Core\Form\Type\TextType;
-use Core\Response\Response;
 use Core\Route\Route;
 
 class AppController extends AbstarctController
 {
     private $app;
-    private $cookie_cart;
 
     public function __construct()
     {
         $this->app = App::getInstance();
-        $this->cookie_cart = new Cart();
     }
 
     #[Route('/', name: 'home')]
-    public function home(): Response
+    public function home()
     {
-        $productsTable = $this->app->getTable('Products');
-        $productsTable
+        $ProductsTable = new Products();
+        $ProductsTable
             ->innerJoin(Category::class)
             ->on("products.category_id = category.category_id")
             ->leftJoin(Carousel::class)
             ->on("carousel.product_id = products.id");
 
-        $products = $productsTable->find("WHERE carousel.type = ? OR carousel.type IS ?", [1, NULL]);
+        $products = $ProductsTable->find("WHERE carousel.type = ? OR carousel.type IS ?", [1, NULL]);
 
-        return $this->render('/home.php', '/default.php',  [
+        return $this->render('/app/home.php', '/default.php',  [
             'title' => 'Accueil',
             'products' => $products,
         ]);
     }
 
-    #[Route('/product/{id}', name: 'product')]
-    public function product(int $id): Response
+    #[Route('/login', name: 'login')]
+    public function login()
     {
-        $productsTable = $this->app->getTable('Products');
-        $carouselsTable = $this->app->getTable('Carousel');
-
-        $productsTable
-            ->innerJoin(Category::class)
-            ->on("products.category_id = category.category_id");
-
-        $product = $productsTable->findOneBy(['id' => $id]);
-        $carousel = $carouselsTable->findAllBy(['product_id' => $id]);
-
-        $form_cart = $this->createForm()
-            ->add("id", HiddenType::class, ['value' => $id])
-            ->add("add_to_cart", SubmitType::class, ['value' => 'add to cart']);
-
-        if ($form_cart->isSubmit()) {
-            $error = $form_cart->isXmlValid($productsTable);
-            if ($error->noError()) {
-                $data = $form_cart->getData();
-
-                $this->cookie_cart->addToCart($data["id"], 1);
-
-                $_SESSION["message"] = $error->success("successfully");
-                $error->location(URL . "/product/$id", "success_location");
-                $error->getXmlMessage($this->app->getProperties(Users::class));
-            }
-            $error->getXmlMessage($this->app->getProperties(Users::class));
+        if ($this->app->isAdmin() || $this->app->isUser()) {
+            $this->headLocation("/");
         }
 
-        return $this->render('/product.php', '/default.php',  [
-            'title' => 'Accueil',
-            'product' => $product,
-            'carousel' => $carousel,
-            'form_cart' => $form_cart->createView(),
-        ]);
-    }
+        $UsersTable = new Users();
 
-    #[Route('/login', name: 'login')]
-    public function login(): Response
-    {
-        $usersTable = $this->app->getTable('Users');
-
-        $formBuilder = $this
-            ->createForm()
-            ->add("email", EmailType::class)
-            ->add("password", PasswordType::class)
+        $formBuilder = $this->createForm()
+            ->add("email", EmailType::class, ['label' => "email", 'id' => "email"])
+            ->add("password", PasswordType::class, ['label' => "password", 'id' => "password"])
             ->add("submit", SubmitType::class, ['value' => 'login'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {
-            $error = $formBuilder->isXmlValid($usersTable);
+            $error = $formBuilder->isXmlValid($UsersTable);
             if ($error->noError()) {
                 $data = $formBuilder->getData();
-                $user = $usersTable->findOneBy(['email' => $data['email']]);
+                $user = $UsersTable->findOneBy(['email' => $data['email']]);
 
                 if ($user) {
                     if (password_verify($data["password"], $user->getPassword())) {
+                        $_SESSION["message"] = $error->success("successfully login");
                         if ($user->getType() == 1) {
                             $_SESSION['admin'] = $user->getId();
                         } else {
                             $_SESSION['user'] = $user->getId();
                         }
+                        $error->location(URL . "/", "success_location");
                     } else {
                         $error->danger("Email or password incorrect", 'error_container');
                     }
                 } else {
                     $error->danger("Email or password incorrect", 'error_container');
                 }
-
-                if ($error->noError()) {
-                    $_SESSION["message"] = $error->success("successfully login");
-                    $error->location(URL . "/", "success_location");
-                    $error->getXmlMessage($this->app->getProperties(Users::class));
-                }
             }
             $error->getXmlMessage($this->app->getProperties(Users::class));
         }
 
-        return $this->render('/login.php', '/login.php', [
+        return $this->render('/app/login.php', '/login.php', [
             'title' => 'Login',
             'form' => $formBuilder->createView(),
         ]);
     }
 
     #[Route('/register', name: 'register')]
-    public function register(): Response
+    public function register()
     {
-        $usersTable = $this->app->getTable('Users');
+        if ($this->app->isAdmin() || $this->app->isUser()) {
+            $this->headLocation("/");
+        }
 
-        $formBuilder = $this
-            ->createForm()
-            ->add("email", EmailType::class)
-            ->add("password", PasswordType::class)
-            ->add("submit", SubmitType::class, ['value' => 'register'])
+        $UsersTable = new Users();
+
+        $formBuilder = $this->createForm()
+            ->add("first_name", TextType::class, ['label' => 'First name', 'id' => 'first_name', 'data-req' => true])
+            ->add("last_name", TextType::class, ['label' => 'Last name', 'id' => 'last_name', 'data-req' => true])
+            ->add("email", EmailType::class, ['label' => 'Email', 'id' => 'email'])
+            ->add("password", PasswordType::class, ['label' => 'Password', 'id' => 'password', 'data-pass' => true])
+            ->add("num", TextType::class, ['label' => 'Phone number', 'id' => 'num', 'data-req' => true])
+            ->add("adress", TextType::class, ['label' => 'Adress', 'id' => 'adress', 'data-req' => true])
+            ->add("submit", SubmitType::class, ['value' => 'Save'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {
-            $error = $formBuilder->isXmlValid($usersTable);
+            $error = $formBuilder->isXmlValid($UsersTable);
             if ($error->noError()) {
                 $data = $formBuilder->getData();
-                $user = $usersTable->findOneBy(['email' => $data['email']]);
+                $user = $UsersTable->findOneBy(['email' => $data['email']]);
 
-                if ($user) {
-                    $error->danger("Email already associated to an account", 'error_container');
-                } else {
-                    $usersTable
-                        ->setEmail($data["email"])
-                        ->setPassword(password_hash($data["password"], PASSWORD_DEFAULT))
+                if (!$user) {
+                    $UsersTable
+                        ->setFirst_name($data['first_name'])
+                        ->setLast_name($data['last_name'])
+                        ->setEmail($data['email'])
+                        ->setPassword(password_hash($data['password'], PASSWORD_DEFAULT))
+                        ->setNum($data['num'])
+                        ->setAdress($data['adress'])
                         ->flush();
 
-                    $userid = $usersTable->lastInsertId();
-                    $_SESSION['user'] = $userid;
-                }
-
-                if ($error->noError()) {
-                    $_SESSION["message"] = $error->success("account create successfully");
+                    $_SESSION['user'] = $UsersTable->lastInsertId();
+                    $_SESSION["message"] = $error->success("successfully register");
                     $error->location(URL . "/", "success_location");
-                    $error->getXmlMessage($this->app->getProperties(Users::class));
+                } else {
+                    $error->danger("Email déjà utilisé", 'error_container');
                 }
             }
             $error->getXmlMessage($this->app->getProperties(Users::class));
         }
 
-        return $this->render('/login.php', '/login.php', [
+        return $this->render('/app/register.php', '/login.php', [
             'title' => 'Register',
             'form' => $formBuilder->createView(),
-        ]);
-    }
-
-    #[Route('/account', name: 'account')]
-    public function account(): Response
-    {
-        if (!$this->app->isUser() && !$this->app->isAdmin()) {
-            $this->headLocation("/login");
-        } else {
-            $user_id = $this->app->isUser() || $this->app->isAdmin();
-        }
-
-        $usersTable = $this->app->getTable('Users');
-        $ordersTable = $this->app->getTable('Orders');
-
-        $ordersTable
-            ->join(Products::class)
-            ->on("products.id = orders.product_id");
-
-        $user = $usersTable->findOneBy(["id" => $user_id]);
-        $orders = $ordersTable->findAllBy(['user_id' => $user_id], "order_date DESC");
-
-        $form_user = $this->createForm()
-            ->add("first_name", TextType::class, ['value' => $user->getFirst_name()])
-            ->add("last_name", TextType::class, ['value' => $user->getLast_name()])
-            ->add("email", EmailType::class, ['value' => $user->getEmail()])
-            ->add("password", PasswordType::class)
-            ->add("num", TextType::class, ['value' => $user->getNum()])
-            ->add("adress", TextType::class, ['value' => $user->getAdress()])
-            ->add("save", SubmitType::class, ['value' => 'save']);
-
-        return $this->render('/account.php', '/default.php', [
-            'title' => 'Account',
-            'orders' => $orders,
-            'form_user' => $form_user->createView(),
-        ]);
-    }
-
-    #[Route('/cart', name: 'cart')]
-    public function cart(): Response
-    {
-        $productsTable = $this->app->getTable('Products');
-        $productsTable
-            ->innerJoin(Category::class)
-            ->on("products.category_id = category.category_id")
-            ->leftJoin(Carousel::class)
-            ->on("carousel.product_id = products.id");
-
-        $form_delete = $this->createForm()
-            ->add("id", HiddenType::class)
-            ->add("add_to_cart", SubmitType::class, ['value' => 'delete']);
-
-        if ($form_delete->isSubmit()) {
-            $error = $form_delete->isXmlValid($productsTable);
-            if ($error->noError()) {
-                $data = $form_delete->getData();
-
-                $this->cookie_cart->removeFromCart($data["id"]);
-
-                $_SESSION["message"] = $error->success("successfully");
-                $error->location(URL . "/cart", "success_location");
-                $error->getXmlMessage($this->app->getProperties(Users::class));
-            }
-            $error->getXmlMessage($this->app->getProperties(Users::class));
-        }
-
-        $products = $productsTable->find("WHERE carousel.type = ? OR carousel.type IS ?", [1, NULL]);
-
-        return $this->render('/cart.php', '/default.php', [
-            'title' => 'Cart',
-            'products' => $products,
-            'cart' => $this->cookie_cart->getCart(),
-            'remove_item' => $form_delete,
         ]);
     }
 }

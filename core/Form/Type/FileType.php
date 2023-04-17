@@ -4,16 +4,14 @@ namespace Core\Form\Type;
 
 class FileType extends Type
 {
-    // public function isValid($value)
-    // {
-    //     // if (!preg_match("/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i", $value)) {
-    //     //     return false;
-    //     // }
-    //     // return true;
-    // }
-
-    public function getTag($name, $options)
+    public function label($name, $for)
     {
-        return parent::input($name, 'file', $options);
+        $for = str_replace("[]", '', $for);
+        return "<label for=\"" . $for . "\"><div class=\"arrow\"><img class=\"icon\" src=\"" . URL . "/assets/icon/plus.svg\"></div>" . ucfirst($name) . "</label>";
+    }
+
+    public function getTag($name, $options, $options_html)
+    {
+        return parent::input($name, 'file', $options, $options_html);
     }
 }

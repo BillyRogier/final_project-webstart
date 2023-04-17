@@ -41,7 +41,7 @@ class Table
     {
         $params = "";
         foreach ($array as $cle => $value) {
-            if ($value == NULL) {
+            if ($value == NULL && $value != "") {
                 $params .= " " . $cle . " IS NULL AND";
             } else {
                 $params .= " " .  $cle . "= ? AND";
@@ -71,17 +71,14 @@ class Table
         return $this->db->prepare("SELECT " . $this->getCle($array) . " FROM " . $this->table . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this));
     }
 
-    public function findAll()
+    public function findAll($options = "")
     {
-        return $this->db->query("SELECT * FROM " . $this->tableJoin . "", get_class($this), [$this->join]);
+        return $this->db->query("SELECT * FROM " . $this->tableJoin . " $options", get_class($this), [$this->join]);
     }
 
-    public function findAllBy($attributes = null, $order = "")
+    public function findAllBy($attributes = null, $options = "")
     {
-        if (!empty($order)) {
-            $order = "ORDER BY $order";
-        }
-        return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . " $order", $this->getValues($attributes), get_class($this), $this->join);
+        return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . " $options", $this->getValues($attributes), get_class($this), $this->join);
     }
 
     public function findOne()
@@ -94,9 +91,9 @@ class Table
         return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this), $this->join, true);
     }
 
-    public function update($structure, $attributes = null)
+    public function update($structure, $where, $attributes = null)
     {
-        return $this->db->prepare("UPDATE " . $this->table . " SET " . $this->getSet($structure) . " WHERE id = ?", $attributes, get_class($this));
+        return $this->db->prepare("UPDATE " . $this->table . " SET " . $this->getSet($structure) . " WHERE $where = ?", $attributes, get_class($this));
     }
 
     public function insert($structure, $attributes = null)
@@ -166,7 +163,7 @@ class Table
     {
         foreach ($classnames as $class) {
             $method = "set" . ucfirst($name);
-            if (method_exists($class, $method)) {
+            if (method_exists($class, $method) && !isset($class->$name)) {
                 $class->$method($value);
             }
         }

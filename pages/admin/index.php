@@ -21,7 +21,6 @@ foreach ($products as $product) : ?>
 
         $form_delete
             ->change("id", ['value' => $product->getId()])
-            ->change("submit", ['value' => 'delete'])
             ->createView()
 
         ?>

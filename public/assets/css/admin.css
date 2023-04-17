@@ -68,3 +68,48 @@ tfoot {
     background-color: #333;
     color: #fff;
 }
+
+.input-container.invalid input,
+.input-container.invalid textarea {
+    border-color: #9c0b0b;
+}
+
+.input-container.active input,
+.input-container.active textarea {
+    border-color: #4c9c0b;
+}
+
+.input-container.invalid .error-message {
+    display: block;
+}
+
+.input-container.active .error-message {
+    display: none;
+}
+
+.error-message {
+    color: #9c0b0b;
+    font: var(--very-small-size);
+    font-weight: 500;
+    padding: 0 5px;
+}
+
+.error-message > li {
+    list-style: disc;
+    list-style-position: inside;
+}
+
+.error-container {
+    width: 100%;
+}
+
+.success {
+    width: 100%;
+    padding: 15px 25px;
+    background-color: #4c9c0b40;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font: var(--small-size);
+    color: #4c9c0b;
+    list-style: none;
+}

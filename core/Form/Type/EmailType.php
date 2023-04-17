@@ -17,8 +17,8 @@ class EmailType extends Type
         return "Veuillez rentrer un email valide";
     }
 
-    public function getTag($name, $options)
+    public function getTag($name, $options, $options_html)
     {
-        return parent::input($name, 'email', $options);
+        return parent::input($name, 'email', $options, $options_html);
     }
 }
