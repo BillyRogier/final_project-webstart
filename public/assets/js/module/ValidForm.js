@@ -51,6 +51,7 @@ export class ValidForm {
     }
 
     getErrorInput(elt) {
+        this.valid = false
         this.eltParent = elt.parentNode.parentNode.parentNode
         this.error = this.eltParent.querySelector('.error-message')
         this.error.innerHTML = ''

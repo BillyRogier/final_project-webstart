@@ -7,7 +7,7 @@ class FileType extends Type
     public function label($name, $for)
     {
         $for = str_replace("[]", '', $for);
-        return "<label for=\"" . $for . "\"><div class=\"arrow\"><img class=\"icon\" src=\"" . URL . "/assets/icon/plus.svg\"></div>" . ucfirst($name) . "</label>";
+        return "<label for=\"" . $for . "\">" . ucfirst($name) . "</label>";
     }
 
     public function getTag($name, $options, $options_html)

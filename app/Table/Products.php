@@ -17,7 +17,9 @@ class Products extends Table
     #[Properties(type: 'float', length: 11)]
     private float $price;
     #[Properties(type: 'int', length: 11)]
-    private int $category_id;
+    private $category_id = null;
+    #[Properties(type: 'int', length: 4)]
+    private $visibility = null;
 
     /**
      * Get the value of id
@@ -119,12 +121,32 @@ class Products extends Table
         return $this;
     }
 
+    /**
+     * Get the value of visibility
+     */
+    public function getVisibility()
+    {
+        return $this->visibility;
+    }
+
+    /**
+     * Set the value of visibility
+     *
+     * @return  self
+     */
+    public function setVisibility($visibility)
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
     public function flush()
     {
         if (isset($this->id)) {
-            parent::update(['name', 'description', 'price', 'products.category_id'], [$this->name, $this->description, $this->price, $this->category_id, $this->id]);
+            parent::update(['name', 'description', 'price', 'products.category_id', 'visibility'], "id", [$this->name, $this->description, $this->price, $this->category_id, $this->visibility, $this->id]);
         } else {
-            parent::insert(['name', 'description', 'price', 'products.category_id'], [$this->name, $this->description, $this->price, $this->category_id]);
+            parent::insert(['name', 'description', 'price', 'products.category_id', 'visibility'], [$this->name, $this->description, $this->price, $this->category_id, $this->visibility]);
         }
     }
 }

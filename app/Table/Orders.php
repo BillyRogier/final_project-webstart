@@ -9,7 +9,7 @@ class Orders extends Table
 {
     protected $table = "orders";
     #[Properties(type: 'int', length: 11)]
-    private int $id;
+    private int $order_id;
     #[Properties(type: 'int', length: 11)]
     private int $user_id;
     #[Properties(type: 'int', length: 11)]
@@ -80,26 +80,6 @@ class Orders extends Table
     }
 
     /**
-     * Get the value of id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Get the value of package_num
      */
     public function getPackage_num()
@@ -121,10 +101,30 @@ class Orders extends Table
 
     public function flush()
     {
-        if (isset($this->id)) {
-            parent::update(['user_id', 'product_id', 'order_date', 'package_num'], [$this->user_id, $this->product_id, $this->order_date, $this->package_num, $this->id]);
+        if (isset($this->order_id)) {
+            parent::update(['user_id', 'product_id', 'order_date', 'package_num'], [$this->user_id, $this->product_id, $this->order_date, $this->package_num, $this->order_id]);
         } else {
             parent::insert(['user_id', 'product_id', 'package_num'], [$this->user_id, $this->product_id, $this->package_num]);
         }
+    }
+
+    /**
+     * Get the value of order_id
+     */
+    public function getOrder_id()
+    {
+        return $this->order_id;
+    }
+
+    /**
+     * Set the value of order_id
+     *
+     * @return  self
+     */
+    public function setOrder_id($order_id)
+    {
+        $this->order_id = $order_id;
+
+        return $this;
     }
 }

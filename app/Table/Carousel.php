@@ -12,6 +12,8 @@ class Carousel extends Table
     private $carousel_id;
     #[Properties(type: 'string', length: 255)]
     private $img;
+    #[Properties(type: 'string', length: 1000)]
+    private $alt;
     #[Properties(type: 'int', length: 2)]
     private $type;
     #[Properties(type: 'int', length: 11)]
@@ -57,16 +59,6 @@ class Carousel extends Table
         return $this;
     }
 
-
-    public function flush()
-    {
-        if (isset($this->carousel_id)) {
-            parent::update(['img', 'product_id', 'type'], [$this->img, $this->product_id, $this->type, $this->carousel_id]);
-        } else {
-            parent::insert(['img', 'product_id', 'type'], [$this->img, $this->product_id, $this->type]);
-        }
-    }
-
     /**
      * Get the value of carousel_id
      */
@@ -105,5 +97,34 @@ class Carousel extends Table
         $this->type = $type;
 
         return $this;
+    }
+
+    /**
+     * Get the value of alt
+     */
+    public function getAlt()
+    {
+        return $this->alt;
+    }
+
+    /**
+     * Set the value of alt
+     *
+     * @return  self
+     */
+    public function setAlt($alt)
+    {
+        $this->alt = $alt;
+
+        return $this;
+    }
+
+    public function flush()
+    {
+        if (isset($this->carousel_id)) {
+            parent::update(['img', 'alt', 'product_id', 'type'], [$this->img, $this->alt, $this->product_id, $this->type, $this->carousel_id]);
+        } else {
+            parent::insert(['img', 'alt', 'product_id', 'type'], [$this->img, $this->alt, $this->product_id, $this->type]);
+        }
     }
 }

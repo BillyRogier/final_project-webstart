@@ -7,7 +7,7 @@
 <?php
 
 use App\Table\Carousel;
-use App\Table\Category;
+use App\Table\Categorys;
 
 foreach ($products as $product) : ?>
     <div class="product">
@@ -15,7 +15,7 @@ foreach ($products as $product) : ?>
         <h3><?= $product->getName() ?></h3>
         <p><?= $product->getDescription() ?></p>
         <p><?= $product->getPrice() ?></p>
-        <p><?= $product->getJoin(Category::class)->getCategory_name() ?></p>
+        <p><?= $product->getJoin(Categorys::class)->getCategory_name() ?></p>
         <a href="<?= URL ?>/admin/update/<?= $product->getId() ?>">update</a>
         <?=
 

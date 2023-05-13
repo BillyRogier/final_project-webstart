@@ -5,7 +5,6 @@
 <?php
 
 use App\Table\Carousel;
-use App\Table\Category;
 
 foreach ($products as $product) : ?>
     <a href="<?= URL ?>/product/<?= $product->getId() ?>">
@@ -13,6 +12,5 @@ foreach ($products as $product) : ?>
         <h3><?= $product->getName() ?></h3>
         <p><?= $product->getDescription() ?></p>
         <p><?= $product->getPrice() ?></p>
-        <p><?= $product->getJoin(Category::class)->getCategory_name() ?></p>
     </a>
 <?php endforeach; ?>

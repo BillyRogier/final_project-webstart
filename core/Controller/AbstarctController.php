@@ -42,6 +42,14 @@ abstract class AbstarctController
         exit;
     }
 
+    public function isAdmin()
+    {
+        if (!isset($_SESSION['admin']) || empty($_SESSION['admin'])) {
+            return false;
+        }
+        return true;
+    }
+
     public function dump($val)
     {
         echo "<pre>";
@@ -51,8 +59,8 @@ abstract class AbstarctController
 
     public function createUrl($url)
     {
-        $url = strtolower(str_replace(' ', '-', $url));
-        $url = strtolower(str_replace(['\'', '', '\'', '"', '?', '!', '=', ',', ';', '<', '>', '*', '&'], '', $url));
+        $url = strtolower(str_replace([' ', '  ', '   ', '    '], '-', $url));
+        $url = strtolower(str_replace(['\'', '', '\'', '"', '?', '!', '=', ',', ';', '<', '>', '*', '&', '(', ')', '[', ']'], '', $url));
         $a = array(
             'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð',
             'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã',

@@ -6,6 +6,7 @@ use App;
 use Core\Error\Error;
 use Core\Form\Type\ChoiceType;
 use Core\Form\Type\FileType;
+use Core\Form\Type\PasswordType;
 use Core\Form\Type\SubmitType;
 
 class FormError extends Form implements FormErrorInterface
@@ -35,7 +36,6 @@ class FormError extends Form implements FormErrorInterface
             foreach ($inputs as $value) {
                 $inputType = $value['type'];
                 $input = str_replace("[]", '', $value['name']);
-                $classType = new $inputType();
                 if (!isset($_POST[$input]) && !isset($_FILES[$input])) {
                     if ($inputType == SubmitType::class) {
                         continue;
@@ -51,16 +51,17 @@ class FormError extends Form implements FormErrorInterface
                         }
                     }
                 }
-                if (!$classType->isValid(isset($_POST[$input]) ? $_POST[$input] : $_FILES[$input])) {
-                    $error->danger($classType->getMessage(), $input);
-                }
                 if (empty($_POST[$input]) && empty($_FILES[$input])  && !isset($value['options']['data-req'])) {
                     if ($inputType == SubmitType::class || $inputType == FileType::class || $input == "id") {
                         continue;
-                    }
+                    };
                     $error->danger("veuillez remplir le champs $input", $input);
                 } else if (!empty($this->table)) {
-                    if ($inputType != ChoiceType::class) {
+                    $classType = new $inputType();
+                    if ($inputType != ChoiceType::class && ($inputType == PasswordType::class && isset($value['options']['data-pass'])) ? true : false) {
+                        if (!$classType->isValid(isset($_POST[$input]) ? $_POST[$input] : $_FILES[$input])) {
+                            $error->danger("le champs $input doit être de type " . $properties[$input]->getType() . "", $input);
+                        }
                         if (isset($properties[$input]) && !empty($properties[$input]->getLenght())) {
                             if (strlen($_POST[$input]) > $properties[$input]->getLenght()) {
                                 $error->danger("le champs $input doit contenir maximum " . $properties[$input]->getLenght() . "", $input);

@@ -8,7 +8,9 @@ return array(
         "db_name" => "final_project"
     ],
     "app" => [
-        "name" => "Les Truelles Ardéchoises",
-        "base_url" => "http://localhost/final_project/public"
+        "name" => "Espresso Tools",
+        "base_url" => "http://localhost/final_project/public",
+        "public_url" => "http://localhost/final_project/public",
+        "upload_dir" =>  "/public/assets/img/",
     ]
 );

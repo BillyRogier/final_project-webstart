@@ -9,6 +9,7 @@ use Core\Route\Route;
 class App
 {
     public $title;
+    public $desc;
     private $db_instance;
     private $config;
     private static $_instance;
@@ -19,6 +20,8 @@ class App
         $this->config = Config::getInstance(ROOT . '/config/config.php');
         $this->title = $this->config->get('app')['name'];
         define('URL', $this->config->get('app')['base_url']);
+        define('BASE_PUBLIC', $this->config->get('app')['public_url']);
+        define('UPLOAD_DIR', ROOT . $this->config->get('app')['upload_dir']);
     }
 
     public static function getInstance()
@@ -95,6 +98,9 @@ class App
                             }
                             if (count($method->getParameters()) == count($arrayAgrts)) {
                                 if (!isset($route)) {
+                                    if (empty($arrayAgrts[count($arrayAgrts) - 1])) {
+                                        header("location:" . URL . substr($path, 0, -1));
+                                    }
                                     $route = call_user_func_array(array($this->getController($class), $function), $arrayAgrts);
                                 }
                             }
@@ -106,7 +112,6 @@ class App
         if (!isset($route) || empty($route)) {
             $route = "404";
         } else if (gettype($route) == "string") {
-            echo $route;
             $_SESSION['message'] = "";
             exit;
         }
@@ -121,6 +126,7 @@ class App
 
         if (!empty($route->getTemplates())) {
             $this->title .= " | " . $title;
+            $this->desc .= isset($desc) || !empty($desc) ? $desc : "";
 
             ob_start();
 
@@ -136,9 +142,10 @@ class App
 
     public function getRoutes()
     {
-        $d = dir(ROOT . '/app/controller');
+
+        $d = ROOT . '/app/Controller';
         $controllers = [];
-        while (($file = $d->read()) !== false) {
+        foreach (scandir($d) as $file) {
             if (str_contains($file, ".php")) {
                 array_push($controllers, str_ireplace(".php", "", $file));
             }
@@ -150,13 +157,13 @@ class App
         foreach ($controllers as $controller) {
             $route = $this->tryRoute($controller, $path);
             if ($route != "404") {
-                $productsCtrl = $this->getController($controller);
                 return $route;
                 break;
             }
         }
 
         if ($route == '404') {
+            header("HTTP/1.0 404 Not Found");
             exit;
         }
     }

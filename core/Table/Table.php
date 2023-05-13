@@ -61,14 +61,14 @@ class Table
         return $values;
     }
 
-    public function find(string $request, array $values)
+    public function find($select, string $request)
     {
-        return $this->db->prepare("SELECT * FROM " .  $this->tableJoin . " " . $request, $values, get_class($this), $this->join);
+        return $this->db->query("SELECT $select FROM " .  $this->tableJoin . " " . $request, get_class($this), [$this->join]);
     }
 
-    public function findBy($array, $attributes = null)
+    public function findBy($array, $attributes = null): static|bool
     {
-        return $this->db->prepare("SELECT " . $this->getCle($array) . " FROM " . $this->table . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this));
+        return $this->db->prepare("SELECT " . $this->getCle($array) . " FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this),  $this->join);
     }
 
     public function findAll($options = "")
@@ -81,12 +81,12 @@ class Table
         return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . " $options", $this->getValues($attributes), get_class($this), $this->join);
     }
 
-    public function findOne()
+    public function findOne(): static|bool
     {
-        return $this->db->query("SELECT * FROM " . $this->tableJoin . " WHERE 1", get_class($this), true);
+        return $this->db->query("SELECT * FROM " . $this->tableJoin . " WHERE 1", get_class($this), $this->join, true);
     }
 
-    public function findOneBy($attributes = null)
+    public function findOneBy($attributes = null): static|bool
     {
         return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this), $this->join, true);
     }
@@ -146,14 +146,14 @@ class Table
         return $this->join($table, "LEFT");
     }
 
-    public function join($table, $type = "")
+    public function join($table, $type = ""): static
     {
         $this->setJoin($table);
         $this->tableJoin = $this->tableJoin . " $type JOIN " . $this->getJoin($table)->table . "";
         return $this;
     }
 
-    public function on($condition)
+    public function on($condition): static
     {
         $this->tableJoin = $this->tableJoin . " ON $condition";
         return $this;

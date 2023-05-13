@@ -13,15 +13,27 @@
 
 <body>
     <header>
-        <a href="<?= URL ?>/admin/users">Users</a>
-        <a href="<?= URL ?>/admin/insert-user">Insert user</a>
+        <a href="<?= URL ?>/admin">Admin</a>
+        <div>
+            <a href="<?= URL ?>/admin/users">Users</a>
+            <a href="<?= URL ?>/admin/users/insert">Insert user</a>
+        </div>
+        <div>
+            <a href="<?= URL ?>/admin/categorys">Categorys</a>
+            <a href="<?= URL ?>/admin/categorys/insert">Insert category</a>
+        </div>
+        <div>
+            <a href="<?= URL ?>/admin/products">Products</a>
+            <a href="<?= URL ?>/admin/products/insert">Insert product</a>
+        </div>
+        <div>
+            <a href="<?= URL ?>/admin/orders">Orders</a>
+            <a href="<?= URL ?>/admin/orders/insert">Insert order</a>
+        </div>
+        <a href="<?= URL ?>/logout">Logout</a>
     </header>
 
     <?= $content ?>
 </body>
 
 </html>
-
-<?php
-
-$_SESSION['message'] = "";
