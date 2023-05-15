@@ -72,7 +72,7 @@ class UsersController extends AbstarctController
     #[Route('/admin/users/insert', name: 'insert user')]
     public function insertUser()
     {
-        $formBuilder = $this->createForm()
+        $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
             ->add("first_name", TextType::class, ['label' => 'First name', 'id' => 'first_name', 'data-req' => true])
             ->add("last_name", TextType::class, ['label' => 'Last name', 'id' => 'last_name', 'data-req' => true])
             ->add("email", EmailType::class, ['label' => 'Email', 'id' => 'email'])
@@ -131,7 +131,7 @@ class UsersController extends AbstarctController
             $this->headLocation("/admin/users");
         }
 
-        $form_update = $this->createForm()
+        $form_update = $this->createForm("", "post", ['class' => 'grid'])
             ->add("id", HiddenType::class, ['value' => $id])
             ->add("first_name", TextType::class, ['value' => $user->getFirst_name(), 'data-req' => true, 'label' => 'Prénom', 'id' => 'first_name'])
             ->add("last_name", TextType::class, ['value' => $user->getLast_name(), 'data-req' => true, 'label' => 'Nom', 'id' => 'last_name'])

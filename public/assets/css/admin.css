@@ -68,6 +68,22 @@ td {
     padding: 5px;
 }
 
+.action_table {
+    display: grid;
+    grid-template-columns: repeat(3, min-content);
+    gap: 10px;
+}
+
+.img_table {
+    display: flex;
+}
+
+.img_table > img {
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+}
+
 thead,
 tfoot {
     background-color: #333;
@@ -132,8 +148,7 @@ tfoot {
     color: #9c0b0b;
     list-style: none;
 }
-form {
+form.grid {
     display: grid;
     gap: 1rem;
-    margin-top: 20px;
 }

@@ -9,15 +9,17 @@ class Orders extends Table
 {
     protected $table = "orders";
     #[Properties(type: 'int', length: 11)]
-    private int $order_id;
+    private $order_id;
     #[Properties(type: 'int', length: 11)]
     private int $user_id;
     #[Properties(type: 'int', length: 11)]
     private int $product_id;
+    #[Properties(type: 'int', length: 11)]
+    private $quantity = 1;
     #[Properties(type: 'string')]
     private $order_date;
-    #[Properties(type: 'int', length: 20)]
-    private int $package_num;
+    #[Properties(type: 'string', length: 255)]
+    private $order_num;
 
     /**
      * Get the value of suer_id
@@ -79,32 +81,13 @@ class Orders extends Table
         return $this;
     }
 
-    /**
-     * Get the value of package_num
-     */
-    public function getPackage_num()
-    {
-        return $this->package_num;
-    }
-
-    /**
-     * Set the value of package_num
-     *
-     * @return  self
-     */
-    public function setPackage_num($package_num)
-    {
-        $this->package_num = $package_num;
-
-        return $this;
-    }
 
     public function flush()
     {
         if (isset($this->order_id)) {
-            parent::update(['user_id', 'product_id', 'order_date', 'package_num'], [$this->user_id, $this->product_id, $this->order_date, $this->package_num, $this->order_id]);
+            parent::update(['user_id', 'product_id', 'quantity', 'order_date', 'order_num'], "order_id", [$this->user_id, $this->product_id, $this->quantity, $this->order_date, $this->order_num, $this->order_id]);
         } else {
-            parent::insert(['user_id', 'product_id', 'package_num'], [$this->user_id, $this->product_id, $this->package_num]);
+            parent::insert(['user_id', 'product_id',  'quantity', 'order_num'], [$this->user_id, $this->product_id, $this->quantity, $this->order_num]);
         }
     }
 
@@ -124,6 +107,46 @@ class Orders extends Table
     public function setOrder_id($order_id)
     {
         $this->order_id = $order_id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of order_num
+     */
+    public function getOrder_num()
+    {
+        return $this->order_num;
+    }
+
+    /**
+     * Set the value of order_num
+     *
+     * @return  self
+     */
+    public function setOrder_num($order_num)
+    {
+        $this->order_num = $order_num;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of quantity
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * Set the value of quantity
+     *
+     * @return  self
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }

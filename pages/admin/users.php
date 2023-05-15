@@ -10,8 +10,7 @@
             <th scope="col">adress</th>
             <th scope="col">type</th>
             <th scope="col">date de création</th>
-            <th scope="col">Modifier</th>
-            <th scope="col">Supprimer</th>
+            <th scope="col">action</th>
         </tr>
     </thead>
     <tbody>
@@ -23,10 +22,15 @@
                 <td><?= $user->getEmail() ?></td>
                 <td><?= $user->getNum() ?></td>
                 <td><?= $user->getAdress() ?></td>
-                <td><?= $user->getType() ?></td>
-                <td><?= $user->getCreation_date() ?></td>
-                <td><a href="<?= URL ?>/admin/users/update/<?= $user->getId() ?>" class="btn btn-primary">modifier</a></td>
                 <td>
+                    <?php if ($user->getType() == 1) {
+                        echo "user";
+                    } else {
+                        echo "admin";
+                    } ?>
+                </td>
+                <td><?= $user->getCreation_date() ?></td>
+                <td class="action_table"><a href="<?= URL ?>/admin/users/update/<?= $user->getId() ?>" class="btn btn-primary">modifier</a>
                     <?=
 
                     $form_delete

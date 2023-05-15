@@ -4,7 +4,7 @@ namespace Core\Form\Type;
 
 class ChoiceType extends Type
 {
-    public function getTag($name, $options = [], $options_choice = [])
+    public function getTag($name, $options = [], $options_choice = [], $options_html = "")
     {
         $options_container = "";
         if (isset($options_choice['choices'])) {
@@ -18,6 +18,6 @@ class ChoiceType extends Type
                 $options_container .= parent::options($name_choice, $value);
             }
         }
-        return parent::select($name, $options, $options_container);
+        return parent::select($name, $options, $options_container,  $options_html);
     }
 }

@@ -11,6 +11,8 @@ interface FormBuilderInterface extends FormInterface
      */
     public function add(string $name, string $type = "text", array $options = []): FormBuilderInterface;
 
+    public function addHTML(string $html): FormBuilderInterface;
+
     /**
      * Change les informations de l'input ayant le nom renseigné
      */

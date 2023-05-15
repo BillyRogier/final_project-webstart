@@ -26,11 +26,6 @@ abstract class AbstarctController
         return $form->createForm($action, $method, $options);
     }
 
-    public function getLogin()
-    {
-        return new Login('Users');
-    }
-
     public function getError()
     {
         return new Error();

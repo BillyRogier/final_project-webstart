@@ -1,7 +1,5 @@
-import { ValidForm } from './ValidForm.js'
-
 export class InputImage {
-    constructor(input, dt, form, errorContainer, url) {
+    constructor(input, dt, form, errorContainer, valid) {
         this.errorContainer = errorContainer
         this.input = input
         this.form = form
@@ -11,28 +9,32 @@ export class InputImage {
         this.allInputsImage =
             this.imgContainer.querySelectorAll('.img-item > input')
         this.dt = dt
-        this.url = url
         this.deleteImage()
-        this.valid = new ValidForm(this.form, this.errorContainer)
+        this.valid = valid
     }
 
     loadImage() {
         if (this.input.files) {
             var curFiles = this.input.files
             for (var i = 0; i < curFiles.length; i++) {
-                console.log(this.allInputsImage[0].value)
                 if (this.allInputsImage[0]) {
                     if (
-                        (this.allInputsImage[0].value == '' && i == 0) ||
-                        (this.allInputsImage[0].value != '' &&
+                        (this.dt.items.length == 0 &&
+                            this.allInputsImage[0].value == '' &&
+                            i == 0) ||
+                        (this.dt.items.length != 0 &&
+                            this.allInputsImage[0].value != '' &&
                             !/[\[\]\\?]/g.test(this.allInputsImage[0].name))
                     ) {
                         this.imgContainer.innerHTML = 'Chargement...'
                     }
                 }
                 if (
-                    (this.allInputsImage[0].value == '' && i == 0) ||
-                    (this.allInputsImage[0].value != '' &&
+                    (this.dt.items.length == 0 &&
+                        i == 0 &&
+                        this.allInputsImage[0].value == '') ||
+                    (this.dt.items.length != 0 &&
+                        this.allInputsImage[0].value != '' &&
                         !/[\[\]\\?]/g.test(this.allInputsImage[0].name))
                 ) {
                     this.imgContainer.innerHTML = ''

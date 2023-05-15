@@ -28,7 +28,7 @@ class LoginController extends AbstarctController
     {
         $UsersTable = new Users();
 
-        $formBuilder = $this->createForm()
+        $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
             ->add("email", EmailType::class, ['label' => "email", 'id' => "email"])
             ->add("password", PasswordType::class, ['label' => "password", 'id' => "password"])
             ->add("submit", SubmitType::class, ['value' => 'login'])
@@ -70,7 +70,7 @@ class LoginController extends AbstarctController
     {
         $UsersTable = new Users();
 
-        $formBuilder = $this->createForm()
+        $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
             ->add("first_name", TextType::class, ['label' => 'First name', 'id' => 'first_name', 'data-req' => true])
             ->add("last_name", TextType::class, ['label' => 'Last name', 'id' => 'last_name', 'data-req' => true])
             ->add("email", EmailType::class, ['label' => 'Email', 'id' => 'email'])

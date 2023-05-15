@@ -122,7 +122,7 @@ class Carousel extends Table
     public function flush()
     {
         if (isset($this->carousel_id)) {
-            parent::update(['img', 'alt', 'product_id', 'type'], [$this->img, $this->alt, $this->product_id, $this->type, $this->carousel_id]);
+            parent::update(['img', 'alt', 'product_id', 'type'], "carousel_id", [$this->img, $this->alt, $this->product_id, $this->type, $this->carousel_id]);
         } else {
             parent::insert(['img', 'alt', 'product_id', 'type'], [$this->img, $this->alt, $this->product_id, $this->type]);
         }

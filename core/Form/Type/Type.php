@@ -42,11 +42,12 @@ class Type
                 value=\"$value\" $select>$name</option>";
     }
 
-    function select($name, $select_option, $options)
+    function select($name, $select_option, $options, $options_html)
     {
+        $nameControl = strtolower(str_replace("[]", '', $name));
         return
-            "<div class=\"$name-item\">
+            "<div class=\"$nameControl-item\">
             <select name=\"$name\" id=\"$name\"
-                $select_option>$options</select></div>";
+                $select_option>$options</select></div> $options_html";
     }
 }

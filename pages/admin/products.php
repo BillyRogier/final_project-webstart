@@ -9,36 +9,53 @@
             <th scope="col">images</th>
             <th scope="col">category</th>
             <th scope="col">visibility</th>
-            <th scope="col">update</th>
-            <th scope="col">delete</th>
+            <th scope="col">action</th>
         </tr>
     </thead>
     <tbody>
         <?php
 
         use App\Table\Carousel;
+        use App\Table\Categorys;
 
-        foreach ($products as $product) : ?>
-            <tr>
-                <td><?= $product->getId() ?></td>
-                <td><?= $product->getName() ?></td>
-                <td><?= $product->getDescription() ?></td>
-                <td><?= $product->getPrice() ?></td>
-                <td>
-                    <img src="<?= URL ?>/assets/img/<?= $product->getJoin(Carousel::class)->getImg() ?>" alt="<?= $product->getJoin(Carousel::class)->getAlt() ?>" />
-                </td>
-                <td><?= $product->getVisibility() ?></td>
-                <td><a href="<?= URL ?>/admin/products/update/<?= $product->getId() ?>" class="btn btn-primary">modifier</a></td>
-                <td>
-                    <?=
+        $img = "";
+        for ($i = 0; $i < count($products); $i++) :
+            if (isset($products[$i + 1]) && ($products[$i]->getId() == $products[$i + 1]->getId())) {
+                $img .= " <img src=\"" . URL . "/assets/img/" . $products[$i]->getJoin(Carousel::class)->getImg() . "\" alt=\" " . $products[$i]->getJoin(Carousel::class)->getAlt() . "\" />";
+                continue;
+            } else { ?>
+                <tr>
+                    <td><?= $products[$i]->getId() ?></td>
+                    <td><?= $products[$i]->getName() ?></td>
+                    <td><?= $products[$i]->getDescription() ?></td>
+                    <td><?= $products[$i]->getPrice() ?></td>
+                    <td class="img_table">
+                        <?=
+                        $img .= " <img src=\"" . URL . "/assets/img/" . $products[$i]->getJoin(Carousel::class)->getImg() . "\" alt=\" " . $products[$i]->getJoin(Carousel::class)->getAlt() . "\" />";
+                        ?>
+                    </td>
+                    <td><?= $products[$i]->getJoin(Categorys::class)->getCategory_name() ?></td>
+                    <td>
+                        <?php if ($products[$i]->getVisibility() == 1) {
+                            echo "visible";
+                        } else if ($products[$i]->getVisibility() == 2) {
+                            echo "hidden";
+                        } else {
+                            echo "no stock";
+                        } ?>
+                    </td>
+                    <td class="action_table"><a href="<?= URL ?>/admin/products/update/<?= $products[$i]->getId() ?>" class="btn btn-primary">modifier</a>
+                        <?=
 
-                    $form_delete
-                        ->change("id", ['value' => $product->getId()])
-                        ->createView()
+                        $form_delete
+                            ->change("id", ['value' => $products[$i]->getId()])
+                            ->createView()
 
-                    ?>
-                </td>
-            </tr>
-        <?php endforeach ?>
+                        ?>
+                    </td>
+                </tr>
+        <?php $img = "";
+            }
+        endfor ?>
     </tbody>
 </table>

@@ -44,7 +44,7 @@ class FormView extends Form implements FormViewInterface
             $value = $type->getTag($name, $options, $options_html, $value['options']['value']);
         } else if (isset($value['options']['choices']) && $type::class == ChoiceType::class) {
             $options = $this->getOptions($value['options'], true);
-            $value = $type->getTag($name, $options,  $value['options']);
+            $value = $type->getTag($name, $options,  $value['options'], $options_html);
         } else {
             $options = $this->getOptions($value['options']);
             $value = $type->getTag($name, $options, $options_html);
@@ -57,22 +57,26 @@ class FormView extends Form implements FormViewInterface
     {
         $inputContainer = "";
         foreach ($this->form['input'] as $input => $value) {
-            $type = new $value[0]['type']();
-            $name = $value[0]['name'];
-            $label = "";
-            if (isset($value[0]['options']['label'])) {
-                $label = $type->label($value[0]['options']['label'], $value[0]['options']['id']);
-            }
-            $input_tag = "<div class=\"item-container grid\">";
-            if (count($value) > 1) {
-                foreach ($value as $val) {
-                    $input_tag .= $this->createInput($val, $type, $name);
+            if (isset($value[0]['type'])) {
+                $type = new $value[0]['type']();
+                $name = $value[0]['name'];
+                $label = "";
+                if (isset($value[0]['options']['label'])) {
+                    $label = $type->label($value[0]['options']['label'], $value[0]['options']['id']);
                 }
+                $input_tag = "<div class=\"item-container grid\">";
+                if (count($value) > 1) {
+                    foreach ($value as $val) {
+                        $input_tag .= $this->createInput($val, $type, $name);
+                    }
+                } else {
+                    $input_tag .= $this->createInput($value[0], $type, $name);
+                }
+                $input_tag .= "</div>";
+                $inputContainer .= $this->viewInput($input_tag, strtolower(str_replace("[]", '', $name)), $label);
             } else {
-                $input_tag .= $this->createInput($value[0], $type, $name);
+                $inputContainer .= $value[0]['html'];
             }
-            $input_tag .= "</div>";
-            $inputContainer .= $this->viewInput($input_tag, strtolower(str_replace("[]", '', $name)), $label);
         }
         return $inputContainer;
     }

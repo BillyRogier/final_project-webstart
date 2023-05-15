@@ -34,44 +34,53 @@ class FormError extends Form implements FormErrorInterface
 
         foreach ($this->form['input'] as $inputs) {
             foreach ($inputs as $value) {
-                $inputType = $value['type'];
-                $input = str_replace("[]", '', $value['name']);
-                if (!isset($_POST[$input]) && !isset($_FILES[$input])) {
-                    if ($inputType == SubmitType::class) {
-                        continue;
-                    }
-                    $error->danger("error occured", "error_container");
-                } else if ((isset($_POST[$input]) ? is_array($_POST[$input]) : is_array($_FILES[$input]))) {
-                    foreach ((isset($_POST[$input]) ? $_POST[$input] : $_FILES[$input]) as $value) {
-                        if (empty($value) && !isset($value['options']['data-req'])) {
-                            if ($inputType == SubmitType::class || $inputType == FileType::class || $input == "id") {
-                                continue;
-                            };
-                            $error->danger("veuillez remplir le champs $input", $input);
+                if (isset($value['type'])) {
+                    $inputType = $value['type'];
+                    $input = str_replace("[]", '', $value['name']);
+                    if (!isset($_POST[$input]) && !isset($_FILES[$input])) {
+                        if ($inputType == SubmitType::class) {
+                            continue;
+                        }
+                        $error->danger("error occured", "error_container");
+                    } else if ((isset($_POST[$input]) ? is_array($_POST[$input]) : is_array($_FILES[$input]))) {
+                        foreach ((isset($_POST[$input]) ? $_POST[$input] : $_FILES[$input]) as $vals) {
+                            if (empty($vals) && !isset($value['options']['data-req'])) {
+                                if ($inputType == SubmitType::class || $inputType == FileType::class || $input == "id") {
+                                    continue;
+                                };
+                                $error->danger("veuillez remplir le champs " . (isset($value['options']['label']) ? $value['options']['label'] : $input) . "", $input);
+                            }
                         }
                     }
-                }
-                if (empty($_POST[$input]) && empty($_FILES[$input])  && !isset($value['options']['data-req'])) {
-                    if ($inputType == SubmitType::class || $inputType == FileType::class || $input == "id") {
-                        continue;
-                    };
-                    $error->danger("veuillez remplir le champs $input", $input);
-                } else if (!empty($this->table)) {
-                    $classType = new $inputType();
-                    if ($inputType != ChoiceType::class && ($inputType == PasswordType::class && isset($value['options']['data-pass'])) ? true : false) {
-                        if (!$classType->isValid(isset($_POST[$input]) ? $_POST[$input] : $_FILES[$input])) {
-                            $error->danger("le champs $input doit être de type " . $properties[$input]->getType() . "", $input);
-                        }
-                        if (isset($properties[$input]) && !empty($properties[$input]->getLenght())) {
-                            if (strlen($_POST[$input]) > $properties[$input]->getLenght()) {
-                                $error->danger("le champs $input doit contenir maximum " . $properties[$input]->getLenght() . "", $input);
+                    if (empty($_POST[$input]) && empty($_FILES[$input])  && !isset($value['options']['data-req'])) {
+                        if ($inputType == SubmitType::class || $inputType == FileType::class || $input == "id") {
+                            continue;
+                        };
+                        $error->danger("veuillez remplir le champs " . (isset($value['options']['label']) ? $value['options']['label'] : $input) . "", $input);
+                    } else if (!empty($this->table)) {
+                        $classType = new $inputType();
+                        if ($inputType != ChoiceType::class && $inputType != PasswordType::class) {
+                            if (!$classType->isValid(isset($_POST[$input]) ? $_POST[$input] : $_FILES[$input])) {
+                                $error->danger("le champs " . (isset($value['options']['label']) ? $value['options']['label'] : $input) . " doit être de type " . $properties[$input]->getType() . "", $input);
+                            }
+                            if (isset($properties[$input]) && !empty($properties[$input]->getLenght())) {
+                                if (is_array($_POST[$input])) {
+                                    foreach ($_POST[$input] as $value) {
+                                        if (strlen($value) > $properties[$input]->getLenght()) {
+                                            $error->danger("le champs " . (isset($value['options']['label']) ? $value['options']['label'] : $input) . " doit contenir maximum " . $properties[$input]->getLenght() . "", $input);
+                                        }
+                                    }
+                                } else {
+                                    if (strlen($_POST[$input]) > $properties[$input]->getLenght()) {
+                                        $error->danger("le champs " . (isset($value['options']['label']) ? $value['options']['label'] : $input) . " doit contenir maximum " . $properties[$input]->getLenght() . "", $input);
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         }
-
         return $error;
     }
 }

@@ -19,7 +19,7 @@ class Products extends Table
     #[Properties(type: 'int', length: 11)]
     private $category_id = null;
     #[Properties(type: 'int', length: 4)]
-    private $visibility = null;
+    private $visibility = 1;
 
     /**
      * Get the value of id

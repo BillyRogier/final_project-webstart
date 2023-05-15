@@ -76,7 +76,7 @@ class CategorysController extends AbstarctController
     #[Route('/admin/categorys/insert')]
     public function insertCategory()
     {
-        $formBuilder = $this->createForm()
+        $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
             ->add("name", TextType::class, ['label' => 'Name', 'id' => 'name'])
             ->add("img", HiddenType::class)
             ->add("file", FileType::class, ['label' => 'Choose a file', 'id' => 'file', 'class' => 'file'])
@@ -130,7 +130,7 @@ class CategorysController extends AbstarctController
             $this->headLocation("/admin/categorys");
         }
 
-        $formBuilder = $this->createForm()
+        $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
             ->add("name", TextType::class, ['value' => $category->getCategory_name(), 'label' => 'Name', 'id' => 'name'])
             ->add("img", HiddenType::class, [
                 'value' => $category->getCategory_img(),

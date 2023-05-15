@@ -6,10 +6,19 @@ class NumberType extends Type
 {
     public function isValid($value)
     {
-        if (!preg_match('/^[0-9]/', $value)) {
-            return false;
+        $resp = true;
+        if (is_array($value)) {
+            foreach ($value as $val) {
+                if (!preg_match('/^-?(?:\d+|\d*\.\d+)$/', $val)) {
+                    $resp = false;
+                }
+            }
+        } else {
+            if (!preg_match('/^-?(?:\d+|\d*\.\d+)$/', $value)) {
+                $resp = false;
+            }
         }
-        return true;
+        return $resp;
     }
 
     public function getTag($name, $options, $options_html)

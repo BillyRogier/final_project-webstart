@@ -20,6 +20,14 @@ class FormBuilder extends Form implements FormBuilderInterface
         return $this;
     }
 
+    public function addHTML(string $html): FormBuilderInterface
+    {
+        $id = uniqid();
+        $this->form['input'][$id] = [];
+        array_push($this->form['input'][$id], ["html" => $html]);
+        return $this;
+    }
+
     public function change(string $name, array $options = [], int $key = 0): FormBuilderInterface
     {
         $previousInput = $this->form['input'][$name][$key];

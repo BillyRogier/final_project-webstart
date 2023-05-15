@@ -5,8 +5,7 @@
             <th scope="col">id</th>
             <th scope="col">name</th>
             <th scope="col">image</th>
-            <th scope="col">update</th>
-            <th scope="col">delete</th>
+            <th scope="col">action</th>
         </tr>
     </thead>
     <tbody>
@@ -15,8 +14,7 @@
                 <td><?= $category->getCategory_id() ?></td>
                 <td><?= $category->getCategory_name() ?></td>
                 <td><img src="<?= URL ?>/assets/img/<?= $category->getCategory_img() ?>" alt="<?= $category->getCategory_name() ?>" /></td>
-                <td><a href="<?= URL ?>/admin/categorys/update/<?= $category->getCategory_id() ?>" class="btn btn-primary">modifier</a></td>
-                <td>
+                <td class="action_table"><a href="<?= URL ?>/admin/categorys/update/<?= $category->getCategory_id() ?>" class="btn btn-primary">modifier</a>
                     <?=
 
                     $form_delete
