@@ -30,6 +30,11 @@
             <a href="<?= URL ?>/admin/orders">Orders</a>
             <a href="<?= URL ?>/admin/orders/insert">Insert order</a>
         </div>
+        <div>
+            <a href="<?= URL ?>/admin/reviews">Reviews</a>
+            <a href="<?= URL ?>/admin/reviews/insert">Insert review</a>
+        </div>
+        <a href="<?= URL ?>/admin/settings">Settings</a>
         <a href="<?= URL ?>/logout">Logout</a>
     </header>
 

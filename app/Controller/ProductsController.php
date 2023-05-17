@@ -5,6 +5,7 @@ namespace App\Controller;
 use App;
 use App\Table\Carousel;
 use App\Table\Categorys;
+use App\Table\Orders;
 use App\Table\Products;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\ChoiceType;
@@ -51,16 +52,24 @@ class ProductsController extends AbstarctController
                 $data = $form_delete->getData();
                 $carousels = $ProductsTable->getJoin(Carousel::class)->findAllBy(['product_id' => $data['id']]);
 
-                foreach ($carousels as $carousel) {
-                    if (file_exists(UPLOAD_DIR . $carousel->getImg())) {
-                        unlink(UPLOAD_DIR . $carousel->getImg());
+                $OrdersTable = new Orders();
+                if (!$OrdersTable->findOneBy(['product_id' => $data['id']])) {
+                    foreach ($carousels as $carousel) {
+                        if (file_exists(UPLOAD_DIR . $carousel->getImg())) {
+                            unlink(UPLOAD_DIR . $carousel->getImg());
+                        }
                     }
+                    $ProductsTable->getJoin(Carousel::class)->delete(['product_id' => $data['id']]);
+                    $ProductsTable->delete(['id' => $data['id']]);
+
+                    $_SESSION["message"] = $error->success("success");
+                } else {
+                    $product = $ProductsTable->findOneBy(['id' => $data['id']]);
+                    $product->setVisibility(2)->flush();
+
+                    $_SESSION["message"] = $error->success("Product order");
                 }
 
-                $ProductsTable->getJoin(Carousel::class)->delete(['product_id' => $data['id']]);
-                $ProductsTable->delete(['id' => $data['id']]);
-
-                $_SESSION["message"] = $error->success("success");
                 $error->location(URL . "/admin/products", "success_location");
             }
             $error->getXmlMessage($this->app->getProperties(Products::class));

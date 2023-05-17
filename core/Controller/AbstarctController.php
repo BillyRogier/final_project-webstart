@@ -48,7 +48,7 @@ abstract class AbstarctController
     public function dump($val)
     {
         echo "<pre>";
-        var_dump($val);
+        print_r($val);
         echo "</pre>";
     }
 

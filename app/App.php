@@ -87,7 +87,7 @@ class App
                                 } else if (str_contains($instance_path[$cle], "{")) {
                                     if ($method->getParameters()[$i]->getType() == "int") {
                                         if (!preg_match('/^[0-9]/', $value)) {
-                                            exit;
+                                            return "404";
                                         }
                                     }
                                     array_push($arrayAgrts, $value);

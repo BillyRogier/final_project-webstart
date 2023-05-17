@@ -18,30 +18,31 @@ export class ValidForm {
     getErrorPropertie(elt) {
         if (this.propertie != '') {
             var prop = this.propertie['properties']
-            if (prop[elt.name] && elt.name != 'id') {
-                if (prop[elt.name]['length']) {
-                    if (elt.value.length > prop[elt.name]['length']) {
+            var elt_name = elt.name.replace(/[\[\]\\?]/g, '')
+            if (prop[elt_name] && elt_name != 'id') {
+                if (prop[elt_name]['length']) {
+                    if (elt.value.length > prop[elt_name]['length']) {
                         this.error.innerHTML =
                             '<li>Le champs ' +
-                            elt.name +
+                            elt_name +
                             ' doit contenir maximum ' +
-                            prop[elt.name]['length'] +
+                            prop[elt_name]['length'] +
                             ' characters</li>'
                     }
                 }
-                if (prop[elt.name]['type']) {
-                    if (prop[elt.name]['type'] == 'int') {
+                if (prop[elt_name]['type']) {
+                    if (prop[elt_name]['type'] == 'int') {
                         if (!/^-?[0-9]+$/.test(elt.value)) {
                             this.error.innerHTML +=
                                 '<li>Le champs ' +
-                                elt.name +
+                                elt_name +
                                 ' doit contenir seulement des chiffres </li>'
                         }
-                    } else if (prop[elt.name]['type'] == 'float') {
+                    } else if (prop[elt_name]['type'] == 'float') {
                         if (!/^-?[0-9-.]+$/.test(elt.value)) {
                             this.error.innerHTML +=
                                 '<li>Le champs ' +
-                                elt.name +
+                                elt_name +
                                 ' doit contenir seulement des chiffres </li>'
                         }
                     }

@@ -13,6 +13,8 @@ interface FormBuilderInterface extends FormInterface
 
     public function addHTML(string $html): FormBuilderInterface;
 
+    public function addContainer(string $name, array $array): FormBuilderInterface;
+
     /**
      * Change les informations de l'input ayant le nom renseigné
      */

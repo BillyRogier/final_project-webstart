@@ -87,7 +87,7 @@ class Orders extends Table
         if (isset($this->order_id)) {
             parent::update(['user_id', 'product_id', 'quantity', 'order_date', 'order_num'], "order_id", [$this->user_id, $this->product_id, $this->quantity, $this->order_date, $this->order_num, $this->order_id]);
         } else {
-            parent::insert(['user_id', 'product_id',  'quantity', 'order_num'], [$this->user_id, $this->product_id, $this->quantity, $this->order_num]);
+            parent::insert(['user_id', 'product_id',  'quantity', 'order_date', 'order_num'], [$this->user_id, $this->product_id, $this->quantity, $this->order_date, $this->order_num]);
         }
     }
 

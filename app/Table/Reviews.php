@@ -7,37 +7,17 @@ use Core\Table\Properties;
 
 class Reviews extends Table
 {
-    protected $table = "review";
+    protected $table = "reviews";
     #[Properties(type: 'int', length: 11)]
-    private int $id;
+    private int $review_id;
     #[Properties(type: 'int', length: 11)]
     private int $product_id;
     #[Properties(type: 'int', length: 11)]
     private int $user_id;
     #[Properties(type: 'string', length: 5000)]
-    private string $description;
+    private string $review_description;
     #[Properties(type: 'int', length: 1)]
     private int $grade;
-
-    /**
-     * Get the value of id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * Get the value of product_id
@@ -84,7 +64,7 @@ class Reviews extends Table
      */
     public function getDescription()
     {
-        return $this->description;
+        return $this->review_description;
     }
 
     /**
@@ -92,9 +72,9 @@ class Reviews extends Table
      *
      * @return  self
      */
-    public function setDescription($description)
+    public function setDescription($review_description)
     {
-        $this->description = $description;
+        $this->review_description = $review_description;
 
         return $this;
     }
@@ -117,5 +97,34 @@ class Reviews extends Table
         $this->grade = $grade;
 
         return $this;
+    }
+
+    /**
+     * Get the value of review_id
+     */
+    public function getReview_id()
+    {
+        return $this->review_id;
+    }
+
+    /**
+     * Set the value of review_id
+     *
+     * @return  self
+     */
+    public function setReview_id($review_id)
+    {
+        $this->review_id = $review_id;
+
+        return $this;
+    }
+
+    public function flush()
+    {
+        if (isset($this->review_id)) {
+            parent::update(['user_id', 'product_id', 'review_description', 'grade'], "review_id", [$this->user_id, $this->product_id, $this->review_description, $this->grade, $this->review_id]);
+        } else {
+            parent::insert(['user_id', 'product_id', 'review_description', 'grade'], [$this->user_id, $this->product_id, $this->review_description, $this->grade]);
+        }
     }
 }

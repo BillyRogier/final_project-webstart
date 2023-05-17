@@ -58,8 +58,8 @@ class FormError extends Form implements FormErrorInterface
                         };
                         $error->danger("veuillez remplir le champs " . (isset($value['options']['label']) ? $value['options']['label'] : $input) . "", $input);
                     } else if (!empty($this->table)) {
-                        $classType = new $inputType();
                         if ($inputType != ChoiceType::class && $inputType != PasswordType::class) {
+                            $classType = new $inputType();
                             if (!$classType->isValid(isset($_POST[$input]) ? $_POST[$input] : $_FILES[$input])) {
                                 $error->danger("le champs " . (isset($value['options']['label']) ? $value['options']['label'] : $input) . " doit être de type " . $properties[$input]->getType() . "", $input);
                             }

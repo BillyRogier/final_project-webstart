@@ -37,15 +37,15 @@ const addProducts = document.querySelectorAll('.add_prdt')
 if (addProducts) {
     addProducts.forEach((btn) => {
         btn.addEventListener('click', () => {
-            const productsContainer = document.querySelector(
+            const productsContainer = document.querySelectorAll(
                 'form > .product-container'
             )
-            let new_element = productsContainer.cloneNode(true)
+            let new_element = productsContainer[0].cloneNode(true)
             const allInputs = new_element.querySelectorAll('input')
             allInputs.forEach((input) => {
                 input.value = '1'
             })
-            productsContainer.after(new_element)
+            productsContainer[productsContainer.length - 1].after(new_element)
         })
     })
 }

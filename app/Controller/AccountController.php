@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App;
+use App\Table\Carousel;
 use App\Table\Orders;
 use App\Table\Products;
 use App\Table\Users;
@@ -16,7 +17,7 @@ class AccountController extends AbstarctController
     public function __construct()
     {
         $this->app = App::getInstance();
-        if (!$this->app->isAdmin() || !$this->app->isUser()) {
+        if (!$this->app->isAdmin() && !$this->app->isUser()) {
             $this->headLocation("/");
         }
     }
@@ -24,17 +25,20 @@ class AccountController extends AbstarctController
     #[Route('/account', name: 'account')]
     public function account()
     {
-        // select all order from this user
         $OrdersTable = new Orders();
         $OrdersTable
             ->innerJoin(Users::class)
             ->on("users.id = orders.user_id")
             ->innerJoin(Products::class)
-            ->on("products.id = orders.product_id");
-        $orders = $OrdersTable->findAllBy(['users.id' => isset($_SESSION['user']) ? $_SESSION['user'] : $_SESSION['admin']]);
+            ->on("products.id = orders.product_id")
+            ->innerJoin(Carousel::class)
+            ->on("carousel.product_id = products.id");
 
-        return $this->render('/app/register.php', '/login.php', [
-            'title' => 'Account | Order',
+        $orders = $OrdersTable->findAllBy(['users.id' => (isset($_SESSION['user']) ? $_SESSION['user'] : $_SESSION['admin']), 'carousel.type' => 1]);
+
+        return $this->render('/app/account_orders.php', '/default.php', [
+            'title' => 'Account | Orders',
+            'orders' => $orders,
         ]);
     }
 
