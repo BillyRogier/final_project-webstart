@@ -23,6 +23,6 @@ class NumberType extends Type
 
     public function getTag($name, $options, $options_html)
     {
-        return parent::input($name, 'text', $options, $options_html);
+        return parent::input($name, 'number', $options, $options_html);
     }
 }

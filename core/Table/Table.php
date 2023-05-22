@@ -86,9 +86,9 @@ class Table
         return $this->db->query("SELECT * FROM " . $this->tableJoin . " WHERE 1", get_class($this), $this->join, true);
     }
 
-    public function findOneBy($attributes = null): static|bool
+    public function findOneBy($attributes = null, $options = ""): static|bool
     {
-        return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . "", $this->getValues($attributes), get_class($this), $this->join, true);
+        return $this->db->prepare("SELECT * FROM " . $this->tableJoin . " WHERE " . $this->getWhere($attributes) . " $options", $this->getValues($attributes), get_class($this), $this->join, true);
     }
 
     public function update($structure, $where, $attributes = null)

@@ -124,7 +124,7 @@ class UsersController extends AbstarctController
     #[Route('/admin/users/update/{id}', name: 'update user')]
     public function updateUser(int $id)
     {
-        $UsersTable = $this->app->getTable('Users');
+        $UsersTable = new Users();
         $user = $UsersTable->findOneBy(['id' => $id]);
 
         if (!$user) {
@@ -132,7 +132,6 @@ class UsersController extends AbstarctController
         }
 
         $form_update = $this->createForm("", "post", ['class' => 'grid'])
-            ->add("id", HiddenType::class, ['value' => $id])
             ->add("first_name", TextType::class, ['value' => $user->getFirst_name(), 'data-req' => true, 'label' => 'Prénom', 'id' => 'first_name'])
             ->add("last_name", TextType::class, ['value' => $user->getLast_name(), 'data-req' => true, 'label' => 'Nom', 'id' => 'last_name'])
             ->add("email", EmailType::class, ['value' => $user->getEmail(), 'label' => 'Email', 'id' => 'email'])

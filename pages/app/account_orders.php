@@ -10,7 +10,7 @@ use App\Table\Products;
 $order_container = "<div class=\"order_container\">";
 for ($i = 0; $i < count($orders); $i++) :
     if (isset($orders[$i + 1]) && ($orders[$i]->getOrder_num() == $orders[$i + 1]->getOrder_num())) {
-        $order_container .= " <a href=\"" . URL . "/order/" . $orders[$i]->getOrder_id() . "\">
+        $order_container .= " <a href=\"" . URL . "\products/" . $orders[$i]->getOrder_id() . "\">
         <img src=\"" . URL . "/assets/img/" . $orders[$i]->getJoin(Carousel::class)->getImg()  . "\" />
         <h3>" . $orders[$i]->getJoin(Products::class)->getName() . "</h3>
         <p>" . $orders[$i]->getJoin(Products::class)->getDescription() . "</p>
@@ -18,7 +18,7 @@ for ($i = 0; $i < count($orders); $i++) :
         <p>" . $orders[$i]->getQuantity() . "</p>
         </a>";
     } else {
-        echo $order_container . " <a href=\"" . URL . "/order/" . $orders[$i]->getOrder_id() . "\">
+        echo $order_container . " <a href=\"" . URL . "\products/" . $orders[$i]->getOrder_id() . "\">
         <img src=\"" . URL . "/assets/img/" . $orders[$i]->getJoin(Carousel::class)->getImg()  . "\" />
         <h3>" . $orders[$i]->getJoin(Products::class)->getName() . "</h3>
         <p>" . $orders[$i]->getJoin(Products::class)->getDescription() . "</p>

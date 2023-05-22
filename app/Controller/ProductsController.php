@@ -135,7 +135,7 @@ class ProductsController extends AbstarctController
                     for ($i = 0; $i < count($data["file"]["tmp_name"]); $i++) {
                         $tmp_name = $data["file"]["tmp_name"][$i];
                         $temp = explode(".", $_FILES["file"]["name"][$i]);
-                        $name = uniqid() . '.' . end($temp);
+                        $name = bin2hex(random_bytes(16)) . '.' . end($temp);
 
                         if (!file_exists(UPLOAD_DIR . $name)) {
                             move_uploaded_file($tmp_name, UPLOAD_DIR . $name);

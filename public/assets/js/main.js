@@ -49,3 +49,14 @@ if (addProducts) {
         })
     })
 }
+
+const quantitys = document.querySelectorAll('.quantity')
+
+if(quantitys){
+    quantitys.forEach(quantity => {
+        quantity.addEventListener("input", () => {
+            quantity.value += 1
+            console.log(quantity.value)
+        })
+    });
+}

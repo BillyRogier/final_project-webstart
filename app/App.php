@@ -34,6 +34,9 @@ class App
 
     public static function load()
     {
+        $sessionLifetime = 24 * 60 * 60; // 1 jour en secondes
+        ini_set('session.cookie_lifetime', $sessionLifetime);
+        ini_set('session.gc_maxlifetime', $sessionLifetime);
         session_start();
         require ROOT . '/app/Autoloader.php';
         Autoloader::register();
@@ -48,12 +51,6 @@ class App
             $this->db_instance = new Database($db['db_name'], $db['db_user'], $db['db_pass'], $db['db_host']);
         }
         return $this->db_instance;
-    }
-
-    public function getTable($name)
-    {
-        $class_name = '\\App\\Table\\' . $name;
-        return new $class_name();
     }
 
     public function getController($class)

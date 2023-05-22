@@ -8,6 +8,12 @@ use App\Table\Orders;
 use App\Table\Products;
 use App\Table\Users;
 use Core\Controller\AbstarctController;
+use Core\Form\Type\ChoiceType;
+use Core\Form\Type\DateTimeType;
+use Core\Form\Type\EmailType;
+use Core\Form\Type\PasswordType;
+use Core\Form\Type\SubmitType;
+use Core\Form\Type\TextType;
 use Core\Route\Route;
 
 class AccountController extends AbstarctController
@@ -46,39 +52,41 @@ class AccountController extends AbstarctController
     public function settings()
     {
         $UsersTable = new Users();
+        $user = $UsersTable->findOneBy(['users.id' => (isset($_SESSION['user']) ? $_SESSION['user'] : $_SESSION['admin'])]);
 
-        $formBuilder = $this->createForm()
-            ->add("first_name", TextType::class, ['label' => 'First name', 'id' => 'first_name', 'data-req' => true])
-            ->add("last_name", TextType::class, ['label' => 'Last name', 'id' => 'last_name', 'data-req' => true])
-            ->add("email", EmailType::class, ['label' => 'Email', 'id' => 'email'])
-            ->add("password", PasswordType::class, ['label' => 'Password', 'id' => 'password', 'data-pass' => true])
-            ->add("num", TextType::class, ['label' => 'Phone number', 'id' => 'num', 'data-req' => true])
-            ->add("adress", TextType::class, ['label' => 'Adress', 'id' => 'adress', 'data-req' => true])
+        if (!$user) {
+            $this->headLocation("/account");
+        }
+
+        $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
+            ->add("first_name", TextType::class, ['value' => $user->getFirst_name(), 'data-req' => true, 'label' => 'Prénom', 'id' => 'first_name'])
+            ->add("last_name", TextType::class, ['value' => $user->getLast_name(), 'data-req' => true, 'label' => 'Nom', 'id' => 'last_name'])
+            ->add("email", EmailType::class, ['value' => $user->getEmail(), 'label' => 'Email', 'id' => 'email'])
+            ->add("password", PasswordType::class, ['label' => 'New password', 'id' => 'password'])
+            ->add("num", TextType::class, ['value' => $user->getNum(), 'data-req' => true, 'label' => 'Numéro de téléphone', 'id' => 'num'])
+            ->add("adress", TextType::class, ['value' => $user->getAdress(), 'data-req' => true, 'label' => 'Adresse', 'id' => 'adress'])
+            ->add("type", ChoiceType::class, ['choices' => ['Admin' => 2, 'Utilisateur' => 1], 'label' => 'Type', 'id' => 'type', 'value' => $user->getType()])
+            ->add("creation_date", DateTimeType::class, ['value' => $user->getCreation_date(), 'label' => 'Date de création', 'id' => 'creation_date'])
             ->add("submit", SubmitType::class, ['value' => 'Save'])
             ->getForm();
+
 
         if ($formBuilder->isSubmit()) {
             $error = $formBuilder->isXmlValid($UsersTable);
             if ($error->noError()) {
                 $data = $formBuilder->getData();
-                $user = $UsersTable->findOneBy(['email' => $data['email']]);
 
-                if (!$user) {
-                    $UsersTable
-                        ->setFirst_name($data['first_name'])
-                        ->setLast_name($data['last_name'])
-                        ->setEmail($data['email'])
-                        ->setPassword(password_hash($data['password'], PASSWORD_DEFAULT))
-                        ->setNum($data['num'])
-                        ->setAdress($data['adress'])
-                        ->flush();
+                $user
+                    ->setFirst_name($data['first_name'])
+                    ->setLast_name($data['last_name'])
+                    ->setEmail($data['email'])
+                    ->setPassword(password_hash($data['password'], PASSWORD_DEFAULT))
+                    ->setNum($data['num'])
+                    ->setAdress($data['adress'])
+                    ->flush();
 
-                    $_SESSION['user'] = $UsersTable->lastInsertId();
-                    $_SESSION["message"] = $error->success("successfully register");
-                    $error->location(URL . "/", "success_location");
-                } else {
-                    $error->danger("Email déjà utilisé", 'error_container');
-                }
+                $_SESSION["message"] = $error->success("successfully update");
+                $error->location(URL . "/account/settings", "success_location");
             }
             $error->getXmlMessage($this->app->getProperties(Users::class));
         }

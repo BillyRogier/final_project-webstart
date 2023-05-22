@@ -6,7 +6,10 @@ use App;
 use App\Table\Carousel;
 use App\Table\Categorys;
 use App\Table\Products;
+use Core\Cart\Cart;
 use Core\Controller\AbstarctController;
+use Core\Form\Type\NumberType;
+use Core\Form\Type\SubmitType;
 use Core\Route\Route;
 
 class AppController extends AbstarctController
@@ -18,7 +21,7 @@ class AppController extends AbstarctController
         $this->app = App::getInstance();
     }
 
-    #[Route('/', name: 'home')]
+    #[Route('/')]
     public function home()
     {
         $ProductsTable = new Products();
@@ -28,11 +31,50 @@ class AppController extends AbstarctController
             ->leftJoin(Carousel::class)
             ->on("carousel.product_id = products.id");
 
-        $products = $ProductsTable->findAllBy(["carousel.type" => 1], "OR carousel.type IS NULL");
+        $products = $ProductsTable->findAllBy(["products.visibility" => 1, "carousel.type" => 1], "OR carousel.type IS NULL");
 
         return $this->render('/app/home.php', '/default.php',  [
             'title' => 'Accueil',
             'products' => $products,
+        ]);
+    }
+
+    #[Route('/product/{id}')]
+    public function viewProduct(int $id)
+    {
+        $ProductsTable = new Products();
+        $ProductsTable
+            ->leftJoin(Categorys::class)
+            ->on("products.category_id = categorys.category_id")
+            ->leftJoin(Carousel::class)
+            ->on("carousel.product_id = products.id");
+
+        $products = $ProductsTable->findAllBy(['products.id' => $id]);
+
+        if (!$products) {
+            $this->headLocation("/");
+        }
+
+        $form_builder = $this->createForm()
+            ->add("quantity", NumberType::class, ['label' => 'Quantity', 'id' => 'quantity', 'value' => '1'])
+            ->add("submit", SubmitType::class, ['value' => 'add to cart'])
+            ->getForm();
+
+        if ($form_builder->isSubmit()) {
+            $error = $form_builder->isXmlValid($ProductsTable);
+            if ($error->noError()) {
+                $data = $form_builder->getData();
+
+                $Cart = new Cart();
+                $Cart->addToCart($id, $data['quantity']);
+            }
+            $error->getXmlMessage($this->app->getProperties(Products::class));
+        }
+
+        return $this->render('/app/product.php', '/default.php',  [
+            'title' => 'Product',
+            'products' => $products,
+            'form' => $form_builder->createView(),
         ]);
     }
 }

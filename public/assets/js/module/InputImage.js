@@ -14,6 +14,7 @@ export class InputImage {
     }
 
     loadImage() {
+        // 
         if (this.input.files) {
             var curFiles = this.input.files
             for (var i = 0; i < curFiles.length; i++) {
