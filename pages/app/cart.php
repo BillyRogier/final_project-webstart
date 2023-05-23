@@ -5,12 +5,15 @@
 
     use App\Table\Carousel;
 
+    $total = 0;
     if (count($products_in_cart) >= 1) {
-        foreach ($products_in_cart as $product) : ?>
+        foreach ($products_in_cart as $product) :
+            $product_total = $product['product']->getPrice() *  $product['quantity'];
+            $total += $product_total; ?>
             <img src="<?= URL ?>/assets/img/<?= $product['product']->getJoin(Carousel::class)->getImg() ?>" />
             <h1><?= $product['product']->getName() ?></h1>
             <p><?= $product['product']->getDescription() ?></p>
-            <p><?= $product['product']->getPrice() ?></p>
+            <p class="product_price"><?= $product['product']->getPrice() ?></p>
             <?=
             $form
                 ->change("id", ['value' => $product['product']->getId()])
@@ -22,8 +25,17 @@
                 ->change("id", ['value' => $product['product']->getId()])
                 ->createView()
             ?>
-    <?php endforeach;
+            <div>
+                total product :
+                <p class="total_product"><?= $product_total ?></p>
+            </div>
+        <?php endforeach; ?>
+        <div>total : <p class="total_cart"><?= $total ?></p>
+        </div>
+        <a href="<?= URL ?>/buy">Valid cart</a>
+    <?php
     } else {
         echo "No products in cart";
-    } ?>
+    }  ?>
+
 </div>

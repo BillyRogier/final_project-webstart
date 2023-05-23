@@ -13,6 +13,12 @@
 <h1><?= $product->getName() ?></h1>
 <p><?= $product->getDescription() ?></p>
 <p><?= $product->getPrice() ?></p>
-<?= $form ?>
+<?php
 
-<!-- download Yris code : 007799 -->
+if ($product->getVisibility() == 3) {
+    echo "no stock";
+} else {
+    echo $form;
+}
+
+?>

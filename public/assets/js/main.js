@@ -53,10 +53,35 @@ if (addProducts) {
 const quantitys = document.querySelectorAll('.quantity')
 
 if(quantitys){
-    quantitys.forEach(quantity => {
+    const product_price = document.querySelectorAll('.product_price')
+    const total_product = document.querySelectorAll('.total_product')
+    const total_cart = document.querySelector('.total_cart')
+    quantitys.forEach((quantity, index) => {
         quantity.addEventListener("input", () => {
-            quantity.value += 1
-            console.log(quantity.value)
+            
+            total_product[index].innerHTML = parseInt(product_price[index].innerHTML, 10) * quantity.value
+            let total = 0
+            total_product.forEach((price,n) => {
+                if(n != index){
+                    total += parseInt(price.innerHTML, 10) 
+                }
+            });
+            total_cart.innerHTML = total + parseInt(total_product[index].innerHTML, 10)
+
+            var formData = new FormData(quantity.parentNode.parentNode.parentNode.parentNode)
+            fetch("",{
+                method: 'POST',
+                body: formData,
+            })
         })
     });
+}
+
+const addToCart = document.querySelector('.add_to_cart')
+
+if(addToCart){
+    addToCart.addEventListener("submit", () => {
+        const numberInCart = document.querySelector('.number_in_cart')
+        numberInCart.innerHTML = parseInt(numberInCart.innerHTML , 10) + 1
+    })
 }

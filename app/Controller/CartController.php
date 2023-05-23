@@ -83,4 +83,46 @@ class CartController extends AbstarctController
             'form_del' => $form_delete,
         ]);
     }
+
+    #[Route('/buy')]
+    public function validCart()
+    {
+        $ProductsTable = new Products();
+        $ProductsTable
+            ->leftJoin(Carousel::class)
+            ->on("carousel.product_id = products.id");
+
+        $Cart = new Cart();
+        $products_in_cart = [];
+
+        foreach ($Cart->getCart() as $key => $value) {
+            $product = $ProductsTable->findOneBy(["products.id" => $key, "carousel.type" => 1]);
+            array_push($products_in_cart, ['product' => $product, 'quantity' => $value]);
+        }
+
+        $form_builder = $this->createForm()
+            ->add("id", HiddenType::class)
+            ->add("quantity", NumberType::class, ['value' => '1'])
+            ->getForm();
+
+        if ($form_builder->isSubmit()) {
+            if (isset($_POST['quantity'])) {
+                $error = $form_builder->isXmlValid($ProductsTable);
+                if ($error->noError()) {
+                    $data = $form_builder->getData();
+
+                    if (array_key_exists($data['id'], $Cart->getCart())) {
+                        $Cart->setQuantity($data['id'], $data['quantity']);
+                    }
+                }
+                $error->getXmlMessage("");
+            }
+        }
+
+        return $this->render('/app/cart.php', '/default.php',  [
+            'title' => 'Cart',
+            'products_in_cart' => $products_in_cart,
+            'form' => $form_builder,
+        ]);
+    }
 }

@@ -31,7 +31,7 @@ class AppController extends AbstarctController
             ->leftJoin(Carousel::class)
             ->on("carousel.product_id = products.id");
 
-        $products = $ProductsTable->findAllBy(["products.visibility" => 1, "carousel.type" => 1], "OR carousel.type IS NULL");
+        $products = $ProductsTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2 OR carousel.type IS NULL");
 
         return $this->render('/app/home.php', '/default.php',  [
             'title' => 'Accueil',
@@ -55,7 +55,7 @@ class AppController extends AbstarctController
             $this->headLocation("/");
         }
 
-        $form_builder = $this->createForm()
+        $form_builder = $this->createForm("", "post", ['class' => 'add_to_cart'])
             ->add("quantity", NumberType::class, ['label' => 'Quantity', 'id' => 'quantity', 'value' => '1'])
             ->add("submit", SubmitType::class, ['value' => 'add to cart'])
             ->getForm();

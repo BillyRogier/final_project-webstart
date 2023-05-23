@@ -13,6 +13,7 @@
 
 <body>
     <header>
+        <a href="<?= URL ?>">Home</a>
         <?php if ($app->isAdmin()) : ?>
             <a href="<?= URL ?>/account">account</a>
             <a href="<?= URL ?>/admin">admin</a>
@@ -22,6 +23,7 @@
             <a href="<?= URL ?>/login">login</a>
             <a href="<?= URL ?>/register">register</a>
         <?php endif ?>
+        <p class="number_in_cart"><?= isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0 ?> </p>
         <a href="<?= URL ?>/cart">cart</a>
     </header>
     <?= $content ?>
