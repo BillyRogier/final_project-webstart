@@ -16,7 +16,7 @@
             <p class="product_price"><?= $product['product']->getPrice() ?></p>
             <?=
             $form
-                ->change("id", ['value' => $product['product']->getId()])
+                ->change("product_id", ['value' => $product['product']->getId()])
                 ->change("quantity", ['value' => $product['quantity'], 'class' => 'quantity'])
                 ->createView()
             ?>
@@ -32,10 +32,12 @@
         <?php endforeach; ?>
         <div>total : <p class="total_cart"><?= $total ?></p>
         </div>
-        <a href="<?= URL ?>/buy">Valid cart</a>
-    <?php
-    } else {
+        <?php if ($loged) : ?>
+            <a href="<?= URL ?>/valid-user/<?= $_SESSION['valid'] ?>">Valid cart</a>
+        <?php else : ?>
+            <a href="<?= URL ?>/login?cart=true">Valid cart</a>
+        <?php endif ?>
+    <?php } else {
         echo "No products in cart";
     }  ?>
-
 </div>

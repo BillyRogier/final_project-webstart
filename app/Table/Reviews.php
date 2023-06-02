@@ -9,15 +9,15 @@ class Reviews extends Table
 {
     protected $table = "reviews";
     #[Properties(type: 'int', length: 11)]
-    private int $review_id;
+    private $review_id;
     #[Properties(type: 'int', length: 11)]
-    private int $product_id;
+    private $product_id;
     #[Properties(type: 'int', length: 11)]
-    private int $user_id;
+    private $user_id;
     #[Properties(type: 'string', length: 5000)]
-    private string $review_description;
+    private $review_description;
     #[Properties(type: 'int', length: 1)]
-    private int $grade;
+    private $grade;
 
     /**
      * Get the value of product_id

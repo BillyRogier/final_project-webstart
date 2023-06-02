@@ -48,7 +48,11 @@ class LoginController extends AbstarctController
                         } else {
                             $_SESSION['user'] = $user->getId();
                         }
-                        $error->location(URL . "/", "success_location");
+                        if (isset($_GET['cart']) && $_GET['cart'] == true) {
+                            $error->location(URL . "/valid-user/" .  $_SESSION['valid'] . "", "success_location");
+                        } else {
+                            $error->location(URL . "/", "success_location");
+                        }
                     } else {
                         $error->danger("Email or password incorrect", 'error_container');
                     }
@@ -98,7 +102,11 @@ class LoginController extends AbstarctController
 
                     $_SESSION['user'] = $UsersTable->lastInsertId();
                     $_SESSION["message"] = $error->success("successfully register");
-                    $error->location(URL . "/", "success_location");
+                    if (isset($_GET['cart']) && $_GET['cart'] == true) {
+                        $error->location(URL . "/valid-user/" .  $_SESSION['valid'] . "", "success_location");
+                    } else {
+                        $error->location(URL . "/", "success_location");
+                    }
                 } else {
                     $error->danger("Email déjà utilisé", 'error_container');
                 }

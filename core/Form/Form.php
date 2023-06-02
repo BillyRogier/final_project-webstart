@@ -2,9 +2,7 @@
 
 namespace Core\Form;
 
-use Core\Error\Error;
-use Core\Form\Type\FileType;
-use Core\Form\Type\SubmitType;
+use Core\Form\Type\HiddenType;
 
 class Form implements FormInterface
 {
@@ -13,6 +11,7 @@ class Form implements FormInterface
     public function createForm(string $action = "", string $method = "post", array $options = []): FormBuilder
     {
         $formBuilder = new FormBuilder($action, $method, $options);
+        $formBuilder->add("csrf_token", HiddenType::class, ['value' => $_SESSION['csrf_token']]);
         return $formBuilder;
     }
 

@@ -6,6 +6,8 @@ use App;
 use App\Table\Carousel;
 use App\Table\Categorys;
 use App\Table\Products;
+use App\Table\Reviews;
+use App\Table\Users;
 use Core\Cart\Cart;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\NumberType;
@@ -71,9 +73,16 @@ class AppController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Products::class));
         }
 
+        $ReviewsTable = new Reviews();
+        $ReviewsTable
+            ->leftJoin(Users::class)
+            ->on("reviews.user_id = users.id");
+        $reviews = $ReviewsTable->findAllBy(['reviews.product_id' => $id]);
+
         return $this->render('/app/product.php', '/default.php',  [
             'title' => 'Product',
             'products' => $products,
+            'reviews' => $reviews,
             'form' => $form_builder->createView(),
         ]);
     }

@@ -38,6 +38,9 @@ class App
         ini_set('session.cookie_lifetime', $sessionLifetime);
         ini_set('session.gc_maxlifetime', $sessionLifetime);
         session_start();
+        if (!isset($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = uniqid();
+        }
         require ROOT . '/app/Autoloader.php';
         Autoloader::register();
         require ROOT . '/core/Autoloader.php';

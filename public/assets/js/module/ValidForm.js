@@ -92,6 +92,7 @@ export class ValidForm {
         if (
             this.error.innerHTML == '' &&
             elt.type != 'file' &&
+            elt.type != 'submit' &&
             (elt.value != '' || elt.getAttribute('data-req') == true)
         ) {
             this.eltParent.classList.remove('invalid')
@@ -100,11 +101,11 @@ export class ValidForm {
         } else if (
             elt.value == '' &&
             elt.type != 'file' &&
+            elt.type != 'submit' &&
             elt.name != 'id' &&
             elt.getAttribute('data-req') != true
         ) {
-            this.error.innerHTML =
-                '<li>Veuillez remplir le champs ' + elt.name + '</li>'
+            this.error.innerHTML = '<li>Veuillez remplir le champs</li>'
             this.eltParent.classList.remove('active')
             this.eltParent.classList.add('invalid')
         }
@@ -136,6 +137,7 @@ export class ValidForm {
         })
             .then((response) => response.json())
             .then((data) => {
+                console.log(data)
                 const inputForm = this.form.querySelectorAll('input')
                 const textareaForm = this.form.querySelectorAll('textarea')
                 const selectForm = this.form.querySelectorAll('select')
