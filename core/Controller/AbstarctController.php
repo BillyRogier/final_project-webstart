@@ -5,6 +5,8 @@ namespace Core\Controller;
 use App;
 use Core\Error\Error;
 use Core\Form\Form;
+use Core\Form\Type\EmailType;
+use Core\Form\Type\SubmitType;
 use Core\Response\Response;
 
 abstract class AbstarctController
@@ -19,6 +21,12 @@ abstract class AbstarctController
 
     public function render($page, $templates, $array): Response
     {
+        $form_newsletter = $this->createForm()
+            ->add("email_newsletter", EmailType::class, ['class' => 'email_newsletter', 'placeholder' => 'email'])
+            ->add("submit", SubmitType::class, ['value' => 'Envoyer']);
+        $array['form_newsletter'] = $form_newsletter->createView();
+
+
         $response = new Response();
         $response->setPath($page);
         $response->setTemplates($templates);
