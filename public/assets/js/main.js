@@ -31,7 +31,6 @@ if (inputsFile) {
         })
     })
 }
-
 const addProducts = document.querySelectorAll('.add_prdt')
 
 if (addProducts) {
@@ -109,21 +108,63 @@ if (addToCart) {
 }
 
 const menuBurger = document.querySelector('.menu_burger')
+const closeMenu = document.querySelector('.close-menu')
 const menu = document.querySelector('.menu')
 
 if (menuBurger) {
     menuBurger.addEventListener('click', () => {
-        menuBurger.classList.toggle('active')
-        menu.classList.toggle('active')
+        menu.classList.add('active')
+    })
+    closeMenu.addEventListener('click', () => {
+        menu.classList.remove('active')
     })
 }
 
 const productsDropdown = document.querySelector('.products_dropdown')
 const productsLinks = document.querySelector('.products_links')
+const bigLinks = document.querySelectorAll('.big_link')
 
-if (productsDropdown) {
-    productsDropdown.addEventListener('click', () => {
-        productsDropdown.classList.toggle('active')
-        productsLinks.classList.toggle('active')
-    })
+const mouseHoverDropdown = () => {
+    menu.style.width = '800px'
+    productsLinks.classList.add('active')
 }
+
+const mouseHoverLinkorClose = () => {
+    menu.style.width = '400px'
+    productsLinks.classList.remove('active')
+}
+
+const dropdownClick = () => {
+    productsDropdown.classList.toggle('active')
+    productsLinks.classList.toggle('active')
+}
+
+const dropdownMenu = () => {
+    if (productsDropdown) {
+        if (window.innerWidth <= 768) {
+            menu.style.width = '100%'
+            productsDropdown.removeEventListener(
+                'mouseover',
+                mouseHoverDropdown
+            )
+            bigLinks.forEach((link) => {
+                link.removeEventListener('mouseover', mouseHoverLinkorClose)
+            })
+            closeMenu.removeEventListener('mouseover', mouseHoverLinkorClose)
+            productsDropdown.addEventListener('click', dropdownClick)
+        } else {
+            productsDropdown.classList.remove('active')
+            productsLinks.classList.remove('active')
+            menu.style.width = '400px'
+            productsDropdown.removeEventListener('click', dropdownClick)
+            productsDropdown.addEventListener('mouseover', mouseHoverDropdown)
+            bigLinks.forEach((link) => {
+                link.addEventListener('mouseover', mouseHoverLinkorClose)
+            })
+            closeMenu.addEventListener('mouseover', mouseHoverLinkorClose)
+        }
+    }
+}
+
+window.addEventListener('load', dropdownMenu)
+window.addEventListener('resize', dropdownMenu)
