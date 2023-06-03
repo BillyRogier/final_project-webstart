@@ -52,36 +52,78 @@ if (addProducts) {
 
 const quantitys = document.querySelectorAll('.quantity')
 
-if(quantitys){
+if (quantitys) {
     const product_price = document.querySelectorAll('.product_price')
     const total_product = document.querySelectorAll('.total_product')
     const total_cart = document.querySelector('.total_cart')
+    const numberInCart = document.querySelector('.number_in_cart')
     quantitys.forEach((quantity, index) => {
-        quantity.addEventListener("input", () => {
-            
-            total_product[index].innerHTML = parseInt(product_price[index].innerHTML, 10) * quantity.value
-            let total = 0
-            total_product.forEach((price,n) => {
-                if(n != index){
-                    total += parseInt(price.innerHTML, 10) 
-                }
-            });
-            total_cart.innerHTML = total + parseInt(total_product[index].innerHTML, 10)
+        quantity.addEventListener('input', () => {
+            if (quantity.value >= 1) {
+                total_product[index].innerHTML =
+                    parseInt(product_price[index].innerHTML, 10) *
+                    quantity.value
+                let total = 0
+                total_product.forEach((price, n) => {
+                    if (n != index) {
+                        total += parseInt(price.innerHTML, 10)
+                    }
+                })
+                total_cart.innerHTML =
+                    total + parseInt(total_product[index].innerHTML, 10)
 
-            var formData = new FormData(quantity.parentNode.parentNode.parentNode.parentNode)
-            fetch("",{
-                method: 'POST',
-                body: formData,
-            })
+                var formData = new FormData(
+                    quantity.parentNode.parentNode.parentNode.parentNode
+                )
+                let totalQuantity = fetch('', {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data.properties > 99) {
+                            numberInCart.innerHTML = '99+'
+                        } else {
+                            numberInCart.innerHTML = data.properties
+                        }
+                    })
+            }
         })
-    });
+    })
 }
 
 const addToCart = document.querySelector('.add_to_cart')
 
-if(addToCart){
-    addToCart.addEventListener("submit", () => {
+if (addToCart) {
+    addToCart.addEventListener('submit', () => {
         const numberInCart = document.querySelector('.number_in_cart')
-        numberInCart.innerHTML = parseInt(numberInCart.innerHTML , 10) + 1
+        let number_in_cart =
+            parseInt(numberInCart.innerHTML, 10) +
+            parseInt(addToCart.querySelector('#quantity').value, 10)
+        if (number_in_cart > 99) {
+            numberInCart.innerHTML = '99+'
+        } else {
+            numberInCart.innerHTML = number_in_cart
+        }
+    })
+}
+
+const menuBurger = document.querySelector('.menu_burger')
+const menu = document.querySelector('.menu')
+
+if (menuBurger) {
+    menuBurger.addEventListener('click', () => {
+        menuBurger.classList.toggle('active')
+        menu.classList.toggle('active')
+    })
+}
+
+const productsDropdown = document.querySelector('.products_dropdown')
+const productsLinks = document.querySelector('.products_links')
+
+if (productsDropdown) {
+    productsDropdown.addEventListener('click', () => {
+        productsDropdown.classList.toggle('active')
+        productsLinks.classList.toggle('active')
     })
 }

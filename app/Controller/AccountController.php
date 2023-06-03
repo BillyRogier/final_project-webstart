@@ -6,29 +6,30 @@ use App;
 use App\Table\Carousel;
 use App\Table\Orders;
 use App\Table\Products;
+use App\Table\Reviews;
 use App\Table\Users;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\ChoiceType;
 use Core\Form\Type\DateTimeType;
 use Core\Form\Type\EmailType;
+use Core\Form\Type\NumberType;
 use Core\Form\Type\PasswordType;
 use Core\Form\Type\SubmitType;
+use Core\Form\Type\TextareaType;
 use Core\Form\Type\TextType;
 use Core\Route\Route;
 
 class AccountController extends AbstarctController
 {
-    private $app;
-
     public function __construct()
     {
-        $this->app = App::getInstance();
+        parent::__construct();
         if (!$this->app->isAdmin() && !$this->app->isUser()) {
             $this->headLocation("/");
         }
     }
 
-    #[Route('/account', name: 'account')]
+    #[Route('/account')]
     public function account()
     {
         $OrdersTable = new Orders();
@@ -48,7 +49,7 @@ class AccountController extends AbstarctController
         ]);
     }
 
-    #[Route('/account/settings', name: 'account')]
+    #[Route('/account/settings')]
     public function settings()
     {
         $UsersTable = new Users();
@@ -93,6 +94,48 @@ class AccountController extends AbstarctController
 
         return $this->render('/app/register.php', '/login.php', [
             'title' => 'Account | Settings',
+            'form' => $formBuilder->createView(),
+        ]);
+    }
+
+    #[Route('/add-comment/{order_num}/{id}')]
+    public function addComment($order_num, $id)
+    {
+        $OrdersTable = new Orders();
+        if (!$OrdersTable->findOneBy(['order_num' => $order_num, 'user_id' => (isset($_SESSION['user']) ? $_SESSION['user'] : $_SESSION['admin']), 'product_id' => $id])) {
+            $this->headLocation("/account");
+        }
+        $ProductsTable = new Products();
+        $product = $ProductsTable->findOneBy(['id' => $id]);
+
+        $ReviewsTable = new Reviews();
+
+        $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
+            ->add("grade", NumberType::class, ['label' => 'Grade', 'id' => 'grade'])
+            ->add("description", TextareaType::class, ['label' => 'Description', 'id' => 'description'])
+            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->getForm();
+
+        if ($formBuilder->isSubmit()) {
+            $error = $formBuilder->isXmlValid($ReviewsTable);
+            if ($error->noError()) {
+                $data = $formBuilder->getData();
+
+                $ReviewsTable
+                    ->setUser_id((isset($_SESSION['user']) ? $_SESSION['user'] : $_SESSION['admin']))
+                    ->setProduct_id($id)
+                    ->setDescription($data['description'])
+                    ->setGrade($data['grade'])
+                    ->flush();
+
+                $_SESSION["message"] = $error->success("successfully insert");
+                $error->location(URL . "/account", "success_location");
+            }
+            $error->getXmlMessage($this->app->getProperties(Reviews::class));
+        }
+
+        return $this->render('/app/add_comment.php', '/default.php', [
+            'title' => 'Add comment',
             'form' => $formBuilder->createView(),
         ]);
     }

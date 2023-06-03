@@ -152,3 +152,101 @@ form.grid {
     display: grid;
     gap: 1rem;
 }
+
+/* FORM PAGE NORMAL */
+
+input,
+textarea,
+select {
+    border: 2px solid #000;
+}
+
+img {
+    width: 200px;
+}
+table,
+td {
+    border: 1px solid #333;
+}
+
+.order_container {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+th,
+td {
+    padding: 5px;
+}
+
+thead,
+tfoot {
+    background-color: #333;
+    color: #fff;
+}
+
+.input-container.invalid input,
+.input-container.invalid textarea,
+.input-container.invalid select {
+    border-color: #9c0b0b;
+}
+
+.input-container.active input,
+.input-container.active textarea,
+.input-container.active select {
+    border-color: #4c9c0b;
+}
+
+.input-container.invalid .error-message {
+    display: block;
+}
+
+.input-container.active .error-message {
+    display: none;
+}
+
+.error-message {
+    color: #9c0b0b;
+    font: var(--very-small-size);
+    font-weight: 500;
+    padding: 0 5px;
+}
+
+.error-message > li {
+    list-style: disc;
+    list-style-position: inside;
+}
+
+.error-container {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.success {
+    width: 100%;
+    padding: 15px 25px;
+    background-color: #4c9c0b40;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font: var(--small-size);
+    color: #4c9c0b;
+    list-style: none;
+}
+
+.danger {
+    width: 100%;
+    padding: 15px 25px;
+    background-color: #9c0b0b40;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font: var(--small-size);
+    color: #9c0b0b;
+    list-style: none;
+}
+
+form {
+    display: grid;
+    gap: 1rem;
+    margin-top: 20px;
+}

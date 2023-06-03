@@ -14,11 +14,8 @@ use Core\Route\Route;
 
 class CategorysController extends AbstarctController
 {
-    private  $app;
-
     public function __construct()
     {
-        $this->app = App::getInstance();
         if (!$this->app->isAdmin()) {
             $this->headLocation("/account");
         }

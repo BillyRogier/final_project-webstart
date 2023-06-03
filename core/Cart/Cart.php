@@ -46,4 +46,19 @@ class Cart
     {
         return $this->cart;
     }
+
+    public function cleanCart()
+    {
+        $this->cart = [];
+        $_SESSION['cart'] = $this->cart;
+    }
+
+    public function countItems()
+    {
+        $totalCount = 0;
+        foreach ($this->cart as $quantity) {
+            $totalCount += $quantity;
+        }
+        return $totalCount;
+    }
 }

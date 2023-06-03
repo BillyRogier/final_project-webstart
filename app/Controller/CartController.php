@@ -18,11 +18,9 @@ use Core\Route\Route;
 
 class CartController extends AbstarctController
 {
-    private $app;
-
     public function __construct()
     {
-        $this->app = App::getInstance();
+        parent::__construct();
     }
 
     #[Route('/cart')]
@@ -56,7 +54,7 @@ class CartController extends AbstarctController
                         $Cart->setQuantity($data['product_id'], $data['quantity']);
                     }
                 }
-                $error->getXmlMessage("");
+                $error->getXmlMessage($Cart->countItems());
             }
         }
 
@@ -189,6 +187,7 @@ class CartController extends AbstarctController
                         ->flush();
                 }
 
+                $Cart->cleanCart();
                 $error->location(URL . "/", "success_location");
             }
             $error->getXmlMessage("");

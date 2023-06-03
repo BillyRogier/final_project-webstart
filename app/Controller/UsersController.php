@@ -19,11 +19,9 @@ use Core\Route\Route;
 
 class UsersController extends AbstarctController
 {
-    private  $app;
-
     public function __construct()
     {
-        $this->app = App::getInstance();
+        parent::__construct();
         if (!$this->app->isAdmin()) {
             $this->headLocation("/account");
         }

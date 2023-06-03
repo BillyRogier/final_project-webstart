@@ -2,14 +2,20 @@
 
 namespace Core\Controller;
 
+use App;
 use Core\Error\Error;
 use Core\Form\Form;
-use Core\Login\Login;
 use Core\Response\Response;
 
 abstract class AbstarctController
 {
+    protected $app;
     protected $response;
+
+    public function __construct()
+    {
+        $this->app = App::getInstance();
+    }
 
     public function render($page, $templates, $array): Response
     {

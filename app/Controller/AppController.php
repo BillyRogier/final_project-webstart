@@ -16,11 +16,10 @@ use Core\Route\Route;
 
 class AppController extends AbstarctController
 {
-    private $app;
 
     public function __construct()
     {
-        $this->app = App::getInstance();
+        parent::__construct();
     }
 
     #[Route('/')]

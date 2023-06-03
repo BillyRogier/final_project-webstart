@@ -13,11 +13,9 @@ use Core\Route\Route;
 
 class LoginController extends AbstarctController
 {
-    private $app;
-
     public function __construct()
     {
-        $this->app = App::getInstance();
+        parent::__construct();
         if ($this->app->isAdmin() || $this->app->isUser()) {
             $this->headLocation("/");
         }
