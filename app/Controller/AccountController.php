@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App;
 use App\Table\Carousel;
 use App\Table\Orders;
 use App\Table\Products;
@@ -24,9 +23,6 @@ class AccountController extends AbstarctController
     public function __construct()
     {
         parent::__construct();
-        if (!$this->app->isAdmin() && !$this->app->isUser()) {
-            $this->headLocation("/");
-        }
     }
 
     #[Route('/account')]

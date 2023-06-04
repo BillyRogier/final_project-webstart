@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App;
 use App\Table\Carousel;
 use App\Table\Categorys;
 use App\Table\Products;
@@ -16,7 +15,6 @@ use Core\Route\Route;
 
 class AppController extends AbstarctController
 {
-
     public function __construct()
     {
         parent::__construct();

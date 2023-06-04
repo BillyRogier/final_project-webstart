@@ -76,27 +76,34 @@
         </div>
     </header>
     <?= $content ?>
-    <footer>
-        <div class="footer-container">
-            <p class="footer-title">Aide & Services</p>
-            <p>Statut de commande</p>
-            <p>Expédition et livraison</p>
-            <p>Retours</p>
-            <p>Modes de paiement</p>
-            <p>Nous contacter</p>
-        </div>
-        <div class="footer-container">
-            <p class="footer-title">Informations légales</p>
-            <p>Mentions légales</p>
-            <p>Conditions générales de vente</p>
-            <p>Protection des données</p>
-        </div>
-        <div class="footer-container">
-            <div class="error-container"><?= isset($_SESSION['message']) ? $_SESSION['message'] : "" ?></div>
+    <footer class="grid">
+        <div class="footer-container grid">
             <p class="footer-title">Newsletter</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <?= $form_newsletter ?>
+            <form action="" method="post" class="grid">
+                <input type="email" name="email_newsletter" placeholder="email">
+                <button class="btn">S'inscrire</button>
+            </form>
         </div>
+        <div class="footer-container grid">
+            <p class="footer-title">Aide & Services</p>
+            <div class="info-container grid">
+                <p>Statut de commande</p>
+                <p>Expédition et livraison</p>
+                <p>Retours</p>
+                <p>Modes de paiement</p>
+                <p>Nous contacter</p>
+            </div>
+        </div>
+        <div class="footer-container grid">
+            <p class="footer-title">Informations légales</p>
+            <div class="info-container grid">
+                <p>Mentions légales</p>
+                <p>Conditions générales de vente</p>
+                <p>Protection des données</p>
+            </div>
+        </div>
+
     </footer>
 </body>
 
