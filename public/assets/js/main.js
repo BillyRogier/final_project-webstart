@@ -141,7 +141,7 @@ const dropdownClick = () => {
 
 const dropdownMenu = () => {
     if (productsDropdown) {
-        if (window.innerWidth <= 768) {
+        if (window.innerWidth <= 1024) {
             menu.style.width = '100%'
             productsDropdown.removeEventListener(
                 'mouseover',

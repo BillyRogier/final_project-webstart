@@ -68,10 +68,13 @@ a {
 
 .btn {
     background-color: var(--orange-color);
-    padding: 10px 20px;
+    padding: 11px 20px;
     border-radius: 5px;
     color: var(--white-color);
     font: var(--small-size);
+    font-weight: 500;
+    line-height: 1.4;
+    width: fit-content;
 }
 
 /* ---------------------- HEADER ---------------------- */
@@ -84,6 +87,7 @@ header {
     grid-template-columns: max-content max-content;
     position: fixed;
     background-color: var(--white-color);
+    z-index: 99;
 }
 
 nav.grid {
@@ -261,6 +265,7 @@ footer form {
     padding: 5px;
     border-radius: 5px;
     grid-template-columns: 1fr min-content;
+    max-width: 600px;
 }
 
 footer form > input {
@@ -271,7 +276,70 @@ footer form > input {
     padding: 0 0 0 5px;
 }
 
+/* ---------------------- MAIN ---------------------- */
+
+main {
+    gap: 160px;
+    padding-top: 60px;
+}
+
+main > .home-container {
+    gap: 80px;
+}
+
+.home {
+    height: calc(100vh - 60px);
+    margin: 0 20px;
+}
+
+.home > .home-image {
+    object-fit: cover;
+    height: calc(100vh - 60px);
+    z-index: -1;
+    object-position: 80% 100%;
+    position: absolute;
+    top: 60px;
+    left: 0;
+}
+
+.home-data {
+    gap: 10px;
+    grid-area: 1/1;
+}
+
+.home-data h1,
+.home-data h2 {
+    color: var(--white-color);
+}
+
+.home-data h2 {
+    font: var(--medium-size);
+}
+
+.arrow_scroll {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 22px;
+}
+
+.about {
+    margin: 0 20px;
+    gap: 40px;
+}
+
 @media (min-width: 1024px) {
+    :root {
+        --very-very-small-size: 400 0.625rem/1.4 'Montserrat', sans-serif;
+        --very-small-size: 400 0.812rem/1.4 'Montserrat', sans-serif;
+        --small-size: 400 1rem/1.4 'Montserrat', sans-serif;
+        --medium-size: 400 1.25rem/1.4 'Montserrat', sans-serif;
+        --large-size: 500 1.562rem/1.4 'Montserrat', sans-serif;
+        --very-large-size: 700 1.938rem/1.3 'Montserrat', sans-serif;
+        --very-very-large-size: 700 2.438rem/1.3 'Montserrat', sans-serif;
+        --very-very-very-large-size: 700 3.062rem/1.3 'Montserrat', sans-serif;
+    }
+
     header {
         height: 80px;
         padding: 0 80px;
@@ -356,5 +424,30 @@ footer form > input {
         justify-content: space-between;
         padding: 40px 80px;
         grid-template-columns: minmax(200px, 600px) max-content max-content;
+    }
+
+    .home {
+        margin: 0 80px;
+    }
+
+    .home-data {
+        grid-column: 2/12;
+    }
+
+    .arrow_scroll {
+        right: 80px;
+    }
+
+    .about {
+        margin: 0 80px;
+        grid-template-columns: repeat(12, 1fr);
+    }
+
+    .about > img {
+        grid-column: 2/6;
+    }
+
+    .about-data {
+        grid-column: 7/12;
     }
 }
