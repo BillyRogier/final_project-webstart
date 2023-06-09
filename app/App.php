@@ -34,7 +34,7 @@ class App
 
     public static function load()
     {
-        $sessionLifetime = 24 * 60 * 60; // 1 jour en secondes
+        $sessionLifetime = 24 * 60 * 60 * 30 * 2; // 1 jour en secondes
         ini_set('session.cookie_lifetime', $sessionLifetime);
         ini_set('session.gc_maxlifetime', $sessionLifetime);
         session_start();

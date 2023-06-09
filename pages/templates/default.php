@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="<?= URL ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= URL ?>/assets/css/style.css">
     <script src="<?= URL ?>/assets/js/main.js" defer type="module"></script>
+    <script src="<?= URL ?>/assets/js/slider.js" defer type="module"></script>
     <title><?= $app->title ?></title>
 </head>
 
@@ -22,7 +23,6 @@
                     <span class="number_in_cart grid">
                         <?php
 
-                        use App\Table\Categorys;
 
                         $totalCount = 0;
                         if (isset($_SESSION['cart'])) {
@@ -59,14 +59,16 @@
                         <div class="menu_part grid">
                             <p>Produits</p>
                         </div>
-                        <li><a href="#" class="link">Tous les produits</a></li>
+                        <li><a href="<?= URL  ?>/category/all-products" class="link">Tous les produits</a></li>
                         <?php
+
+                        use App\Table\Categorys;
 
                         $CategorysTable = new Categorys();
                         $categorys = $CategorysTable->findAll();
 
                         foreach ($categorys as $category) : ?>
-                            <li><a href="#" class="link"><?= $category->getCategory_name() ?></a></li>
+                            <li><a href="<?= URL ?>/category/<?= $category->getCategory_name() ?>" class="link"><?= $category->getCategory_name() ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                 </li>

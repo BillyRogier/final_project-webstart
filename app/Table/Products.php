@@ -9,13 +9,13 @@ class Products extends Table
 {
     protected $table = "products";
     #[Properties(type: 'int', length: 11)]
-    private int $id;
+    private $id;
     #[Properties(type: 'string', length: 255)]
-    private string $name;
+    private $name;
     #[Properties(type: 'string', length: 5000)]
-    private string $description;
+    private $description;
     #[Properties(type: 'float', length: 11)]
-    private float $price;
+    private $price;
     #[Properties(type: 'int', length: 11)]
     private $category_id = null;
     #[Properties(type: 'int', length: 4)]

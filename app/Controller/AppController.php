@@ -30,13 +30,17 @@ class AppController extends AbstarctController
             ->leftJoin(Carousel::class)
             ->on("carousel.product_id = products.id");
 
+        $categorys = $ProductsTable->getJoin(Categorys::class)->findAll();
+
         $products = $ProductsTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2 OR carousel.type IS NULL");
 
         return $this->render('/app/home.php', '/default.php',  [
             'title' => 'Accueil',
             'products' => $products,
+            'categorys' => $categorys,
         ]);
     }
+
 
     #[Route('/product/{id}')]
     public function viewProduct(int $id)
@@ -81,6 +85,30 @@ class AppController extends AbstarctController
             'products' => $products,
             'reviews' => $reviews,
             'form' => $form_builder->createView(),
+        ]);
+    }
+
+    #[Route('/category/{category}')]
+    public function category($category)
+    {
+        $CategorysTable = new Categorys();
+        $CategorysTable
+            ->leftJoin(Products::class)
+            ->on("products.category_id = categorys.category_id")
+            ->leftJoin(Carousel::class)
+            ->on("carousel.product_id = products.id");
+
+        $products =
+            $category == "all-products" ?
+            $CategorysTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2 OR carousel.type IS NULL") :
+            $CategorysTable->findAllBy(["carousel.type" => 1, "categorys.category_name" => $category], "AND products.visibility != 2 OR carousel.type IS NULL");
+
+
+        return $this->render('/app/category.php', '/default.php',  [
+            'title' => str_replace("-", " ", ucfirst($category)),
+            'subtitle' => $category,
+            'category_img' => $products[0]->getCategory_img(),
+            'products' => $products,
         ]);
     }
 }

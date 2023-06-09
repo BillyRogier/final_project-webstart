@@ -20,16 +20,39 @@
             </div>
         </section>
     </div>
-    <?php
+    <section class="categorys">
+        <?php foreach ($categorys as $category) : ?>
+            <div class="category">
+                <img src="<?= URL ?>/assets/img/<?= $category->getCategory_img() ?>" alt="category" class="category-image">
+                <a href="#" class="link"><?= $category->getCategory_name() ?></a>
+            </div>
+        <?php endforeach; ?>
+    </section>
+    <section class="products-trends grid">
+        <div class="header-slider grid">
+            <h2>Produits tendances</h2>
+            <div class="line"></div>
+            <div class="slider-arrows">
+                <div class="arrow prev"> <img src="<?= URL ?>/assets/icon/arrow_white.svg" alt="arrow left" class="arrow-image left"></div>
+                <div class="arrow next"><img src="<?= URL ?>/assets/icon/arrow_white.svg" alt="arrow right" class="arrow-image right"></div>
+            </div>
+        </div>
+        <div class="slider-container">
+            <div class="slider">
+                <?php
 
-    use App\Table\Carousel;
+                use App\Table\Carousel;
 
-    foreach ($products as $product) : ?>
-        <a href="<?= URL ?>/product/<?= $product->getId() ?>">
-            <img src="<?= URL ?>/assets/img/<?= $product->getJoin(Carousel::class)->getImg() ?>" />
-            <h3><?= $product->getName() ?></h3>
-            <p><?= $product->getDescription() ?></p>
-            <p><?= $product->getPrice() ?></p>
-        </a>
-    <?php endforeach; ?>
+                foreach ($products as $product) : ?>
+                    <a href="<?= URL ?>/product/<?= $product->getId() ?>" class="slider-item product grid">
+                        <img src="<?= URL ?>/assets/img/<?= $product->getJoin(Carousel::class)->getImg() ?>" />
+                        <div class="product-data grid">
+                            <h3><?= $product->getName() ?></h3>
+                            <p><?= $product->getPrice() ?> €</p>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
 </main>

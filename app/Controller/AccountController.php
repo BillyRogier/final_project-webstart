@@ -23,6 +23,9 @@ class AccountController extends AbstarctController
     public function __construct()
     {
         parent::__construct();
+        if (!$this->app->isAdmin() && !$this->app->isUser()) {
+            $this->headLocation("/");
+        }
     }
 
     #[Route('/account')]

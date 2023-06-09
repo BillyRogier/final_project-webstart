@@ -141,7 +141,7 @@ const dropdownClick = () => {
 
 const dropdownMenu = () => {
     if (productsDropdown) {
-        if (window.innerWidth <= 1024) {
+        if (window.innerWidth < 1024) {
             menu.style.width = '100%'
             productsDropdown.removeEventListener(
                 'mouseover',
@@ -153,9 +153,9 @@ const dropdownMenu = () => {
             closeMenu.removeEventListener('mouseover', mouseHoverLinkorClose)
             productsDropdown.addEventListener('click', dropdownClick)
         } else {
+            menu.style.width = '400px'
             productsDropdown.classList.remove('active')
             productsLinks.classList.remove('active')
-            menu.style.width = '400px'
             productsDropdown.removeEventListener('click', dropdownClick)
             productsDropdown.addEventListener('mouseover', mouseHoverDropdown)
             bigLinks.forEach((link) => {
