@@ -551,7 +551,7 @@ main > .category-container {
     cursor: pointer;
 }
 
-#quantity {
+.quantity {
     text-align: center;
     width: min-content;
 }
@@ -581,25 +581,50 @@ main > .category-container {
     padding: 20px;
     grid-template-columns: repeat(2, max-content);
     justify-content: space-between;
+    cursor: pointer;
 }
 
 .drop_review > img {
     height: 30px;
     transform: rotate(90deg);
+    transition: 0.3s ease-in-out;
+}
+
+.drop_review.active {
+    border-bottom: none;
+}
+
+.drop_review.active > img {
+    transform: rotate(270deg);
 }
 
 .review-wrapper {
     gap: 40px;
+    border-width: 0 0 4px 0;
+    border-style: dotted;
+    transition: 0.3s ease-in-out;
+    padding-bottom: 40px;
+}
+
+.review-wrapper.active {
+    gap: 0;
+    padding-bottom: 0;
 }
 
 .reviews-container {
-    border-width: 0 0 4px 0;
-    border-style: dotted;
+    display: block;
+    height: fit-content;
     border-color: var(--text-color);
+    gap: 40px;
+    transition: 0.3s ease-in-out;
+    overflow: hidden;
+    margin: 0 20px;
 }
 
-.review {
-    margin: 0 20px 40px;
+.reviews-container.active {
+    transition: 0.3s ease-in-out;
+    height: 0;
+    padding-bottom: 0;
 }
 
 .head_review {
@@ -768,8 +793,8 @@ main > .category-container {
     .header-slider > .line {
         border: none;
         display: block;
-        border-top: 5px dotted var(--text-color);
-        height: 5px;
+        border-top: 4px dotted var(--text-color);
+        height: 4px;
         width: 100%;
     }
 
@@ -841,5 +866,21 @@ main > .category-container {
 
     .drop_review {
         padding: 20px 80px;
+    }
+
+    .review {
+        grid-template-columns: 1fr 3fr;
+        gap: 80px;
+        justify-content: start;
+    }
+
+    .review-wrapper {
+        padding-bottom: 80px;
+        gap: 80px;
+    }
+
+    .reviews-container {
+        gap: 80px;
+        margin: 0 80px;
     }
 }

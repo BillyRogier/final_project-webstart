@@ -50,43 +50,57 @@ if (addProducts) {
 }
 
 const quantitys = document.querySelectorAll('.quantity')
+const lessQuantity = document.querySelectorAll('.less')
+const moreQuantity = document.querySelectorAll('.more')
 
-if (quantitys) {
+const changeValueCart = async (quantity, index) => {
     const product_price = document.querySelectorAll('.product_price')
     const total_product = document.querySelectorAll('.total_product')
     const total_cart = document.querySelector('.total_cart')
     const numberInCart = document.querySelector('.number_in_cart')
-    quantitys.forEach((quantity, index) => {
-        quantity.addEventListener('input', () => {
-            if (quantity.value >= 1) {
-                total_product[index].innerHTML =
-                    parseInt(product_price[index].innerHTML, 10) *
-                    quantity.value
-                let total = 0
-                total_product.forEach((price, n) => {
-                    if (n != index) {
-                        total += parseInt(price.innerHTML, 10)
+    if (quantity.value >= 1) {
+        var form = quantity.parentNode.parentNode.parentNode.parentNode
+        if (!form.classList.contains('add_to_cart')) {
+            total_product[index].innerHTML =
+                parseInt(product_price[index].innerHTML, 10) * quantity.value
+            let total = 0
+            total_product.forEach((price, n) => {
+                if (n != index) {
+                    total += parseInt(price.innerHTML, 10)
+                }
+            })
+            total_cart.innerHTML =
+                total + parseInt(total_product[index].innerHTML, 10)
+
+            var formData = new FormData(form)
+            fetch('', {
+                method: 'POST',
+                body: formData,
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.properties > 99) {
+                        numberInCart.innerHTML = '99+'
+                    } else {
+                        numberInCart.innerHTML = data.properties
                     }
                 })
-                total_cart.innerHTML =
-                    total + parseInt(total_product[index].innerHTML, 10)
+        }
+    }
+}
 
-                var formData = new FormData(
-                    quantity.parentNode.parentNode.parentNode.parentNode
-                )
-                let totalQuantity = fetch('', {
-                    method: 'POST',
-                    body: formData,
-                })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.properties > 99) {
-                            numberInCart.innerHTML = '99+'
-                        } else {
-                            numberInCart.innerHTML = data.properties
-                        }
-                    })
-            }
+if (quantitys) {
+    quantitys.forEach((quantity, index) => {
+        lessQuantity[index].addEventListener('click', () => {
+            quantity.value = parseInt(quantity.value, 10) - 1
+            changeValueCart(quantity, index)
+        })
+        moreQuantity[index].addEventListener('click', () => {
+            quantity.value = parseInt(quantity.value, 10) + 1
+            changeValueCart(quantity, index)
+        })
+        quantity.addEventListener('input', () => {
+            changeValueCart(quantity, index)
         })
     })
 }
@@ -134,9 +148,9 @@ const mouseHoverLinkorClose = () => {
     productsLinks.classList.remove('active')
 }
 
-const dropdownClick = () => {
-    productsDropdown.classList.toggle('active')
-    productsLinks.classList.toggle('active')
+const dropdownClick = (dropdown, elt) => {
+    dropdown.classList.toggle('active')
+    elt.classList.toggle('active')
 }
 
 const dropdownMenu = () => {
@@ -151,12 +165,16 @@ const dropdownMenu = () => {
                 link.removeEventListener('mouseover', mouseHoverLinkorClose)
             })
             closeMenu.removeEventListener('mouseover', mouseHoverLinkorClose)
-            productsDropdown.addEventListener('click', dropdownClick)
+            productsDropdown.addEventListener('click', () => {
+                dropdownClick(productsDropdown, productsLinks)
+            })
         } else {
             menu.style.width = '400px'
             productsDropdown.classList.remove('active')
             productsLinks.classList.remove('active')
-            productsDropdown.removeEventListener('click', dropdownClick)
+            productsDropdown.removeEventListener('click', () => {
+                dropdownClick(productsDropdown, productsLinks)
+            })
             productsDropdown.addEventListener('mouseover', mouseHoverDropdown)
             bigLinks.forEach((link) => {
                 link.addEventListener('mouseover', mouseHoverLinkorClose)
@@ -168,3 +186,12 @@ const dropdownMenu = () => {
 
 window.addEventListener('load', dropdownMenu)
 window.addEventListener('resize', dropdownMenu)
+
+const reviewDropdown = document.querySelector('.drop_review')
+const reviewContent = document.querySelector('.reviews-container')
+const reviewWrapper = document.querySelector('.review-wrapper')
+
+reviewDropdown.addEventListener('click', () => {
+    dropdownClick(reviewDropdown, reviewContent)
+    reviewWrapper.classList.toggle('active')
+})

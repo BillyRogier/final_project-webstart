@@ -73,7 +73,13 @@ class Slider {
             this.sliderIndicators.forEach((indicator) => {
                 indicator.classList.remove('active')
             })
-            if (this.index < 2) {
+            if (
+                this.index <= this.sliderItems.length / 2 - 1 &&
+                this.index >= 0 &&
+                this.sliderItems.length / 2 - 1 <= 2
+            ) {
+                this.sliderIndicators[this.index].classList.add('active')
+            } else if (this.index < 2) {
                 this.sliderIndicators[this.index + 2].classList.add('active')
             } else {
                 this.sliderIndicators[this.index - 2].classList.add('active')

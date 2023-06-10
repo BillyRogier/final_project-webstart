@@ -59,7 +59,7 @@ class AppController extends AbstarctController
         }
 
         $form_builder = $this->createForm("", "post", ['class' => 'add_to_cart grid'])
-            ->add("quantity", NumberType::class, ['id' => 'quantity', 'value' => '1'])
+            ->add("quantity", NumberType::class, ['id' => 'quantity', 'class' => 'quantity', 'value' => '1'])
             ->add("submit", SubmitType::class, ['value' => 'Ajouter au panier', 'class' => 'btn'])
             ->getForm();
 

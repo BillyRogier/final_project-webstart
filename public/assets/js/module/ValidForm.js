@@ -137,7 +137,6 @@ export class ValidForm {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)
                 const inputForm = this.form.querySelectorAll('input')
                 const textareaForm = this.form.querySelectorAll('textarea')
                 const selectForm = this.form.querySelectorAll('select')
