@@ -17,9 +17,18 @@ class Type
     function input($name, $type, $options, $options_html)
     {
         $nameControl = strtolower(str_replace("[]", '', $name));
+        $input = "<input name=\"$name\" type=\"$type\" $options> ";
+        if ($name == "quantity") {
+            $input = "
+            <p class=\"less\">-</p>
+            <input name=\"$name\" type=\"$type\" $options> 
+            <p class=\"more\">+</p>
+            ";
+        }
+
         return
             "<div class=\"$nameControl-item\">
-                <input name=\"$name\" type=\"$type\" $options> 
+                $input
                 $options_html
             </div>";
     }

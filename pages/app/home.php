@@ -37,7 +37,7 @@
                 <div class="arrow next"><img src="<?= URL ?>/assets/icon/arrow_white.svg" alt="arrow right" class="arrow-image right"></div>
             </div>
         </div>
-        <div class="slider-container">
+        <div class="slider-container" id="slider_products-trends">
             <div class="slider">
                 <?php
 

@@ -58,9 +58,9 @@ class AppController extends AbstarctController
             $this->headLocation("/");
         }
 
-        $form_builder = $this->createForm("", "post", ['class' => 'add_to_cart'])
-            ->add("quantity", NumberType::class, ['label' => 'Quantity', 'id' => 'quantity', 'value' => '1'])
-            ->add("submit", SubmitType::class, ['value' => 'add to cart'])
+        $form_builder = $this->createForm("", "post", ['class' => 'add_to_cart grid'])
+            ->add("quantity", NumberType::class, ['id' => 'quantity', 'value' => '1'])
+            ->add("submit", SubmitType::class, ['value' => 'Ajouter au panier', 'class' => 'btn'])
             ->getForm();
 
         if ($form_builder->isSubmit()) {
@@ -74,6 +74,8 @@ class AppController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Products::class));
         }
 
+        $products_trends = $ProductsTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2 OR carousel.type IS NULL");
+
         $ReviewsTable = new Reviews();
         $ReviewsTable
             ->leftJoin(Users::class)
@@ -83,6 +85,7 @@ class AppController extends AbstarctController
         return $this->render('/app/product.php', '/default.php',  [
             'title' => 'Product',
             'products' => $products,
+            'products_trends' => $products_trends,
             'reviews' => $reviews,
             'form' => $form_builder->createView(),
         ]);
@@ -103,9 +106,12 @@ class AppController extends AbstarctController
             $CategorysTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2 OR carousel.type IS NULL") :
             $CategorysTable->findAllBy(["carousel.type" => 1, "categorys.category_name" => $category], "AND products.visibility != 2 OR carousel.type IS NULL");
 
+        if (!$products) {
+            $this->headLocation("/");
+        }
 
         return $this->render('/app/category.php', '/default.php',  [
-            'title' => str_replace("-", " ", ucfirst($category)),
+            'title' => str_replace("-", " ", ucfirst(($category != "all-products" ? $category : "Tous les produits"))),
             'subtitle' => $category,
             'category_img' => $products[0]->getCategory_img(),
             'products' => $products,

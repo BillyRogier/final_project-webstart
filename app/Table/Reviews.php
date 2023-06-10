@@ -18,6 +18,8 @@ class Reviews extends Table
     private $review_description;
     #[Properties(type: 'int', length: 1)]
     private $grade;
+    #[Properties(type: 'string', length: 5000)]
+    private $review_date;
 
     /**
      * Get the value of product_id
@@ -122,9 +124,29 @@ class Reviews extends Table
     public function flush()
     {
         if (isset($this->review_id)) {
-            parent::update(['user_id', 'product_id', 'review_description', 'grade'], "review_id", [$this->user_id, $this->product_id, $this->review_description, $this->grade, $this->review_id]);
+            parent::update(['user_id', 'product_id', 'review_description', 'grade', 'review_date'], "review_id", [$this->user_id, $this->product_id, $this->review_description, $this->grade, $this->review_date, $this->review_id]);
         } else {
-            parent::insert(['user_id', 'product_id', 'review_description', 'grade'], [$this->user_id, $this->product_id, $this->review_description, $this->grade]);
+            parent::insert(['user_id', 'product_id', 'review_description', 'grade', 'review_date'], [$this->user_id, $this->product_id, $this->review_description, $this->grade, $this->review_date]);
         }
+    }
+
+    /**
+     * Get the value of review_date
+     */
+    public function getReview_date()
+    {
+        return $this->review_date;
+    }
+
+    /**
+     * Set the value of review_date
+     *
+     * @return  self
+     */
+    public function setReview_date($review_date)
+    {
+        $this->review_date = $review_date;
+
+        return $this;
     }
 }

@@ -4,13 +4,17 @@ class Slider {
     index = 0
     move = false
 
-    constructor(slider, sliderItems) {
+    constructor(container, slider, sliderItems, sliderIndicators) {
         this.slider = slider
         this.sliderItems = sliderItems
+        if (sliderIndicators) {
+            this.sliderIndicators = container.querySelectorAll('.indicator')
+        }
         this.sliderItemWitdh = this.sliderItems[0].offsetWidth + 20
         this.sliderWitdh = this.slider.offsetWidth
         this.addSliderItem(sliderItems)
         this.showItems = Math.ceil(slider.offsetWidth / this.sliderItemWitdh)
+        this.setIndicators()
     }
 
     addSliderItem() {
@@ -23,17 +27,18 @@ class Slider {
             this.sliderItems[this.sliderItems.length - 1].cloneNode(true),
             this.slider.firstChild
         )
-        this.slider.insertBefore(
-            this.sliderItems[this.sliderItems.length - 2].cloneNode(true),
-            this.slider.firstChild
-        )
+        if (this.sliderItems[this.sliderItems.length - 2]) {
+            this.slider.insertBefore(
+                this.sliderItems[this.sliderItems.length - 2].cloneNode(true),
+                this.slider.firstChild
+            )
+        }
         this.index = 2
         this.slider.style.transition = '0s'
         this.slider.style.transform = `translate3d(-${
             2 * this.sliderItemWitdh
         }px, 0, 0)`
-        this.slider = document.querySelector(`.${this.slider.classList}`)
-        this.sliderItems = slider.children
+        this.sliderItems = this.slider.children
         this.slider.style.transition = ' 0s'
     }
 
@@ -44,6 +49,7 @@ class Slider {
         this.slider.style.transform = `translate3d(-${
             this.index * this.sliderItemWitdh
         }px, 0, 0)`
+        this.setIndicators()
         setTimeout(() => {
             this.slider.style.transition = '0s'
             if (
@@ -60,6 +66,19 @@ class Slider {
             }px, 0, 0)`
             this.move = false
         }, 300)
+    }
+
+    setIndicators() {
+        if (this.sliderIndicators) {
+            this.sliderIndicators.forEach((indicator) => {
+                indicator.classList.remove('active')
+            })
+            if (this.index < 2) {
+                this.sliderIndicators[this.index + 2].classList.add('active')
+            } else {
+                this.sliderIndicators[this.index - 2].classList.add('active')
+            }
+        }
     }
 
     touchStart = (e) => {
@@ -119,33 +138,47 @@ class Slider {
     }
 }
 
-const sliderContainer = document.querySelector('.slider-container')
-const slider = sliderContainer.querySelector('.slider')
-const nextBtn = document.querySelector('.arrow.next')
-const prevBtn = document.querySelector('.arrow.prev')
+const sliderProductsImg = document.querySelector('#slider_products-img')
+const sliderContainer = document.querySelector('#slider_products-trends')
 
-const classSlider = new Slider(slider, slider.querySelectorAll('.slider-item'))
+const launchSlide = (container, indicators) => {
+    const slider = container.querySelector('.slider')
+    const sliderItems = slider.querySelectorAll('.slider-item')
+    if (sliderItems.length > 1) {
+        const nextBtn = document.querySelector('.arrow.next')
+        const prevBtn = document.querySelector('.arrow.prev')
+        const classSlider = new Slider(
+            container,
+            slider,
+            sliderItems,
+            indicators
+        )
 
-sliderContainer.addEventListener('touchstart', (e) => {
-    classSlider.touchStart(e)
-})
+        container.addEventListener('touchstart', (e) => {
+            classSlider.touchStart(e)
+        })
 
-sliderContainer.addEventListener('touchmove', (e) => {
-    classSlider.touchMove(e)
-})
+        container.addEventListener('touchmove', (e) => {
+            classSlider.touchMove(e)
+        })
 
-sliderContainer.addEventListener('touchend', () => {
-    classSlider.touchEnd()
-})
+        container.addEventListener('touchend', () => {
+            classSlider.touchEnd()
+        })
 
-nextBtn.addEventListener('click', () => {
-    classSlider.goToNext()
-})
+        nextBtn.addEventListener('click', () => {
+            classSlider.goToNext()
+        })
 
-prevBtn.addEventListener('click', () => {
-    classSlider.goToPrev()
-})
+        prevBtn.addEventListener('click', () => {
+            classSlider.goToPrev()
+        })
 
-window.addEventListener('resize', () => {
-    classSlider.setPosition()
-})
+        window.addEventListener('resize', () => {
+            classSlider.setPosition()
+        })
+    }
+}
+
+launchSlide(sliderContainer)
+launchSlide(sliderProductsImg, true)
