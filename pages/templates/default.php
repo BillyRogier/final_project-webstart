@@ -19,7 +19,7 @@
             <div class="links grid">
                 <div class="icon search"><img src="<?= URL ?>/assets/icon/search.svg" alt="search"></div>
                 <a href="<?= URL . ($app->isUser() || $app->isAdmin() ? "/account" : "/login") ?>" class="icon"><img src="<?= URL ?>/assets/icon/login.svg" alt="login"></a>
-                <a href="<?= URL ?>/cart" class="icon cart">
+                <a href="<?= URL ?>/cart" class="icon icon_cart">
                     <span class="number_in_cart grid">
                         <?php
 

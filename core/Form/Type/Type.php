@@ -24,6 +24,11 @@ class Type
             <input name=\"$name\" type=\"$type\" $options> 
             <p class=\"more\">+</p>
             ";
+        } else if ($name == "delete_btn") {
+            $input = "
+            <input name=\"$name\" type=\"$type\" $options> 
+            <img src=\"" . URL . "/assets/icon/bin.svg\"/>
+            ";
         }
 
         return

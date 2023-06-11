@@ -58,9 +58,9 @@ class CartController extends AbstarctController
             }
         }
 
-        $form_delete = $this->createForm()
+        $form_delete = $this->createForm("", "post", ['class' => 'form_delete'])
             ->add("id", HiddenType::class)
-            ->add("submit", SubmitType::class, ['value' => 'delete'])
+            ->add("delete_btn", SubmitType::class, ['value' => 'supprimer', 'class' => 'delete_btn'])
             ->getForm();
 
         if ($form_delete->isSubmit()) {
@@ -79,11 +79,15 @@ class CartController extends AbstarctController
         }
         $_SESSION['valid'] =  uniqid();
 
+        $products_trends = $ProductsTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2 OR carousel.type IS NULL");
+
         return $this->render('/app/cart.php', '/default.php',  [
             'title' => 'Cart',
             'products_in_cart' => $products_in_cart,
+            'count_items' => $Cart->countItems(),
             'form' => $form_builder,
             'form_del' => $form_delete,
+            'products_trends' => $products_trends,
             'loged' => ($this->app->isUser() || $this->app->isAdmin()),
         ]);
     }
