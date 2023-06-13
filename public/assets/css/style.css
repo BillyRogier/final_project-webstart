@@ -70,12 +70,13 @@ a {
     background-color: var(--orange-color);
     padding: 11px 20px;
     border-radius: 5px;
-    color: var(--white-color);
+    color: var(--white-color) !important;
     font: var(--small-size);
     font-weight: 500;
     line-height: 1.4;
     width: fit-content;
     cursor: pointer;
+    border: none !important;
     text-align: center;
 }
 
@@ -88,6 +89,7 @@ a {
     width: 50px;
     cursor: pointer;
     border-radius: 50%;
+    border: none;
     user-select: none;
 }
 
@@ -95,8 +97,26 @@ a {
     width: 13px;
 }
 
-input {
+label {
+    font: var(--small-size);
+    font-weight: 500;
+}
+
+input,
+select,
+textarea {
+    border: 2px solid var(--green-color);
+    width: 100%;
     outline: none;
+    background-color: var(--white-color);
+    border-radius: 5px;
+    padding: 5px 10px;
+    font: var(--small-size);
+    color: var(--text-color);
+}
+
+.input-container {
+    gap: 5px;
 }
 
 .line {
@@ -263,6 +283,10 @@ header li {
     fill: var(--text-color);
 }
 
+input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
 /* ---------------------- FOOTER ---------------------- */
 
 footer.grid {
@@ -299,10 +323,8 @@ footer form {
 
 footer form > input {
     width: 100%;
-    font: var(--small-size);
-    outline: none;
-    color: var(--text-color);
     padding: 0 0 0 5px;
+    border: none;
 }
 
 /* ---------------------- MAIN ---------------------- */
@@ -749,27 +771,63 @@ main > .category-container {
 }
 
 .account_order {
-    margin: 0 20px;
+    background-color: var(--beige-color);
+    gap: 40px;
 }
 
-.order-product-container {
-    grid-template-rows: repeat(3, min-content);
+.order {
+    background-color: var(--white-color);
+    padding: 20px;
+    border-radius: 5px;
 }
+
+.orders-container {
+    margin: 0 20px 20px;
+}
+
 .order-product-container > .btn {
     width: 100%;
 }
 
 .order-product {
-    grid-template-columns: 100px 1fr max-content;
+    grid-template-columns: 50px 1fr max-content;
 }
 .order-product > img {
-    height: 100px;
+    height: 50px;
 }
 
-.order:not(:last-child) {
-    border: none;
-    padding-bottom: 40px;
-    border-bottom: 4px dotted var(--text-color);
+.account_links {
+    background-color: var(--white-color);
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px 20px 0;
+}
+
+.account_links > li {
+    list-style: none;
+}
+
+.account_links > li > a {
+    font: var(--medium-size);
+    font-weight: 500;
+}
+
+.order-head {
+    order: -1;
+    grid-template-columns: repeat(2, max-content);
+    justify-content: space-between;
+}
+
+.order-head > .line {
+    grid-column: 1/3;
+}
+
+.account_settings.grid {
+    padding-bottom: 0;
+}
+
+.add_comment {
+    margin: 20px;
 }
 
 @media (min-width: 1024px) {
@@ -1018,19 +1076,24 @@ main > .category-container {
     }
 
     .cart {
-        grid-template-columns: 1fr 300px;
+        grid-template-columns: repeat(12, 1fr);
         align-items: start;
         padding: 40px 80px;
-        gap: 80px;
+        gap: 20px;
     }
 
     .checkout-container {
         order: 1;
+        grid-column: 10/13;
+    }
+
+    .products_cart-container {
+        grid-column: 1/9;
     }
 
     .product_cart {
         justify-items: end;
-        grid-template-columns: 300px 1fr;
+        grid-template-columns: minmax(100px, 300px) 1fr;
     }
 
     .head-product {
@@ -1049,5 +1112,42 @@ main > .category-container {
         grid-row: 1/5;
         grid-column: 1;
         height: 100%;
+    }
+    .account_order {
+        grid-template-columns: repeat(12, 1fr);
+        justify-content: start;
+        align-items: start;
+        gap: 20px;
+        padding: 40px 80px;
+    }
+
+    .orders-container {
+        margin: 0;
+        grid-column: 4/13;
+    }
+
+    .account_links {
+        grid-column: 1/4;
+        margin: 0;
+    }
+
+    .order-product-container {
+        grid-template-columns: 1fr max-content;
+    }
+
+    .order-product-container > .line {
+        grid-column: 1/3;
+    }
+
+    .input-container {
+        grid-column: 1/3;
+    }
+
+    .first_name-container {
+        grid-column: 2/3;
+    }
+
+    .last_name-container {
+        grid-column: 1/2;
     }
 }

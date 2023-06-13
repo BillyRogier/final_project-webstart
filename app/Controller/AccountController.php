@@ -11,6 +11,8 @@ use Core\Controller\AbstarctController;
 use Core\Form\Type\ChoiceType;
 use Core\Form\Type\DateTimeType;
 use Core\Form\Type\EmailType;
+use Core\Form\Type\FileType;
+use Core\Form\Type\HiddenType;
 use Core\Form\Type\NumberType;
 use Core\Form\Type\PasswordType;
 use Core\Form\Type\SubmitType;
@@ -40,10 +42,18 @@ class AccountController extends AbstarctController
             ->innerJoin(Carousel::class)
             ->on("carousel.product_id = products.id");
 
-        $orders = $OrdersTable->findAllBy(['users.id' => (isset($_SESSION['user']) ? $_SESSION['user'] : $_SESSION['admin']), 'carousel.type' => 1]);
+        $orders = $OrdersTable->findAllBy(['users.id' => (isset($_SESSION['user']) ? $_SESSION['user'] : $_SESSION['admin']), 'carousel.type' => 1], "ORDER BY order_date DESC");
+
+        $ProductsTable = new Products();
+        $ProductsTable
+            ->leftJoin(Carousel::class)
+            ->on("carousel.product_id = products.id");
+
+        $products_trends = $ProductsTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2 OR carousel.type IS NULL");
 
         return $this->render('/app/account_orders.php', '/default.php', [
             'title' => 'Account | Orders',
+            'products_trends' => $products_trends,
             'orders' => $orders,
         ]);
     }
@@ -59,15 +69,13 @@ class AccountController extends AbstarctController
         }
 
         $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
-            ->add("first_name", TextType::class, ['value' => $user->getFirst_name(), 'data-req' => true, 'label' => 'Prénom', 'id' => 'first_name'])
             ->add("last_name", TextType::class, ['value' => $user->getLast_name(), 'data-req' => true, 'label' => 'Nom', 'id' => 'last_name'])
+            ->add("first_name", TextType::class, ['value' => $user->getFirst_name(), 'data-req' => true, 'label' => 'Prénom', 'id' => 'first_name'])
             ->add("email", EmailType::class, ['value' => $user->getEmail(), 'label' => 'Email', 'id' => 'email'])
             ->add("password", PasswordType::class, ['label' => 'New password', 'id' => 'password'])
             ->add("num", TextType::class, ['value' => $user->getNum(), 'data-req' => true, 'label' => 'Numéro de téléphone', 'id' => 'num'])
             ->add("adress", TextType::class, ['value' => $user->getAdress(), 'data-req' => true, 'label' => 'Adresse', 'id' => 'adress'])
-            ->add("type", ChoiceType::class, ['choices' => ['Admin' => 2, 'Utilisateur' => 1], 'label' => 'Type', 'id' => 'type', 'value' => $user->getType()])
-            ->add("creation_date", DateTimeType::class, ['value' => $user->getCreation_date(), 'label' => 'Date de création', 'id' => 'creation_date'])
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->add("submit", SubmitType::class, ['value' => 'Enregistrer', 'class' => 'btn'])
             ->getForm();
 
 
@@ -91,7 +99,7 @@ class AccountController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Users::class));
         }
 
-        return $this->render('/app/register.php', '/login.php', [
+        return $this->render('/app/account_settings.php', '/default.php', [
             'title' => 'Account | Settings',
             'form' => $formBuilder->createView(),
         ]);
@@ -104,15 +112,15 @@ class AccountController extends AbstarctController
         if (!$OrdersTable->findOneBy(['order_num' => $order_num, 'user_id' => (isset($_SESSION['user']) ? $_SESSION['user'] : $_SESSION['admin']), 'product_id' => $id])) {
             $this->headLocation("/account");
         }
-        $ProductsTable = new Products();
-        $product = $ProductsTable->findOneBy(['id' => $id]);
-
         $ReviewsTable = new Reviews();
 
         $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
-            ->add("grade", NumberType::class, ['label' => 'Grade', 'id' => 'grade'])
+            ->add("grade", NumberType::class, ['label' => 'Note', 'id' => 'grade'])
+            ->add("title", TextType::class, ['label' => 'Titre', 'id' => 'title'])
             ->add("description", TextareaType::class, ['label' => 'Description', 'id' => 'description'])
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->add("img", HiddenType::class)
+            ->add("file", FileType::class, ['label' => 'Ajouter une image', 'id' => 'file', 'class' => 'file'])
+            ->add("submit", SubmitType::class, ['value' => 'Ajouter le commentaire', 'class' => 'btn'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {
