@@ -41,7 +41,7 @@ class ProductsController extends AbstarctController
         $form_delete = $this
             ->createForm()
             ->add("id", HiddenType::class)
-            ->add("submit", SubmitType::class, ['value' => 'supprimer'])
+            ->add("submit", SubmitType::class, ['value' => 'supprimer', 'class' => 'btn btn-danger'])
             ->getForm();
 
         if ($form_delete->isSubmit()) {
@@ -99,7 +99,7 @@ class ProductsController extends AbstarctController
             ->add("file[]", FileType::class, ['label' => 'Choose a file', 'id' => 'file', 'class' => 'file', 'multiple' => true])
             ->add("category", ChoiceType::class, ['label' => 'Category', 'choices' => $category_choices, 'id' => 'category'])
             ->add("visibility", ChoiceType::class, ['label' => 'Visibility', 'choices' => ['visible' => 1, 'hidden' => 2, 'no stock' => 3], 'id' => 'visibility'])
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->add("submit", SubmitType::class, ['value' => 'Enregistrer', 'class' => 'btn'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {
@@ -154,8 +154,9 @@ class ProductsController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Products::class));
         }
 
-        return $this->render('/app/register.php', '/admin.php', [
+        return $this->render('/admin/formulaire.php', '/admin.php', [
             'title' => 'Admin | Products | Insert',
+            'title_page' => 'Insérer produit',
             'form' => $formBuilder->createView(),
         ]);
     }
@@ -203,7 +204,7 @@ class ProductsController extends AbstarctController
             ->add("file[]", FileType::class, ['label' => 'Choose a file', 'id' => 'file', 'class' => 'file', 'multiple' => true])
             ->add("category", ChoiceType::class, ['label' => 'Category', 'choices' => $category_choices, 'value' => $product[0]->getCategory_id(), 'id' => 'category'])
             ->add("visibility", ChoiceType::class, ['label' => 'Visibility', 'choices' => ['visible' => 1, 'hidden' => 2, 'no stock' => 3], 'value' => $product[0]->getVisibility(), 'id' => 'visibility'])
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->add("submit", SubmitType::class, ['value' => 'Enregistrer', 'class' => 'btn'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {
@@ -274,8 +275,9 @@ class ProductsController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Categorys::class));
         }
 
-        return $this->render('/app/register.php', '/admin.php', [
+        return $this->render('/admin/formulaire.php', '/admin.php', [
             'title' => 'Admin | Products | Update',
+            'title_page' => 'Modifier produit',
             'form' => $formBuilder->createView(),
         ]);
     }

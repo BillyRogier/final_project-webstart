@@ -22,10 +22,10 @@
     </div>
     <section class="categorys">
         <?php foreach ($categorys as $category) : ?>
-            <div class="category">
+            <a class="category" href="<?= URL ?>/category/<?= $category->getCategory_name() ?>">
                 <img src="<?= URL ?>/assets/img/<?= $category->getCategory_img() ?>" alt="category" class="category-image">
-                <a href="#" class="link"><?= $category->getCategory_name() ?></a>
-            </div>
+                <p class="link"><?= $category->getCategory_name() ?></p>
+            </a>
         <?php endforeach; ?>
     </section>
     <section class="products-trends grid">

@@ -1,6 +1,7 @@
 <main class="grid">
     <section class="cart grid">
         <h1 style="display: none;">Panier</h1>
+        <div class="error-container"><?= isset($_SESSION['message']) ? $_SESSION['message'] : "" ?></div>
         <?php
 
         use App\Table\Carousel;

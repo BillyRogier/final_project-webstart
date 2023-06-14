@@ -71,7 +71,6 @@ class CartController extends AbstarctController
 
                     $Cart->removeFromCart($data['id']);
 
-                    $_SESSION["message"] = $error->success("successfully delete from cart");
                     $error->location(URL . "/cart", "success_location");
                 }
                 $error->getXmlMessage("");
@@ -106,12 +105,12 @@ class CartController extends AbstarctController
         }
 
         $form_builder = $this->createForm("", "post", ['class' => 'grid'])
-            ->add("first_name", TextType::class, ['value' => (isset($user) ? $user->getFirst_name() : ""), 'label' => 'Prénom', 'id' => 'first_name'])
             ->add("last_name", TextType::class, ['value' => (isset($user) ? $user->getLast_name() : ""), 'label' => 'Nom', 'id' => 'last_name'])
+            ->add("first_name", TextType::class, ['value' => (isset($user) ? $user->getFirst_name() : ""), 'label' => 'Prénom', 'id' => 'first_name'])
             ->add("email", EmailType::class, ['value' => (isset($user) ? $user->getEmail() : ""), 'label' => 'Email', 'id' => 'email'])
             ->add("num", TextType::class, ['value' => (isset($user) ? $user->getNum() : ""), 'data-req' => true, 'label' => 'Numéro de téléphone', 'id' => 'num'])
             ->add("adress", TextType::class, ['value' => (isset($user) ? $user->getAdress() : ""), 'label' => 'Adresse', 'id' => 'adress'])
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->add("submit", SubmitType::class, ['value' => 'Continuer', 'class' => 'btn'])
             ->getForm();
 
         if ($form_builder->isSubmit()) {
@@ -169,7 +168,7 @@ class CartController extends AbstarctController
 
 
         $form_builder = $this->createForm("", "post", ['class' => 'grid'])
-            ->add("submit", SubmitType::class, ['value' => 'Valider la commande'])
+            ->add("submit", SubmitType::class, ['value' => 'Valider la commande', 'class' => 'btn'])
             ->getForm();
 
         if ($form_builder->isSubmit()) {
@@ -201,6 +200,7 @@ class CartController extends AbstarctController
         return $this->render('/app/valid_cart.php', '/default.php',  [
             'title' => 'Valid user',
             'products_in_cart' => $products_in_cart,
+            'count_items' => $Cart->countItems(),
             'user' => $user,
             'form' => $form_builder->createView(),
         ]);

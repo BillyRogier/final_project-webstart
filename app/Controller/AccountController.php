@@ -8,12 +8,9 @@ use App\Table\Products;
 use App\Table\Reviews;
 use App\Table\Users;
 use Core\Controller\AbstarctController;
-use Core\Form\Type\ChoiceType;
-use Core\Form\Type\DateTimeType;
 use Core\Form\Type\EmailType;
 use Core\Form\Type\FileType;
 use Core\Form\Type\HiddenType;
-use Core\Form\Type\NumberType;
 use Core\Form\Type\PasswordType;
 use Core\Form\Type\SubmitType;
 use Core\Form\Type\TextareaType;
@@ -115,11 +112,21 @@ class AccountController extends AbstarctController
         $ReviewsTable = new Reviews();
 
         $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
-            ->add("grade", NumberType::class, ['label' => 'Note', 'id' => 'grade'])
+            ->add("grade", HiddenType::class, [
+                'label' => 'Note', 'id' => 'grade',
+                'html' => '
+                <div class="grade add_grade">
+                    <div class="grade_ball"></div>
+                    <div class="grade_ball"></div>
+                    <div class="grade_ball"></div>
+                    <div class="grade_ball"></div>
+                    <div class="grade_ball"></div>
+                </div>'
+            ])
             ->add("title", TextType::class, ['label' => 'Titre', 'id' => 'title'])
             ->add("description", TextareaType::class, ['label' => 'Description', 'id' => 'description'])
-            ->add("img", HiddenType::class)
-            ->add("file", FileType::class, ['label' => 'Ajouter une image', 'id' => 'file', 'class' => 'file'])
+            ->add("img", HiddenType::class, ['data-req' => true])
+            ->add("file", FileType::class, ['label' => 'Ajouter un fichier', 'id' => 'file', 'class' => 'file', 'data-req' => true])
             ->add("submit", SubmitType::class, ['value' => 'Ajouter le commentaire', 'class' => 'btn'])
             ->getForm();
 
@@ -128,10 +135,20 @@ class AccountController extends AbstarctController
             if ($error->noError()) {
                 $data = $formBuilder->getData();
 
+                $tmp_name = $data["file"]["tmp_name"];
+                $temp = explode(".", $_FILES["file"]["name"]);
+                $name = bin2hex(random_bytes(16)) . '.' . end($temp);
+
+                if (!file_exists(UPLOAD_DIR . $name)) {
+                    move_uploaded_file($tmp_name, UPLOAD_DIR . $name);
+                }
+
                 $ReviewsTable
                     ->setUser_id((isset($_SESSION['user']) ? $_SESSION['user'] : $_SESSION['admin']))
                     ->setProduct_id($id)
+                    ->setReview_title($data['title'])
                     ->setDescription($data['description'])
+                    ->setReview_img($name)
                     ->setGrade($data['grade'])
                     ->flush();
 
@@ -145,5 +162,13 @@ class AccountController extends AbstarctController
             'title' => 'Add comment',
             'form' => $formBuilder->createView(),
         ]);
+    }
+
+    #[Route('/logout', name: 'admin')]
+    public function logout()
+    {
+        unset($_SESSION['user']);
+        unset($_SESSION['admin']);
+        $this->headLocation("/");
     }
 }

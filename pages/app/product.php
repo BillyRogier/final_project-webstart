@@ -40,23 +40,25 @@ use App\Table\Users;
                     <p><?= ucfirst($product->getDescription()) ?></p>
                     <p class="product-price"><?= $product->getPrice() ?> €</p>
                     <div class="grade">
-                        <?php
+                        <?php if (count($reviews) >= 1) : ?>
+                            <?php
 
-                        $grade_average = 0;
-                        $i = 0;
-                        foreach ($reviews as $review) {
-                            $i++;
-                            $grade_average += $review->getGrade();
-                        }
-                        $average = $grade_average / $i;
+                            $grade_average = 0;
+                            $i = 0;
+                            foreach ($reviews as $review) {
+                                $i++;
+                                $grade_average += $review->getGrade();
+                            }
+                            $average = $grade_average / $i;
 
-                        for ($i = 0; $i < 5; $i++) :
-                            if ($i < $average) : ?>
-                                <div class="grade_ball active"></div>
-                            <?php else : ?>
-                                <div class="grade_ball"></div>
-                        <?php endif;
-                        endfor ?>
+                            for ($i = 0; $i < 5; $i++) :
+                                if ($i < $average) : ?>
+                                    <div class="grade_ball active"></div>
+                                <?php else : ?>
+                                    <div class="grade_ball"></div>
+                            <?php endif;
+                            endfor ?>
+                        <?php endif ?>
                     </div>
                     <div class="error-container"><?= isset($_SESSION['message']) ? $_SESSION['message'] : ""  ?></div>
                     <?php if ($product->getVisibility() == 3) { ?>
@@ -93,7 +95,11 @@ use App\Table\Users;
                                 <?php endif;
                                 endfor ?>
                             </div>
+                            <h3><?= $review->getReview_title() ?></h3>
                             <p><?= $review->getDescription() ?></p>
+                            <?php if (!empty($review->getReview_img())) : ?>
+                                <img src="<?= URL ?>/assets/img/<?= $review->getReview_img() ?>" alt="avis produit image">
+                            <?php endif ?>
                         </div>
                     </div>
                 <?php endforeach; ?>

@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App;
 use App\Table\Settings;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\PasswordType;
@@ -34,7 +33,7 @@ class AdminController extends AbstarctController
         $SettingsTable = new Settings();
         $setting = $SettingsTable->findOne();
 
-        $form_builder = $this->createForm()
+        $form_builder = $this->createForm("", "post", ['class' => 'grid'])
             ->add("location", TextType::class, ['value' => ($setting ? $setting->getLocation() : ""), 'data-req' => true, 'label' => 'Location', 'id' => 'locaiton'])
             ->add("email", TextType::class, ['value' => ($setting ? $setting->getEmail() : ""), 'data-req' => true, 'label' => 'Email', 'id' => 'email'])
             ->add("email_pass", PasswordType::class, ['value' => ($setting ? $setting->getEmail_pass() : ""), 'data-req' => true, 'label' => "Email password", 'id' => 'email_pass'])
@@ -52,7 +51,7 @@ class AdminController extends AbstarctController
             ->add("host_name", TextType::class, ['value' => ($setting ? $setting->getHost_name() : ""), 'data-req' => true, 'label' => 'Host name', 'id' => 'host_name'])
             ->add("host_location", TextType::class, ['value' => ($setting ? $setting->getHost_location() : ""), 'data-req' => true, 'label' => 'Host location', 'id' => 'host_location'])
             ->add("host_number", TextType::class, ['value' => ($setting ? $setting->getHost_number() : ""), 'data-req' => true, 'label' => 'Host number', 'id' => 'host_number'])
-            ->add("submit", SubmitType::class, ['value' => 'save'])
+            ->add("submit", SubmitType::class, ['value' => 'Enregistrer', 'class' => 'btn'])
             ->getForm();
 
         if ($form_builder->isSubmit()) {
@@ -87,8 +86,9 @@ class AdminController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Settings::class));
         }
 
-        return $this->render('/app/register.php', '/admin.php', [
+        return $this->render('/admin/formulaire.php', '/admin.php', [
             'title' => 'Admin | Settings',
+            'title_page' => 'Paramètres',
             'form' => $form_builder->createView(),
         ]);
     }

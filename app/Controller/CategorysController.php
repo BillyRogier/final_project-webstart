@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App;
 use App\Table\Categorys;
 use App\Table\Products;
 use Core\Controller\AbstarctController;
@@ -16,6 +15,7 @@ class CategorysController extends AbstarctController
 {
     public function __construct()
     {
+        parent::__construct();
         if (!$this->app->isAdmin()) {
             $this->headLocation("/account");
         }
@@ -29,7 +29,7 @@ class CategorysController extends AbstarctController
 
         $form_delete = $this->createForm()
             ->add("id", HiddenType::class)
-            ->add("submit", SubmitType::class, ['value' => 'Supprimer'])
+            ->add("submit", SubmitType::class, ['value' => 'Supprimer', 'class' => 'btn btn-danger'])
             ->getForm();
 
         if ($form_delete->isSubmit()) {
@@ -77,7 +77,7 @@ class CategorysController extends AbstarctController
             ->add("name", TextType::class, ['label' => 'Name', 'id' => 'name'])
             ->add("img", HiddenType::class)
             ->add("file", FileType::class, ['label' => 'Choose a file', 'id' => 'file', 'class' => 'file'])
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->add("submit", SubmitType::class, ['value' => 'Insérer', 'class' => 'btn'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {
@@ -111,8 +111,9 @@ class CategorysController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Categorys::class));
         }
 
-        return $this->render('/app/register.php', '/admin.php', [
+        return $this->render('/admin/formulaire.php', '/admin.php', [
             'title' => 'Admin | Categorys | Insert',
+            'title_page' => 'Insérer catégorie',
             'form' => $formBuilder->createView(),
         ]);
     }
@@ -137,7 +138,7 @@ class CategorysController extends AbstarctController
                 <span class="del_image btn">delete</span>'
             ])
             ->add("file", FileType::class, ['label' => 'Choose a file', 'id' => 'file', 'class' => 'file'])
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->add("submit", SubmitType::class, ['value' => 'Enregistrer', 'class' => 'btn'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {
@@ -178,8 +179,9 @@ class CategorysController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Categorys::class));
         }
 
-        return $this->render('/app/register.php', '/admin.php', [
+        return $this->render('/admin/formulaire.php', '/admin.php', [
             'title' => 'Admin | Categorys | Update',
+            'title_page' => 'Modifier catégorie',
             'form' => $formBuilder->createView(),
         ]);
     }

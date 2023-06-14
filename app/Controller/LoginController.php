@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App;
 use App\Table\Users;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\EmailType;
@@ -26,10 +25,11 @@ class LoginController extends AbstarctController
     {
         $UsersTable = new Users();
 
-        $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
+        $formBuilder = $this->createForm("", "post", ['class' => 'login_form grid'])
             ->add("email", EmailType::class, ['label' => "email", 'id' => "email"])
             ->add("password", PasswordType::class, ['label' => "password", 'id' => "password"])
-            ->add("submit", SubmitType::class, ['value' => 'login'])
+            ->addHTML("<a href=\"" . URL . "/register\" class=\"register_link\">Vous n'avez pas de compte inscrivez-vous</a>")
+            ->add("submit", SubmitType::class, ['value' => 'Se connecter', 'class' => 'btn'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {
@@ -40,7 +40,6 @@ class LoginController extends AbstarctController
 
                 if ($user) {
                     if (password_verify($data["password"], $user->getPassword())) {
-                        $_SESSION["message"] = $error->success("successfully login");
                         if ($user->getType() == 2) {
                             $_SESSION['admin'] = $user->getId();
                         } else {
@@ -72,14 +71,15 @@ class LoginController extends AbstarctController
     {
         $UsersTable = new Users();
 
-        $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
+        $formBuilder = $this->createForm("", "post", ['class' => 'login_form grid'])
             ->add("first_name", TextType::class, ['label' => 'First name', 'id' => 'first_name', 'data-req' => true])
             ->add("last_name", TextType::class, ['label' => 'Last name', 'id' => 'last_name', 'data-req' => true])
             ->add("email", EmailType::class, ['label' => 'Email', 'id' => 'email'])
             ->add("password", PasswordType::class, ['label' => 'Password', 'id' => 'password', 'data-pass' => true])
             ->add("num", TextType::class, ['label' => 'Phone number', 'id' => 'num', 'data-req' => true])
             ->add("adress", TextType::class, ['label' => 'Adress', 'id' => 'adress', 'data-req' => true])
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->addHTML("<a href=\"" . URL . "/login\" class=\"register_link\">Vous avez déjà un compte connectez-vous</a>")
+            ->add("submit", SubmitType::class, ['value' => 'Inscrivez-vous', 'class' => 'btn'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {
@@ -99,7 +99,6 @@ class LoginController extends AbstarctController
                         ->flush();
 
                     $_SESSION['user'] = $UsersTable->lastInsertId();
-                    $_SESSION["message"] = $error->success("successfully register");
                     if (isset($_GET['cart']) && $_GET['cart'] == true) {
                         $error->location(URL . "/valid-user/" .  $_SESSION['valid'] . "", "success_location");
                     } else {
@@ -116,12 +115,5 @@ class LoginController extends AbstarctController
             'title' => 'Register',
             'form' => $formBuilder->createView(),
         ]);
-    }
-
-    #[Route('/logout', name: 'admin')]
-    public function logout()
-    {
-        session_destroy();
-        $this->headLocation("/");
     }
 }

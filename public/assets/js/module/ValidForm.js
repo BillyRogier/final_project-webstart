@@ -8,6 +8,12 @@ export class ValidForm {
         this.errorContainer = errorContainer
     }
 
+    displayError(name) {
+        if (name != 'img' || name != 'img[]') {
+            this.error.style.display = 'block'
+        }
+    }
+
     successRedirection(data) {
         if (data.success_location) {
             window.location.href = data.success_location
@@ -106,10 +112,12 @@ export class ValidForm {
             elt.getAttribute('data-req') != true
         ) {
             this.error.innerHTML = '<li>Veuillez remplir le champs</li>'
+            this.displayError(elt.name)
             this.eltParent.classList.remove('active')
             this.eltParent.classList.add('invalid')
         }
         if (this.error.innerHTML != '' || this.errorContainer.innerHTML != '') {
+            this.displayError(elt.name)
             this.eltParent.classList.remove('active')
             this.eltParent.classList.add('invalid')
         }
@@ -141,7 +149,10 @@ export class ValidForm {
                 const textareaForm = this.form.querySelectorAll('textarea')
                 const selectForm = this.form.querySelectorAll('select')
                 if (!this.successRedirection(data)) {
-                    this.errorContainer.innerHTML = data.error_container
+                    if (data.errorContainer) {
+                        this.errorContainer.innerHTML = data.error_container
+                        this.errorContainer.style.display = 'block'
+                    }
                     this.propertie = data
                     this.inputEvent(inputForm)
                     this.inputEvent(textareaForm)

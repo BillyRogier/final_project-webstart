@@ -35,7 +35,7 @@ class UsersController extends AbstarctController
 
         $form_delete = $this->createForm()
             ->add("id", HiddenType::class)
-            ->add("submit", SubmitType::class, ['value' => 'Supprimer'])
+            ->add("submit", SubmitType::class, ['value' => 'Supprimer', 'class' => 'btn btn-danger'])
             ->getForm();
 
         if ($form_delete->isSubmit()) {
@@ -78,7 +78,7 @@ class UsersController extends AbstarctController
             ->add("num", TextType::class, ['label' => 'Phone number', 'id' => 'num', 'data-req' => true])
             ->add("adress", TextType::class, ['label' => 'Adress', 'id' => 'adress', 'data-req' => true])
             ->add("type", ChoiceType::class, ['choices' => ['Admin' => 2, 'Utilisateur' => 1], 'label' => 'Type', 'id' => 'type'])
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->add("submit", SubmitType::class, ['value' => 'Insérer', 'class' => 'btn'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {
@@ -113,9 +113,10 @@ class UsersController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Users::class));
         }
 
-        return $this->render('/app/register.php', '/admin.php', [
+        return $this->render('/admin/formulaire.php', '/admin.php', [
             'title' => 'Admin | Register',
             'form' => $formBuilder->createView(),
+            'title_page' => 'Insérer utilisateurs',
         ]);
     }
 
@@ -137,7 +138,7 @@ class UsersController extends AbstarctController
             ->add("adress", TextType::class, ['value' => $user->getAdress(), 'data-req' => true, 'label' => 'Adresse', 'id' => 'adress'])
             ->add("type", ChoiceType::class, ['choices' => ['Admin' => 2, 'Utilisateur' => 1], 'label' => 'Type', 'id' => 'type', 'value' => $user->getType()])
             ->add("creation_date", DateTimeType::class, ['value' => $user->getCreation_date(), 'label' => 'Date de création', 'id' => 'creation_date'])
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->add("submit", SubmitType::class, ['value' => 'Enregistrer', 'class' => 'btn'])
             ->getForm();
 
         if ($form_update->isSubmit()) {
@@ -165,9 +166,10 @@ class UsersController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Users::class));
         }
 
-        return $this->render('/admin/user_update.php', '/admin.php', [
+        return $this->render('/admin/formulaire.php', '/admin.php', [
             'title' => 'Admin | Users | Update ' . $user->getFirst_name(),
-            'form_update' => $form_update->createView(),
+            'title_page' => 'Modfier utilisateur',
+            'form' => $form_update->createView(),
         ]);
     }
 }

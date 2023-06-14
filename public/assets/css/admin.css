@@ -1,23 +1,29 @@
-/* @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"); */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
 
 :root {
-    --text-color: #0b0a0a;
+    --text-color: #111111;
+    --brown-color: #7f3f10;
+    --orange-color: #ce8331;
+    --beige-color: #f0dcc2;
+    --white-color: #fcfcfc;
+    --green-color: #18463d;
 
-    --very-small-size: 400 0.833rem/1.5 'Roboto', sans-serif;
-    --small-size: 400 1rem/1.5 'Roboto', sans-serif;
-    --link-size: 500 1.2rem/1.5 'Roboto', sans-serif;
-    --medium-size: 400 1.2rem/1.5 'Roboto', sans-serif;
-    --large-size: 500 1.44rem/1.5 'Roboto', sans-serif;
-    --very-large-size: 500 1.728rem/1.75 'Roboto', sans-serif;
-    --very-very-large-size: 700 2.074rem/1.75 'Roboto', sans-serif;
+    --very-very-small-size: 400 0.688rem/1.4 'Montserrat', sans-serif;
+    --very-small-size: 400 0.833rem/1.4 'Montserrat', sans-serif;
+    --small-size: 400 1rem/1.4 'Montserrat', sans-serif;
+    --medium-size: 400 1.2rem/1.4 'Montserrat', sans-serif;
+    --large-size: 500 1.44rem/1.4 'Montserrat', sans-serif;
+    --very-large-size: 700 1.75rem/1.3 'Montserrat', sans-serif;
+    --very-very-large-size: 700 2.062rem/1.3 'Montserrat', sans-serif;
+    --very-very-very-large-size: 700 2.5rem/1.3 'Montserrat', sans-serif;
 }
 
 html {
-    font-size: 112.5%;
+    font-size: 100%;
 }
 
 body {
-    margin: 20px;
+    background-color: var(--white-color);
 }
 
 h1,
@@ -25,228 +31,216 @@ h2,
 h3,
 h4,
 h5,
-p {
+p,
+a {
     color: var(--text-color);
 }
 
 h1 {
-    font: var(--very-very-large-size);
+    font: var(--very-very-very-large-size);
 }
 
 h2 {
-    font: var(--very-large-size);
+    font: var(--very-very-large-size);
 }
 
 h3 {
-    font: var(--large-size);
+    font: var(--very-large-size);
 }
 
 h4 {
-    font: var(--medium-size);
+    font: var(--large-size);
 }
 
 p {
     font: var(--small-size);
 }
 
+a {
+    text-decoration: none;
+}
+
+.grid {
+    display: grid;
+    gap: 20px;
+    align-items: center;
+}
+
+.btn {
+    background-color: var(--orange-color) !important;
+    padding: 11px 20px;
+    border-radius: 5px;
+    color: var(--white-color) !important;
+    font: var(--small-size);
+    font-weight: 500;
+    line-height: 1.4;
+    width: fit-content;
+    cursor: pointer;
+    border: none !important;
+    text-align: center;
+}
+
+.arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--green-color);
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+    user-select: none;
+}
+
+.arrow > img {
+    width: 13px;
+}
+
+label {
+    font: var(--small-size);
+    font-weight: 500;
+}
+
 input,
-textarea,
-select {
-    border: 2px solid #000;
+select,
+textarea {
+    border: 2px solid var(--green-color);
+    width: 100%;
+    outline: none;
+    background-color: var(--white-color);
+    border-radius: 5px;
+    padding: 5px 10px;
+    font: var(--small-size);
+    color: var(--text-color);
 }
 
-img {
-    width: 200px;
-}
-table,
-td {
-    border: 1px solid #333;
+.input-container {
+    gap: 5px;
 }
 
-th,
-td {
-    padding: 5px;
+.line {
+    border: none;
+    border-top: 4px dotted var(--text-color);
+    height: 4px;
+    width: 100%;
+}
+
+input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav li {
+    list-style: none;
+}
+
+.csrf_token-container,
+.id-container {
+    display: none;
 }
 
 .action_table {
+    grid-template-columns: repeat(2, min-content);
+    align-items: center;
+}
+
+.error-message {
+    margin: 0;
+    padding: 0 5px;
+    display: none;
+}
+
+table {
+    border: 1px solid gray;
+}
+
+.btn.del {
+    background-color: red;
+}
+
+.btn:hover {
+    background-color: inherit;
+}
+
+main {
+    padding: 20px;
+}
+
+.error-message li {
+    color: rgb(213, 0, 0);
+    margin: 0;
+    font: var(--very-small-size);
+}
+
+.input-container.invalid input {
+    border-color: rgb(213, 0, 0);
+}
+
+.error-container {
+    display: none;
+}
+
+.file {
+    display: none;
+}
+
+.file-label {
     display: grid;
-    grid-template-columns: repeat(3, min-content);
-    gap: 10px;
+    gap: 20px;
+    grid-template-columns: max-content max-content;
+    align-items: center;
+    cursor: pointer;
 }
 
 .img_table {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 100px);
+    min-width: 400px;
 }
 
 .img_table > img {
-    height: 50px;
-    width: 50px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
 }
 
-thead,
-tfoot {
-    background-color: #333;
-    color: #fff;
-}
-
-.input-container.invalid input,
-.input-container.invalid textarea,
-.input-container.invalid select {
-    border-color: #9c0b0b;
-}
-
-.input-container.active input,
-.input-container.active textarea,
-.input-container.active select {
-    border-color: #4c9c0b;
-}
-
-.input-container.invalid .error-message {
-    display: block;
-}
-
-.input-container.active .error-message {
-    display: none;
-}
-
-.error-message {
-    color: #9c0b0b;
-    font: var(--very-small-size);
-    font-weight: 500;
-    padding: 0 5px;
-}
-
-.error-message > li {
-    list-style: disc;
-    list-style-position: inside;
-}
-
-.error-container {
-    margin-top: 20px;
-    width: 100%;
-}
-
-.success {
-    width: 100%;
-    padding: 15px 25px;
-    background-color: #4c9c0b40;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    font: var(--small-size);
-    color: #4c9c0b;
-    list-style: none;
-}
-
-.danger {
-    width: 100%;
-    padding: 15px 25px;
-    background-color: #9c0b0b40;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    font: var(--small-size);
-    color: #9c0b0b;
-    list-style: none;
-}
-form.grid {
+.img-item {
     display: grid;
-    gap: 1rem;
-}
-
-/* FORM PAGE NORMAL */
-
-input,
-textarea,
-select {
-    border: 2px solid #000;
-}
-
-img {
+    gap: 10px;
     width: 200px;
 }
-table,
-td {
-    border: 1px solid #333;
+
+.img-item > img {
+    height: 200px;
+    object-fit: cover;
 }
 
-.order_container {
-    background-color: #f9f9f9;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-th,
-td {
-    padding: 5px;
-}
-
-thead,
-tfoot {
-    background-color: #333;
-    color: #fff;
-}
-
-.input-container.invalid input,
-.input-container.invalid textarea,
-.input-container.invalid select {
-    border-color: #9c0b0b;
-}
-
-.input-container.active input,
-.input-container.active textarea,
-.input-container.active select {
-    border-color: #4c9c0b;
-}
-
-.input-container.invalid .error-message {
-    display: block;
-}
-
-.input-container.active .error-message {
-    display: none;
-}
-
-.error-message {
-    color: #9c0b0b;
-    font: var(--very-small-size);
-    font-weight: 500;
-    padding: 0 5px;
-}
-
-.error-message > li {
-    list-style: disc;
-    list-style-position: inside;
-}
-
-.error-container {
-    margin-top: 20px;
+.del_image {
     width: 100%;
 }
 
-.success {
-    width: 100%;
-    padding: 15px 25px;
-    background-color: #4c9c0b40;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    font: var(--small-size);
-    color: #4c9c0b;
-    list-style: none;
+.img-container > .item-container {
+    grid-template-columns: repeat(auto-fill, 200px);
 }
 
-.danger {
-    width: 100%;
-    padding: 15px 25px;
-    background-color: #9c0b0b40;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    font: var(--small-size);
-    color: #9c0b0b;
-    list-style: none;
-}
+@media (min-width: 1024px) {
+    :root {
+        --very-very-small-size: 400 0.625rem/1.4 'Montserrat', sans-serif;
+        --very-small-size: 400 0.812rem/1.4 'Montserrat', sans-serif;
+        --small-size: 400 1rem/1.4 'Montserrat', sans-serif;
+        --medium-size: 400 1.25rem/1.4 'Montserrat', sans-serif;
+        --large-size: 500 1.562rem/1.4 'Montserrat', sans-serif;
+        --very-large-size: 700 1.938rem/1.3 'Montserrat', sans-serif;
+        --very-very-large-size: 700 2.438rem/1.3 'Montserrat', sans-serif;
+        --very-very-very-large-size: 700 3.062rem/1.3 'Montserrat', sans-serif;
+    }
 
-form {
-    display: grid;
-    gap: 1rem;
-    margin-top: 20px;
+    main.grid {
+        gap: 160px;
+        padding: 80px 40px;
+    }
 }

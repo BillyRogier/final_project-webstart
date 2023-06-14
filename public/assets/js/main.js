@@ -54,38 +54,49 @@ const lessQuantity = document.querySelectorAll('.less')
 const moreQuantity = document.querySelectorAll('.more')
 
 const changeValueCart = async (quantity, index) => {
-    const product_price = document.querySelectorAll('.product_price')
-    const total_product = document.querySelectorAll('.total_product')
-    const total_cart = document.querySelector('.total_cart')
-    const numberInCart = document.querySelector('.number_in_cart')
-    if (quantity.value >= 1) {
-        var form = quantity.parentNode.parentNode.parentNode.parentNode
-        if (!form.classList.contains('add_to_cart')) {
-            total_product[index].innerHTML =
-                parseInt(product_price[index].innerHTML, 10) * quantity.value
-            let total = 0
-            total_product.forEach((price, n) => {
-                if (n != index) {
-                    total += parseInt(price.innerHTML, 10)
-                }
-            })
-            total_cart.innerHTML =
-                total + parseInt(total_product[index].innerHTML, 10)
-
-            var formData = new FormData(form)
-            fetch('', {
-                method: 'POST',
-                body: formData,
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data.properties > 99) {
-                        numberInCart.innerHTML = '99+'
-                    } else {
-                        numberInCart.innerHTML = data.properties
+    if (quantity.value < 100 && quantity.value > 0) {
+        const product_price = document.querySelectorAll('.product_price')
+        const total_product = document.querySelectorAll('.total_product')
+        const total_cart = document.querySelector('.total_cart')
+        const numberInCart = document.querySelector('.number_in_cart')
+        if (quantity.value >= 1) {
+            var form = quantity.parentNode.parentNode.parentNode.parentNode
+            if (!form.classList.contains('add_to_cart')) {
+                total_product[index].innerHTML =
+                    parseInt(product_price[index].innerHTML, 10) *
+                    quantity.value
+                let total = 0
+                total_product.forEach((price, n) => {
+                    if (n != index) {
+                        total += parseInt(price.innerHTML, 10)
                     }
                 })
+                total_cart.innerHTML =
+                    total + parseInt(total_product[index].innerHTML, 10)
+
+                var formData = new FormData(form)
+                fetch('', {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data.properties > 99) {
+                            numberInCart.innerHTML = '99+'
+                        } else {
+                            numberInCart.innerHTML = data.properties
+                        }
+                    })
+            }
         }
+    }
+}
+
+const maxMin = (quantity) => {
+    if (quantity.value > 99) {
+        quantity.value = 99
+    } else if (quantity.value <= 0) {
+        quantity.value = 1
     }
 }
 
@@ -93,13 +104,16 @@ if (quantitys) {
     quantitys.forEach((quantity, index) => {
         lessQuantity[index].addEventListener('click', () => {
             quantity.value = parseInt(quantity.value, 10) - 1
+            maxMin(quantity)
             changeValueCart(quantity, index)
         })
         moreQuantity[index].addEventListener('click', () => {
             quantity.value = parseInt(quantity.value, 10) + 1
+            maxMin(quantity)
             changeValueCart(quantity, index)
         })
         quantity.addEventListener('input', () => {
+            maxMin(quantity)
             changeValueCart(quantity, index)
         })
     })
@@ -191,7 +205,29 @@ const reviewDropdown = document.querySelector('.drop_review')
 const reviewContent = document.querySelector('.reviews-container')
 const reviewWrapper = document.querySelector('.review-wrapper')
 
-reviewDropdown.addEventListener('click', () => {
-    dropdownClick(reviewDropdown, reviewContent)
-    reviewWrapper.classList.toggle('active')
-})
+if (reviewDropdown) {
+    reviewDropdown.addEventListener('click', () => {
+        dropdownClick(reviewDropdown, reviewContent)
+        reviewWrapper.classList.toggle('active')
+    })
+}
+
+const addGrade = document.querySelectorAll('.add_grade > .grade_ball')
+const gradeInput = document.querySelector('#grade')
+
+if (addGrade) {
+    addGrade.forEach((ball, index) => {
+        ball.addEventListener('click', () => {
+            ball.parentNode.parentNode.parentNode.parentNode.querySelector(
+                '.error-message'
+            ).innerHTML = ''
+            addGrade.forEach((ball) => {
+                ball.classList.remove('active')
+            })
+            for (let i = 0; i <= index; i++) {
+                addGrade[i].classList.add('active')
+            }
+            gradeInput.value = index + 1
+        })
+    })
+}

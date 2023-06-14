@@ -11,6 +11,8 @@
             <li><a href="<?= URL ?>/account">Commandes</a></li>
             <div class="line"></div>
             <li><a href="<?= URL ?>/account/settings">Paramètres</a></li>
+            <div class="line"></div>
+            <li><a href="<?= URL ?>/logout">Se déconnecter</a></li>
         </ul>
         <div class="orders-container grid">
             <div class="order"><?= $form ?></div>
