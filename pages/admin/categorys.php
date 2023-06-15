@@ -6,7 +6,7 @@
                 <th scope="col">id</th>
                 <th scope="col">name</th>
                 <th scope="col">image</th>
-                <th scope="col">action</th>
+                <th scope="col" colspan="2">action</th>
             </tr>
         </thead>
         <tbody>
@@ -15,13 +15,14 @@
                     <td><?= $category->getCategory_id() ?></td>
                     <td><?= $category->getCategory_name() ?></td>
                     <td class="img_table"><img src="<?= URL ?>/assets/img/<?= $category->getCategory_img() ?>" alt="<?= $category->getCategory_name() ?>" /></td>
-                    <td class="action_table grid"><a href="<?= URL ?>/admin/categorys/update/<?= $category->getCategory_id() ?>" class="btn btn-primary">modifier</a>
+                    <td class="action_table">
+                        <a href="<?= URL ?>/admin/categorys/update/<?= $category->getCategory_id() ?>" class="btn btn-primary">modifier</a>
+                    </td>
+                    <td class="action_table">
                         <?=
-
                         $form_delete
                             ->change("id", ['value' => $category->getCategory_id()])
                             ->createView()
-
                         ?>
                     </td>
                 </tr>

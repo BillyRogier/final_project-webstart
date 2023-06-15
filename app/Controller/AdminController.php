@@ -2,7 +2,12 @@
 
 namespace App\Controller;
 
+use App\Table\Categorys;
+use App\Table\Orders;
+use App\Table\Products;
+use App\Table\Reviews;
 use App\Table\Settings;
+use App\Table\Users;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\PasswordType;
 use Core\Form\Type\SubmitType;
@@ -22,8 +27,25 @@ class AdminController extends AbstarctController
     #[Route('/admin')]
     public function admin()
     {
+        $UsersTable = new Users();
+        $OrdersTable = new Orders();
+        $ProductsTable = new Products();
+        $CategorysTable = new Categorys();
+        $ReviewsTable = new Reviews();
+
+        $users = $UsersTable->findAll();
+        $orders = $OrdersTable->findAll();
+        $products = $ProductsTable->findAll();
+        $categorys = $CategorysTable->findAll();
+        $reviews = $ReviewsTable->findAll();
+
         return $this->render('/admin/index.php', '/admin.php', [
             'title' => 'Admin | Accueil',
+            'users' => $users,
+            'orders' => $orders,
+            'products' => $products,
+            'categorys' => $categorys,
+            'reviews' => $reviews,
         ]);
     }
 

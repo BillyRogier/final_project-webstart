@@ -34,7 +34,7 @@ class OrdersController extends AbstarctController
 
         $form_delete = $this->createForm()
             ->add("id", HiddenType::class)
-            ->add("submit", SubmitType::class, ['value' => 'Supprimer'])
+            ->add("submit", SubmitType::class, ['value' => 'Supprimer', 'class' => 'btn del'])
             ->getForm();
 
         if ($form_delete->isSubmit()) {
@@ -80,12 +80,12 @@ class OrdersController extends AbstarctController
 
         $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
             ->add("user", ChoiceType::class, ['label' => 'Users', 'id' => 'user', 'choices' => $users_choices])
-            ->addHTML("<div class=\"product-container\">")
+            ->addHTML("<div class=\"product-container grid\">")
             ->add("products[]", ChoiceType::class, ['label' => 'Products', 'id' => uniqid(), 'choices' => $products_choices])
             ->add("quantity[]", NumberType::class, ['label' => 'Quantity', 'id' => uniqid(), 'value' => 1])
             ->addHTML("</div>")
-            ->addHTML("<span class=\"add_prdt\">add product</span>")
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->addHTML("<span class=\"add_prdt btn add_color\">add product</span>")
+            ->add("submit", SubmitType::class, ['value' => 'Enregistrer', 'class' => 'btn'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {
@@ -190,20 +190,20 @@ class OrdersController extends AbstarctController
 
         foreach ($orders as $order) {
             $formBuilder
-                ->addHTML("<div class=\"product-container\">")
+                ->addHTML("<div class=\"product-container grid\">")
                 ->addContainer(
                     "product-container",
                     [
                         ["products[]", ChoiceType::class, ['label' => 'Products', 'value' => $order->getJoin(Products::class)->getId(), 'id' => uniqid(), 'choices' => $products_choices]],
-                        ["quantity[]", NumberType::class, ['label' => 'Quantity', 'id' => uniqid(), 'value' => $order->getQuantity()]]
+                        ["quantity[]", NumberType::class, ['label' => 'Quantity', 'id' => uniqid(), 'value' => $order->getQuantity()]],
                     ]
                 )
                 ->addHTML("</div>");
         }
 
         $formBuilder
-            ->addHTML("<span class=\"add_prdt\">add product</span>")
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->addHTML("<span class=\"add_prdt btn add_color\">add product</span>")
+            ->add("submit", SubmitType::class, ['value' => 'Enregistrer', 'class' => 'btn'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {

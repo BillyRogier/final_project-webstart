@@ -78,6 +78,11 @@ a {
     cursor: pointer;
     border: none !important;
     text-align: center;
+    text-transform: capitalize;
+}
+
+.add_color {
+    background-color: var(--green-color) !important;
 }
 
 .arrow {
@@ -143,11 +148,6 @@ nav li {
     display: none;
 }
 
-.action_table {
-    grid-template-columns: repeat(2, min-content);
-    align-items: center;
-}
-
 .error-message {
     margin: 0;
     padding: 0 5px;
@@ -159,7 +159,7 @@ table {
 }
 
 .btn.del {
-    background-color: red;
+    background-color: rgb(213, 0, 0) !important;
 }
 
 .btn:hover {
@@ -168,6 +168,10 @@ table {
 
 main {
     padding: 20px;
+}
+
+.product-container {
+    gap: 10px;
 }
 
 .error-message li {
@@ -196,10 +200,22 @@ main {
     cursor: pointer;
 }
 
-.img_table {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 100px);
-    min-width: 400px;
+.grade {
+    display: flex;
+    gap: 10px;
+}
+
+.grade_ball {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--orange-color);
+    background-color: var(--white-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.grade_ball.active {
+    background-color: var(--orange-color);
 }
 
 .img_table > img {
@@ -225,6 +241,38 @@ main {
 
 .img-container > .item-container {
     grid-template-columns: repeat(auto-fill, 200px);
+}
+
+td > form {
+    display: inherit;
+}
+
+.action_table {
+    width: 0;
+}
+
+.stats-container {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    align-items: start;
+}
+
+.stat {
+    background-color: var(--beige-color);
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.count_stat {
+    grid-template-columns: max-content max-content;
+    justify-content: space-between;
+}
+
+nav.bg-body-tertiary {
+    background-color: var(--white-color) !important;
+}
+
+nav.nav-link {
+    color: var(--text-color) !important;
 }
 
 @media (min-width: 1024px) {

@@ -135,12 +135,15 @@ class AccountController extends AbstarctController
             if ($error->noError()) {
                 $data = $formBuilder->getData();
 
-                $tmp_name = $data["file"]["tmp_name"];
-                $temp = explode(".", $_FILES["file"]["name"]);
-                $name = bin2hex(random_bytes(16)) . '.' . end($temp);
+                if ($data["file"]["tmp_name"]) {
+                    $tmp_name = $data["file"]["tmp_name"];
+                    $temp = explode(".", $_FILES["file"]["name"]);
+                    $name = bin2hex(random_bytes(16)) . '.' . end($temp);
 
-                if (!file_exists(UPLOAD_DIR . $name)) {
                     move_uploaded_file($tmp_name, UPLOAD_DIR . $name);
+
+                    $ReviewsTable
+                        ->setReview_img($name);
                 }
 
                 $ReviewsTable
@@ -148,7 +151,6 @@ class AccountController extends AbstarctController
                     ->setProduct_id($id)
                     ->setReview_title($data['title'])
                     ->setDescription($data['description'])
-                    ->setReview_img($name)
                     ->setGrade($data['grade'])
                     ->flush();
 

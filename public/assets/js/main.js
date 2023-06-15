@@ -31,23 +31,6 @@ if (inputsFile) {
         })
     })
 }
-const addProducts = document.querySelectorAll('.add_prdt')
-
-if (addProducts) {
-    addProducts.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const productsContainer = document.querySelectorAll(
-                'form > .product-container'
-            )
-            let new_element = productsContainer[0].cloneNode(true)
-            const allInputs = new_element.querySelectorAll('input')
-            allInputs.forEach((input) => {
-                input.value = '1'
-            })
-            productsContainer[productsContainer.length - 1].after(new_element)
-        })
-    })
-}
 
 const quantitys = document.querySelectorAll('.quantity')
 const lessQuantity = document.querySelectorAll('.less')
@@ -230,4 +213,54 @@ if (addGrade) {
             gradeInput.value = index + 1
         })
     })
+}
+
+const delPrdtFunction = () => {
+    const delPrdt = document.querySelectorAll('.del_prdt')
+    if (delPrdt) {
+        delPrdt.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                btn.parentNode.remove()
+                delPrdtFunction()
+            })
+        })
+    }
+}
+
+const addProducts = document.querySelectorAll('.add_prdt')
+
+if (addProducts) {
+    const productsContainer = document.querySelectorAll(
+        'form > .product-container'
+    )
+
+    productsContainer.forEach((container, index) => {
+        if (index >= 1) {
+            const delBtn = document.createElement('span')
+            delBtn.innerHTML = 'delete product'
+            delBtn.classList.add('del_prdt')
+            delBtn.classList.add('btn')
+            delBtn.classList.add('del')
+            container.appendChild(delBtn)
+        }
+    })
+
+    addProducts.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const delBtn = document.createElement('span')
+            delBtn.innerHTML = 'delete product'
+            delBtn.classList.add('del_prdt')
+            delBtn.classList.add('btn')
+            delBtn.classList.add('del')
+            let new_element = productsContainer[0].cloneNode(true)
+            new_element.appendChild(delBtn)
+            const allInputs = new_element.querySelectorAll('input')
+            allInputs.forEach((input) => {
+                input.value = '1'
+            })
+            productsContainer[productsContainer.length - 1].after(new_element)
+            delPrdtFunction()
+        })
+    })
+    delPrdtFunction()
 }

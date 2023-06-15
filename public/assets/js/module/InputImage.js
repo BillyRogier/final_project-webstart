@@ -14,29 +14,14 @@ export class InputImage {
     }
 
     loadImage() {
-        // 
         if (this.input.files) {
             var curFiles = this.input.files
             for (var i = 0; i < curFiles.length; i++) {
-                if (this.allInputsImage[0]) {
-                    if (
-                        (this.dt.items.length == 0 &&
-                            this.allInputsImage[0].value == '' &&
-                            i == 0) ||
-                        (this.dt.items.length != 0 &&
-                            this.allInputsImage[0].value != '' &&
-                            !/[\[\]\\?]/g.test(this.allInputsImage[0].name))
-                    ) {
-                        this.imgContainer.innerHTML = 'Chargement...'
-                    }
-                }
                 if (
                     (this.dt.items.length == 0 &&
                         i == 0 &&
                         this.allInputsImage[0].value == '') ||
-                    (this.dt.items.length != 0 &&
-                        this.allInputsImage[0].value != '' &&
-                        !/[\[\]\\?]/g.test(this.allInputsImage[0].name))
+                    !/[\[\]\\?]/g.test(this.allInputsImage[0].name)
                 ) {
                     this.imgContainer.innerHTML = ''
                 }

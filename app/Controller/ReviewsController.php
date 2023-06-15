@@ -2,16 +2,17 @@
 
 namespace App\Controller;
 
-use App;
 use App\Table\Products;
 use App\Table\Reviews;
 use App\Table\Users;
 use Core\Controller\AbstarctController;
 use Core\Form\Type\ChoiceType;
+use Core\Form\Type\FileType;
 use Core\Form\Type\HiddenType;
 use Core\Form\Type\NumberType;
 use Core\Form\Type\SubmitType;
 use Core\Form\Type\TextareaType;
+use Core\Form\Type\TextType;
 use Core\Route\Route;
 
 class ReviewsController extends AbstarctController
@@ -38,7 +39,7 @@ class ReviewsController extends AbstarctController
         $form_delete = $this
             ->createForm()
             ->add("id", HiddenType::class)
-            ->add("submit", SubmitType::class, ['value' => 'supprimer'])
+            ->add("submit", SubmitType::class, ['value' => 'supprimer', 'class' => 'btn del'])
             ->getForm();
 
         if ($form_delete->isSubmit()) {
@@ -46,7 +47,13 @@ class ReviewsController extends AbstarctController
             if ($error->noError()) {
                 $data = $form_delete->getData();
 
-                if ($ReviewsTable->findOneBy(['reviews.review_id' => $data['id']])) {
+                $review = $ReviewsTable->findOneBy(['reviews.review_id' => $data['id']]);
+                if ($review) {
+                    if (!empty($review->getReview_img())) {
+                        if (file_exists(UPLOAD_DIR . $review->getReview_img())) {
+                            unlink(UPLOAD_DIR . $review->getReview_img());
+                        }
+                    }
                     $ReviewsTable->delete(['reviews.review_id' => $data['id']]);
 
                     $_SESSION["message"] = $error->success("successfully delete");
@@ -90,9 +97,22 @@ class ReviewsController extends AbstarctController
         $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
             ->add("user", ChoiceType::class, ['label' => 'Users', 'id' => 'user', 'choices' => $users_choices])
             ->add("product", ChoiceType::class, ['label' => 'Product', 'id' => 'product', 'choices' => $products_choices])
+            ->add("grade", HiddenType::class, [
+                'label' => 'Note', 'id' => 'grade',
+                'html' => '
+                <div class="grade add_grade">
+                    <div class="grade_ball"></div>
+                    <div class="grade_ball"></div>
+                    <div class="grade_ball"></div>
+                    <div class="grade_ball"></div>
+                    <div class="grade_ball"></div>
+                </div>'
+            ])
+            ->add("title", TextType::class, ['label' => 'Titre', 'id' => 'title'])
             ->add("description", TextareaType::class, ['label' => 'Description', 'id' => 'description'])
-            ->add("grade", NumberType::class, ['label' => 'Grade', 'id' => 'grade'])
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->add("img", HiddenType::class, ['data-req' => true])
+            ->add("file", FileType::class, ['label' => 'Ajouter un fichier', 'id' => 'file', 'class' => 'file', 'data-req' => true])
+            ->add("submit", SubmitType::class, ['value' => 'Enregistrer', 'class' => 'btn'])
             ->getForm();
 
         if ($formBuilder->isSubmit()) {
@@ -100,9 +120,22 @@ class ReviewsController extends AbstarctController
             if ($error->noError()) {
                 $data = $formBuilder->getData();
 
+                if ($data["file"]["tmp_name"]) {
+                    $tmp_name = $data["file"]["tmp_name"];
+                    $temp = explode(".", $_FILES["file"]["name"]);
+                    $name = bin2hex(random_bytes(16)) . '.' . end($temp);
+
+                    move_uploaded_file($tmp_name, UPLOAD_DIR . $name);
+
+                    $ReviewsTable
+                        ->setReview_img($name);
+                }
+
+
                 $ReviewsTable
                     ->setUser_id($data['user'])
                     ->setProduct_id($data['product'])
+                    ->setReview_title($data['title'])
                     ->setDescription($data['description'])
                     ->setGrade($data['grade'])
                     ->flush();
@@ -113,8 +146,9 @@ class ReviewsController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Reviews::class));
         }
 
-        return $this->render('/app/register.php', '/admin.php', [
+        return $this->render('/admin/formulaire.php', '/admin.php', [
             'title' => 'Admin | Reviews | Insert',
+            'title_page' => 'Insérer commentaire',
             'form' => $formBuilder->createView(),
         ]);
     }
@@ -149,14 +183,29 @@ class ReviewsController extends AbstarctController
             $products_choices[$product->getName()] = $product->getId();
         }
 
+        $grade_balls = '';
+        for ($i = 0; $i < 5; $i++) {
+            if ($i < $review->getGrade()) {
+                $grade_balls .= '<div class="grade_ball active"></div>';
+                continue;
+            }
+            $grade_balls .= '<div class="grade_ball"></div>';
+        }
+
         $formBuilder = $this->createForm("", "post", ['class' => 'grid'])
             ->add("user", ChoiceType::class, ['label' => 'Users', 'value' => $review->getUser_id(), 'id' => 'user', 'choices' => $users_choices])
             ->add("product", ChoiceType::class, ['label' => 'Product', 'value' => $review->getProduct_id(), 'id' => 'product', 'choices' => $products_choices])
+            ->add("grade", HiddenType::class, [
+                'label' => 'Note', 'id' => 'grade', 'value' => $review->getGrade(),
+                'html' => '
+                <div class="grade add_grade">
+                   ' . $grade_balls . '
+                </div>'
+            ])
+            ->add("title", TextType::class, ['label' => 'Titre', 'id' => 'title'])
             ->add("description", TextareaType::class, ['label' => 'Description', 'value' => $review->getDescription(), 'id' => 'description'])
-            ->add("grade", NumberType::class, ['label' => 'Grade', 'value' => $review->getGrade(), 'id' => 'grade'])
-            ->add("submit", SubmitType::class, ['value' => 'Save'])
+            ->add("submit", SubmitType::class, ['value' => 'Enregistrer', 'class' => 'btn'])
             ->getForm();
-
 
         if ($formBuilder->isSubmit()) {
             $error = $formBuilder->isXmlValid($ReviewsTable);
@@ -183,8 +232,9 @@ class ReviewsController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Reviews::class));
         }
 
-        return $this->render('/app/register.php', '/admin.php', [
+        return $this->render('/admin/formulaire.php', '/admin.php', [
             'title' => 'Admin | Products | Update',
+            'title_page' => 'Modifier commentaire',
             'form' => $formBuilder->createView(),
         ]);
     }

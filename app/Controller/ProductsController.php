@@ -41,7 +41,7 @@ class ProductsController extends AbstarctController
         $form_delete = $this
             ->createForm()
             ->add("id", HiddenType::class)
-            ->add("submit", SubmitType::class, ['value' => 'supprimer', 'class' => 'btn btn-danger'])
+            ->add("submit", SubmitType::class, ['value' => 'supprimer', 'class' => 'btn del'])
             ->getForm();
 
         if ($form_delete->isSubmit()) {

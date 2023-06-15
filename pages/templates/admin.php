@@ -71,6 +71,9 @@
                         <a class="nav-link" href="<?= URL ?>/admin/settings">Paramètres</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="<?= URL ?>">Page d'accueil</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="<?= URL ?>/logout">Se déconnecter</a>
                     </li>
                 </ul>

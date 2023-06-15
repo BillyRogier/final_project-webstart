@@ -29,7 +29,7 @@ class CategorysController extends AbstarctController
 
         $form_delete = $this->createForm()
             ->add("id", HiddenType::class)
-            ->add("submit", SubmitType::class, ['value' => 'Supprimer', 'class' => 'btn btn-danger'])
+            ->add("submit", SubmitType::class, ['value' => 'Supprimer', 'class' => 'btn del'])
             ->getForm();
 
         if ($form_delete->isSubmit()) {

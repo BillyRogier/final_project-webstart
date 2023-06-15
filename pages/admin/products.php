@@ -10,7 +10,7 @@
                 <th scope="col">images</th>
                 <th scope="col">category</th>
                 <th scope="col">visibility</th>
-                <th scope="col">action</th>
+                <th scope="col" colspan="2">action</th>
             </tr>
         </thead>
         <tbody>
@@ -45,9 +45,10 @@
                                 echo "no stock";
                             } ?>
                         </td>
-                        <td class="action_table grid"><a href="<?= URL ?>/admin/products/update/<?= $products[$i]->getId() ?>" class="btn btn-primary">modifier</a>
+                        <td class="action_table"><a href="<?= URL ?>/admin/products/update/<?= $products[$i]->getId() ?>" class="btn btn-primary">modifier</a>
+                        </td>
+                        <td class="action_table">
                             <?=
-
                             $form_delete
                                 ->change("id", ['value' => $products[$i]->getId()])
                                 ->createView()

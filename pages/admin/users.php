@@ -11,7 +11,7 @@
                 <th scope="col">adress</th>
                 <th scope="col">type</th>
                 <th scope="col">date de création</th>
-                <th scope="col">action</th>
+                <th scope="col" colspan="2">action</th>
             </tr>
         </thead>
         <tbody>
@@ -31,14 +31,14 @@
                         } ?>
                     </td>
                     <td><?= $user->getCreation_date() ?></td>
-                    <td class="action_table grid"><a href="<?= URL ?>/admin/users/update/<?= $user->getId() ?>" class="btn btn-primary">modifier</a>
-                        <?=
+                    <td class="action_table"><a href="<?= URL ?>/admin/users/update/<?= $user->getId() ?>" class="btn btn-primary">modifier</a></td>
+                    <td> <?=
 
-                        $form_delete
-                            ->change("id", ['value' => $user->getId()])
-                            ->createView()
+                            $form_delete
+                                ->change("id", ['value' => $user->getId()])
+                                ->createView()
 
-                        ?>
+                            ?>
                     </td>
                 </tr>
             <?php endforeach ?>
