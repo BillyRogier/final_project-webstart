@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App;
 use App\Table\Orders;
 use App\Table\Products;
 use App\Table\Reviews;
@@ -47,8 +46,14 @@ class UsersController extends AbstarctController
                     $OrdersTable = new Orders();
                     $ReviewsTable = new Reviews();
 
-                    $ReviewsTable->delete(['user_id' => $data['id']]);
-                    $OrdersTable->delete(['user_id' => $data['id']]);
+                    $reviews =  $ReviewsTable->findAllBy(['user_id' => $data['id']]);
+                    foreach ($reviews as $review) {
+                        $review->setUser_id(null)->flush();
+                    }
+                    $orders = $OrdersTable->findAllBy(['user_id' => $data['id']]);
+                    foreach ($orders as $order) {
+                        $order->setUser_id(null)->flush();
+                    }
                     $UsersTable->delete(['id' => $data['id']]);
 
                     $_SESSION["message"] = $error->success("delete successfully");

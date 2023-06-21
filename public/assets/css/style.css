@@ -83,7 +83,11 @@ a {
     cursor: pointer;
     border: none !important;
     text-align: center;
-    text-transform: capitalize;
+    transition: 0.3s ease-in-out;
+}
+
+.btn:hover {
+    background-color: #b0712d;
 }
 
 .arrow {

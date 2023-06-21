@@ -18,9 +18,11 @@
 
             $n = 1;
             for ($i = 0; $i < count($orders); $i++) :
-                $table = "<tr>
+                $table =  "<tr>
                     <td>" . $orders[$i]->getOrder_id() . "</td>
-                    <td>" . $orders[$i]->getJoin(Users::class)->getEmail() . "</td>
+                    <td>
+                    " . (!is_null($orders[0]->getUser_id()) ? $orders[$i]->getJoin(Users::class)->getEmail() : "") . "
+                    </td>
                     <td>$n</td>
                     <td>" . $orders[$i]->getOrder_num() . "</td>
                     <td>" . $orders[$i]->getOrder_date() . "</td>
@@ -37,6 +39,8 @@
                 </tr>";
                 if (isset($orders[$i + 1]) && ($orders[$i]->getOrder_num() == $orders[$i + 1]->getOrder_num()) && ($orders[$i]->getProduct_id() != $orders[$i + 1]->getProduct_id())) {
                     $n += 1;
+                } else if (isset($orders[$i + 1]) && ($orders[$i]->getOrder_num() == $orders[$i + 1]->getOrder_num())) {
+                    $n = 1;
                 } else {
                     echo $table;
                     $n = 1;

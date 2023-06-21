@@ -13,7 +13,11 @@ use App\Table\Users;
                 <svg width="14" height="21" viewBox="0 0 14 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2.00098 18.9624L12.001 10.9624L2.00098 2.9624" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="arrow-svg" />
                 </svg>
-                <a href="<?= URL ?>/category/<?= $products[0]->getJoin(Categorys::class)->getCategory_name() ?>" class="path_link"><?= ucfirst($products[0]->getJoin(Categorys::class)->getCategory_name()) ?></a>
+                <?php if ($products[0]->getJoin(Categorys::class)->getCategory_name()) : ?>
+                    <a href="<?= URL ?>/category/<?= $products[0]->getJoin(Categorys::class)->getCategory_name() ?>" class="path_link"><?= ucfirst($products[0]->getJoin(Categorys::class)->getCategory_name()) ?></a>
+                <?php else : ?>
+                    <a href="<?= URL ?>/category/all-products" class="path_link">Tous les produits</a>
+                <?php endif ?>
             </div>
             <div class="product-container grid">
                 <div class="slider-container grid" id="slider_products-img">

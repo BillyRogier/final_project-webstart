@@ -6,26 +6,28 @@ use App\Table\Users;
 ?>
 <main class="grid" style="gap: 40px;">
     <div class="error-container"><?= isset($_SESSION['message']) ?  $_SESSION['message'] : "" ?></div>
-    <table class="table  user">
-        <thead>
-            <tr>
-                <th scope="col">First name</th>
-                <th scope="col">Last name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Num</th>
-                <th scope="col">Adress</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><?= $orders[0]->getJoin(Users::class)->getFirst_name() ?></td>
-                <td><?= $orders[0]->getJoin(Users::class)->getLast_name() ?></td>
-                <td><?= $orders[0]->getJoin(Users::class)->getEmail() ?></td>
-                <td><?= $orders[0]->getJoin(Users::class)->getNum() ?></td>
-                <td><?= $orders[0]->getJoin(Users::class)->getAdress() ?></td>
-            </tr>
-        </tbody>
-    </table>
+    <?php if (!empty($orders[0]->getJoin(Users::class)->getEmail())) : ?>
+        <table class="table  user">
+            <thead>
+                <tr>
+                    <th scope="col">First name</th>
+                    <th scope="col">Last name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Num</th>
+                    <th scope="col">Adress</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><?= $orders[0]->getJoin(Users::class)->getFirst_name() ?></td>
+                    <td><?= $orders[0]->getJoin(Users::class)->getLast_name() ?></td>
+                    <td><?= $orders[0]->getJoin(Users::class)->getEmail() ?></td>
+                    <td><?= $orders[0]->getJoin(Users::class)->getNum() ?></td>
+                    <td><?= $orders[0]->getJoin(Users::class)->getAdress() ?></td>
+                </tr>
+            </tbody>
+        </table>
+    <?php endif ?>
     <table class="table  order">
         <thead>
             <tr>

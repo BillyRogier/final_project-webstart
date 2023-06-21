@@ -11,7 +11,7 @@ class Orders extends Table
     #[Properties(type: 'int', length: 11)]
     private $order_id;
     #[Properties(type: 'int', length: 11)]
-    private int $user_id;
+    private  $user_id;
     #[Properties(type: 'int', length: 11)]
     private int $product_id;
     #[Properties(type: 'int', length: 11)]

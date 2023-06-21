@@ -66,24 +66,8 @@ class FormView extends Form implements FormViewInterface
                 }
                 $input_tag = "<div class=\"item-container grid\">";
                 if (count($value) > 1) {
-                    if ($value[0] != $value[1]) {
-                        foreach ($value as $val) {
-                            $type = new $val['type']();
-                            $name = $val['name'];
-                            $label = "";
-                            if (isset($val['options']['label'])) {
-                                $label = $type->label($val['options']['label'], $val['options']['id']);
-                            }
-                            $input_tag = "<div class=\"item-container grid\">";
-                            $input_tag .= $this->createInput($val, $type, $name);
-                            $input_tag .= "</div>";
-                            $inputContainer .= $this->viewInput($input_tag, strtolower(str_replace("[]", '', $name)), $label);
-                        }
-                        continue;
-                    } else {
-                        foreach ($value as $val) {
-                            $input_tag .= $this->createInput($val, $type, $name);
-                        }
+                    foreach ($value as $val) {
+                        $input_tag .= $this->createInput($val, $type, $name);
                     }
                 } else {
                     $input_tag .= $this->createInput($value[0], $type, $name);
