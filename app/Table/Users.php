@@ -9,21 +9,21 @@ class Users extends Table
 {
     protected $table = "users";
     #[Properties(type: 'int', length: 11)]
-    private int $id;
+    private $id = null;
     #[Properties(type: 'string', length: 255)]
-    private string $first_name = "";
+    private $first_name = "";
     #[Properties(type: 'string', length: 255)]
-    private string $last_name = "";
+    private $last_name = "";
     #[Properties(type: 'string', length: 255)]
-    private string $email;
+    private $email;
     #[Properties(type: 'string', length: 255)]
-    private string $password;
+    private $password;
     #[Properties(type: 'string', length: 20)]
-    private string $num = "";
+    private $num = "";
     #[Properties(type: 'string', length: 255)]
-    private string $adress = "";
+    private $adress = "";
     #[Properties(type: 'int', length: 1)]
-    private int $type = 0;
+    private $type = 0;
     #[Properties(type: 'string')]
     private $creation_date;
 

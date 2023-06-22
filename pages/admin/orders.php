@@ -27,14 +27,6 @@
                     <td>" . $orders[$i]->getOrder_num() . "</td>
                     <td>" . $orders[$i]->getOrder_date() . "</td>
                     <td class=\"action_table\"><a href=\"" . URL . "/admin/orders/view/" . $orders[$i]->getOrder_num() . "\" class=\"btn add_color\">Détails</a></td>
-                    <td class=\"action_table\"><a href=\"" . URL . "/admin/orders/update/" . $orders[$i]->getOrder_num() . "\" class=\"btn\">modifier</a></td>
-                    <td class=\"action_table\">
-                            " .
-                    $form_delete
-                    ->change("id", ['value' => $orders[$i]->getOrder_num()])
-                    ->createView()
-                    . "
-                    </td>
                     </td>
                 </tr>";
                 if (isset($orders[$i + 1]) && ($orders[$i]->getOrder_num() == $orders[$i + 1]->getOrder_num()) && ($orders[$i]->getProduct_id() != $orders[$i + 1]->getProduct_id())) {

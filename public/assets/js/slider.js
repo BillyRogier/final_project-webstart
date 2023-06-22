@@ -9,6 +9,7 @@ class Slider {
         this.sliderItems = sliderItems
         if (sliderIndicators) {
             this.sliderIndicators = container.querySelectorAll('.indicator')
+            this.setActionIndicators()
         }
         this.sliderItemWitdh = this.sliderItems[0].offsetWidth + 20
         this.sliderWitdh = this.slider.offsetWidth
@@ -42,6 +43,15 @@ class Slider {
         this.slider.style.transition = ' 0s'
     }
 
+    setActionIndicators = () => {
+        this.sliderIndicators.forEach((indicator, n) => {
+            indicator.addEventListener('click', () => {
+                this.index = n + 2
+                this.setPosition()
+            })
+        })
+    }
+
     setPosition = () => {
         this.move = true
         this.slider.style.transition = ' 0.3s'
@@ -73,23 +83,23 @@ class Slider {
             this.sliderIndicators.forEach((indicator) => {
                 indicator.classList.remove('active')
             })
-            // if (
-            //     this.index <= this.sliderItems.length / 2 - 1 &&
-            //     this.index >= 0 &&
-            //     this.sliderItems.length / 2 - 1 < 2
-            // ) {
-            //     console.log(this.index)
-            //     this.sliderIndicators[this.index].classList.add('active')
-            // } else
-            if (this.index < 2 && this.sliderIndicators[this.index + 2]) {
-                console.log(this.index)
-                this.sliderIndicators[this.index + 2].classList.add('active')
-            } else if (this.index >= 2) {
-                console.log(this.index)
+            if (this.index == 0) {
+                this.sliderIndicators[
+                    this.sliderIndicators.length - 2
+                ].classList.add('active')
+            } else if (this.index == 1) {
+                this.sliderIndicators[
+                    this.sliderIndicators.length - 1
+                ].classList.add('active')
+            } else if (
+                this.index >= 2 &&
+                this.index <= this.sliderItems.length / 2 + 1
+            ) {
                 this.sliderIndicators[this.index - 2].classList.add('active')
             } else {
-                console.log(this.index)
-                this.sliderIndicators[this.index].classList.add('active')
+                this.sliderIndicators[this.index / 2 - 2].classList.add(
+                    'active'
+                )
             }
         }
     }
@@ -158,8 +168,8 @@ const launchSlide = (container, indicators) => {
     const slider = container.querySelector('.slider')
     const sliderItems = slider.querySelectorAll('.slider-item')
     if (sliderItems.length > 1) {
-        const nextBtn = document.querySelector('.arrow.next')
-        const prevBtn = document.querySelector('.arrow.prev')
+        const nextBtn = container.parentNode.querySelector('.arrow.next')
+        const prevBtn = container.parentNode.querySelector('.arrow.prev')
         const classSlider = new Slider(
             container,
             slider,

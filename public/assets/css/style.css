@@ -568,6 +568,7 @@ main > .category-container {
     border: 1px solid var(--green-color);
     background-color: var(--white-color);
     transition: all 0.3s ease-in-out;
+    cursor: pointer;
 }
 
 .indicator.active {
