@@ -817,7 +817,9 @@ main > .category-container {
     font: var(--very-small-size);
 }
 
-.input-container.invalid input {
+.input-container.invalid input,
+.input-container.invalid select,
+.input-container.invalid textarea {
     border-color: rgb(213, 0, 0);
 }
 
@@ -828,6 +830,7 @@ main > .category-container {
 .account_order {
     background-color: var(--beige-color);
     gap: 40px;
+    min-height: 70vh;
 }
 
 .order {

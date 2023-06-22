@@ -22,9 +22,9 @@
     </div>
     <section class="categorys">
         <?php foreach ($categorys as $category) : ?>
-            <a class="category" href="<?= URL ?>/category/<?= $category->getCategory_name() ?>">
+            <a class="category" href="<?= URL ?>/category/<?= strtolower($category->getCategory_name()) ?>">
                 <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $category->getCategory_img() ?>" alt="category" class="category-image">
-                <p class="link"><?= $category->getCategory_name() ?></p>
+                <p class="link"><?= ucfirst($category->getCategory_name()) ?></p>
             </a>
         <?php endforeach; ?>
     </section>
@@ -47,7 +47,7 @@
                     <a href="<?= URL ?>/product/<?= $product->getId() ?>" class="slider-item product grid">
                         <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $product->getJoin(Carousel::class)->getImg() ?>" />
                         <div class="product-data grid">
-                            <h3><?= $product->getName() ?></h3>
+                            <h3><?= ucfirst($product->getName()) ?></h3>
                             <p><?= $product->getPrice() ?> €</p>
                         </div>
                     </a>

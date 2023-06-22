@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="<?= BASE_PUBLIC ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= BASE_PUBLIC ?>/assets/css/style.css">
     <script src="<?= BASE_PUBLIC ?>/assets/js/main.js" defer type="module"></script>
-    <script src="<?= BASE_PUBLIC ?>/assets/js/slider.js" defer type="module"></script>
     <title><?= $app->title ?></title>
 </head>
 
@@ -68,7 +67,7 @@
                         $categorys = $CategorysTable->findAll();
 
                         foreach ($categorys as $category) : ?>
-                            <li><a href="<?= URL ?>/category/<?= $category->getCategory_name() ?>" class="link"><?= $category->getCategory_name() ?></a></li>
+                            <li><a href="<?= URL ?>/category/<?= strtolower($category->getCategory_name()) ?>" class="link"><?= ucfirst($category->getCategory_name()) ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                 </li>

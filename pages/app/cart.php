@@ -15,7 +15,7 @@
                     <div class="product_cart grid">
                         <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $product['product']->getJoin(Carousel::class)->getImg() ?>" />
                         <div class="head-product grid">
-                            <h2><?= $product['product']->getName() ?></h2>
+                            <h2><?= ucfirst($product['product']->getName()) ?></h2>
                             <p class="product_price"><?= $product['product']->getPrice() ?> €</p>
                         </div>
                         <div class="quantity-container grid">
@@ -43,7 +43,7 @@
             </div>
             <div class="checkout-container grid">
                 <h3>Récapitulatif de commande</h3>
-                <p>nombre d'article : <?= $count_items ?></p>
+                <p>Nombre d'article : <?= $count_items ?></p>
                 <div class="line"></div>
                 <div class="total_cart-container grid">
                     <h4>Total</h4>

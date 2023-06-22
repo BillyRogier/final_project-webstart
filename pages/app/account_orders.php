@@ -47,7 +47,7 @@
                         </div>
                         <div class="order-head grid">
                             <div class="order-head-date">
-                                <p>Commende éffectué le</p>
+                                <p>Commande éffectué le</p>
                                 <p><?= $orders[$i]->getOrder_date() ?></p>
                             </div>
                             <div class="order-head-date">
@@ -71,7 +71,7 @@
                         </div>
                         <div class="order-head grid">
                             <div class="order-head-date">
-                                <p>Commende éffectué le</p>
+                                <p>Commande éffectué le</p>
                                 <p><?= $orders[$i]->getOrder_date() ?></p>
                             </div>
                             <div class="order-head-date">

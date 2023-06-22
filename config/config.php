@@ -9,7 +9,7 @@ return array(
     ],
     "app" => [
         "name" => "Espresso Tools",
-        "base_url" => "http://localhost/final_project/",
+        "base_url" => "http://localhost/final_project",
         "public_url" => "http://localhost/final_project/public",
         "upload_dir" =>  "/public/assets/img/",
     ]

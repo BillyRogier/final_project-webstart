@@ -1,5 +1,6 @@
 import { ValidForm } from './module/ValidForm.js'
 import { InputImage } from './module/InputImage.js'
+import { Slider } from './module/slider.js'
 
 const forms = document.querySelectorAll('form')
 const errorContainer = document.querySelector('.error-container')
@@ -274,4 +275,55 @@ if (sortableList) {
         dragClass: 'sortable-drag',
         handle: 'div',
     })
+}
+
+const sliderProductsImg = document.querySelector('#slider_products-img')
+const sliderContainer = document.querySelector('#slider_products-trends')
+
+if (sliderContainer) {
+    const launchSlide = (container, indicators) => {
+        if (container) {
+            const slider = container.querySelector('.slider')
+            const sliderItems = slider.querySelectorAll('.slider-item')
+            if (sliderItems.length > 1) {
+                const nextBtn =
+                    container.parentNode.querySelector('.arrow.next')
+                const prevBtn =
+                    container.parentNode.querySelector('.arrow.prev')
+                const classSlider = new Slider(
+                    container,
+                    slider,
+                    sliderItems,
+                    indicators
+                )
+
+                container.addEventListener('touchstart', (e) => {
+                    classSlider.touchStart(e)
+                })
+
+                container.addEventListener('touchmove', (e) => {
+                    classSlider.touchMove(e)
+                })
+
+                container.addEventListener('touchend', () => {
+                    classSlider.touchEnd()
+                })
+
+                nextBtn.addEventListener('click', () => {
+                    classSlider.goToNext()
+                })
+
+                prevBtn.addEventListener('click', () => {
+                    classSlider.goToPrev()
+                })
+
+                window.addEventListener('resize', () => {
+                    classSlider.setPosition()
+                })
+            }
+        }
+    }
+
+    launchSlide(sliderContainer)
+    launchSlide(sliderProductsImg, true)
 }

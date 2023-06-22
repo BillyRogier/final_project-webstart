@@ -1,4 +1,4 @@
-class Slider {
+export class Slider {
     startTouchX = 0
     lastDeltaX = 0
     index = 0
@@ -160,48 +160,3 @@ class Slider {
         this.setPosition()
     }
 }
-
-const sliderProductsImg = document.querySelector('#slider_products-img')
-const sliderContainer = document.querySelector('#slider_products-trends')
-
-const launchSlide = (container, indicators) => {
-    const slider = container.querySelector('.slider')
-    const sliderItems = slider.querySelectorAll('.slider-item')
-    if (sliderItems.length > 1) {
-        const nextBtn = container.parentNode.querySelector('.arrow.next')
-        const prevBtn = container.parentNode.querySelector('.arrow.prev')
-        const classSlider = new Slider(
-            container,
-            slider,
-            sliderItems,
-            indicators
-        )
-
-        container.addEventListener('touchstart', (e) => {
-            classSlider.touchStart(e)
-        })
-
-        container.addEventListener('touchmove', (e) => {
-            classSlider.touchMove(e)
-        })
-
-        container.addEventListener('touchend', () => {
-            classSlider.touchEnd()
-        })
-
-        nextBtn.addEventListener('click', () => {
-            classSlider.goToNext()
-        })
-
-        prevBtn.addEventListener('click', () => {
-            classSlider.goToPrev()
-        })
-
-        window.addEventListener('resize', () => {
-            classSlider.setPosition()
-        })
-    }
-}
-
-launchSlide(sliderContainer)
-launchSlide(sliderProductsImg, true)
