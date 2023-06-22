@@ -13,7 +13,7 @@
                     $product_total = $product['product']->getPrice() *  $product['quantity'];
                     $total += $product_total; ?>
                     <div class="product_cart grid">
-                        <img src="<?= URL ?>/assets/img/<?= $product['product']->getJoin(Carousel::class)->getImg() ?>" />
+                        <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $product['product']->getJoin(Carousel::class)->getImg() ?>" />
                         <div class="head-product grid">
                             <h2><?= $product['product']->getName() ?></h2>
                             <p class="product_price"><?= $product['product']->getPrice() ?> €</p>
@@ -63,15 +63,15 @@
             <h2>Produits tendances</h2>
             <div class="line"></div>
             <div class="slider-arrows">
-                <div class="arrow prev"> <img src="<?= URL ?>/assets/icon/arrow_white.svg" alt="arrow left" class="arrow-image left"></div>
-                <div class="arrow next"><img src="<?= URL ?>/assets/icon/arrow_white.svg" alt="arrow right" class="arrow-image right"></div>
+                <div class="arrow prev"> <img src="<?= BASE_PUBLIC ?>/assets/icon/arrow_white.svg" alt="arrow left" class="arrow-image left"></div>
+                <div class="arrow next"><img src="<?= BASE_PUBLIC ?>/assets/icon/arrow_white.svg" alt="arrow right" class="arrow-image right"></div>
             </div>
         </div>
         <div class="slider-container" id="slider_products-trends">
             <div class="slider">
                 <?php foreach ($products_trends as $products_trend) : ?>
                     <a href="<?= URL ?>/product/<?= $products_trend->getId() ?>" class="slider-item product grid">
-                        <img src="<?= URL ?>/assets/img/<?= $products_trend->getJoin(Carousel::class)->getImg() ?>" />
+                        <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $products_trend->getJoin(Carousel::class)->getImg() ?>" />
                         <div class="product-data grid">
                             <h3><?= $products_trend->getName() ?></h3>
                             <p><?= $products_trend->getPrice() ?> €</p>

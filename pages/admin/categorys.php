@@ -14,7 +14,7 @@
                 <tr>
                     <td><?= $category->getCategory_id() ?></td>
                     <td><?= $category->getCategory_name() ?></td>
-                    <td class="img_table"><img src="<?= URL ?>/assets/img/<?= $category->getCategory_img() ?>" alt="<?= $category->getCategory_name() ?>" /></td>
+                    <td class="img_table"><img src="<?= BASE_PUBLIC ?>/assets/img/<?= $category->getCategory_img() ?>" alt="<?= $category->getCategory_name() ?>" /></td>
                     <td class="action_table">
                         <a href="<?= URL ?>/admin/categorys/update/<?= $category->getCategory_id() ?>" class="btn btn-primary">modifier</a>
                     </td>

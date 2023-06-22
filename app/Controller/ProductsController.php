@@ -195,7 +195,7 @@ class ProductsController extends AbstarctController
                 ->add("img[]", HiddenType::class, [
                     'value' => $prdt->getJoin(Carousel::class)->getImg(),
                     'html' =>
-                    '<img src="' . URL . '/assets/img/' . $prdt->getJoin(Carousel::class)->getImg() . '" alt="' . $prdt->getJoin(Carousel::class)->getAlt() . '">
+                    '<img src="' . BASE_PUBLIC . '/assets/img/' . $prdt->getJoin(Carousel::class)->getImg() . '" alt="' . $prdt->getJoin(Carousel::class)->getAlt() . '">
                 <input name="alt[]" type="text" placeholder="Description image" class="img_alt" value="' . $prdt->getJoin(Carousel::class)->getAlt() . '">
                 <span class="del_image btn">delete</span>'
                 ]);

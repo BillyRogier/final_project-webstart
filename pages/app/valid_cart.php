@@ -13,7 +13,7 @@
                 $product_total = $product['product']->getPrice() *  $product['quantity'];
                 $total += $product_total; ?>
                 <div class="product_cart grid">
-                    <img src="<?= URL ?>/assets/img/<?= $product['product']->getJoin(Carousel::class)->getImg() ?>" />
+                    <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $product['product']->getJoin(Carousel::class)->getImg() ?>" />
                     <div class="head-product grid">
                         <h2><?= $product['quantity'] . " x " . $product['product']->getName() ?></h2>
                         <p class="product_price"><?= $product['product']->getPrice() ?> €</p>

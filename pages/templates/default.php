@@ -5,20 +5,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Description" />
-    <link rel="stylesheet" href="<?= URL ?>/assets/css/reset.css">
-    <link rel="stylesheet" href="<?= URL ?>/assets/css/style.css">
-    <script src="<?= URL ?>/assets/js/main.js" defer type="module"></script>
-    <script src="<?= URL ?>/assets/js/slider.js" defer type="module"></script>
+    <link rel="stylesheet" href="<?= BASE_PUBLIC ?>/assets/css/reset.css">
+    <link rel="stylesheet" href="<?= BASE_PUBLIC ?>/assets/css/style.css">
+    <script src="<?= BASE_PUBLIC ?>/assets/js/main.js" defer type="module"></script>
+    <script src="<?= BASE_PUBLIC ?>/assets/js/slider.js" defer type="module"></script>
     <title><?= $app->title ?></title>
 </head>
 
 <body>
     <header class="grid">
-        <a href="<?= URL ?>" class="logo grid"><img src="<?= URL ?>/assets/icon/logo.svg" alt="logo"><img src="<?= URL ?>/assets/icon/logo_name.svg" alt="Espreso Tools" class="logo_name"></a>
+        <a href="<?= URL ?>" class="logo grid"><img src="<?= BASE_PUBLIC ?>/assets/icon/logo.svg" alt="logo"><img src="<?= BASE_PUBLIC ?>/assets/icon/logo_name.svg" alt="Espreso Tools" class="logo_name"></a>
         <nav class="grid">
             <div class="links grid">
-                <div class="icon search"><img src="<?= URL ?>/assets/icon/search.svg" alt="search"></div>
-                <a href="<?= URL . ($app->isUser() || $app->isAdmin() ? "/account" : "/login") ?>" class="icon"><img src="<?= URL ?>/assets/icon/login.svg" alt="login"></a>
+                <div class="icon search"><img src="<?= BASE_PUBLIC ?>/assets/icon/search.svg" alt="search"></div>
+                <a href="<?= URL . ($app->isUser() || $app->isAdmin() ? "/account" : "/login") ?>" class="icon"><img src="<?= BASE_PUBLIC ?>/assets/icon/login.svg" alt="login"></a>
                 <a href="<?= URL ?>/cart" class="icon icon_cart">
                     <span class="number_in_cart grid">
                         <?php
@@ -33,7 +33,7 @@
 
                         echo ($totalCount > 99 ? "99+" : $totalCount)  ?>
                     </span>
-                    <img src="<?= URL ?>/assets/icon/cart.svg" alt="cart">
+                    <img src="<?= BASE_PUBLIC ?>/assets/icon/cart.svg" alt="cart">
                 </a>
             </div>
             <div class="menu_burger grid">
@@ -47,13 +47,13 @@
         </nav>
         <div class="menu grid">
             <div class="close-menu grid">
-                <img src="<?= URL ?>/assets/icon/close.svg" alt="close menu" class="icon">
+                <img src="<?= BASE_PUBLIC ?>/assets/icon/close.svg" alt="close menu" class="icon">
             </div>
             <div class="menu-links grid">
                 <li>
                     <div class="products_dropdown grid">
                         <div href="#" class="big_link">Products</div>
-                        <img src="<?= URL ?>/assets/icon/arrow.svg" alt="arrow">
+                        <img src="<?= BASE_PUBLIC ?>/assets/icon/arrow.svg" alt="arrow">
                     </div>
                     <ul class="products_links grid">
                         <div class="menu_part grid">

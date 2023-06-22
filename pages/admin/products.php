@@ -32,7 +32,7 @@
                         <td><?= $products[$i]->getPrice() ?></td>
                         <td class="img_table">
                             <?=
-                            $img .= " <img src=\"" . URL . "/assets/img/" . $products[$i]->getJoin(Carousel::class)->getImg() . "\" alt=\" " . $products[$i]->getJoin(Carousel::class)->getAlt() . "\" />";
+                            $img .= " <img src=\"" . BASE_PUBLIC . "/assets/img/" . $products[$i]->getJoin(Carousel::class)->getImg() . "\" alt=\" " . $products[$i]->getJoin(Carousel::class)->getAlt() . "\" />";
                             ?>
                         </td>
                         <td><?= $products[$i]->getJoin(Categorys::class)->getCategory_name() ?></td>

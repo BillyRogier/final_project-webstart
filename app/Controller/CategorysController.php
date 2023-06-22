@@ -133,7 +133,7 @@ class CategorysController extends AbstarctController
             ->add("img", HiddenType::class, [
                 'value' => $category->getCategory_img(),
                 'html' =>
-                '<img src="' . URL . '/assets/img/' . $category->getCategory_img() . '" alt="' . $category->getAlt() . '">
+                '<img src="' . BASE_PUBLIC . '/assets/img/' . $category->getCategory_img() . '" alt="' . $category->getAlt() . '">
                 <input name="alt" type="text" placeholder="Description image" class="img_alt" value="' . $category->getAlt() . '">
                 <span class="del_image btn">delete</span>'
             ])

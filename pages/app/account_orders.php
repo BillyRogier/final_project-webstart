@@ -28,7 +28,7 @@
                     <div class="order grid">
                         <div class="order-product-container grid">
                             <a href="<?= URL ?>/product/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="order-product grid">
-                                <img src="<?= URL ?>/assets/img/<?= $orders[$i]->getJoin(Carousel::class)->getImg() ?>" />
+                                <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $orders[$i]->getJoin(Carousel::class)->getImg() ?>" />
                                 <p><?= $orders[$i]->getQuantity() ?> x <?= $orders[$i]->getJoin(Products::class)->getName() ?></p>
                                 <p><?= $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice() ?> €</p>
                             </a>
@@ -39,7 +39,7 @@
                     $total += $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice(); ?>
                         <div class="order-product-container grid">
                             <a href="<?= URL ?>/product/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="order-product grid">
-                                <img src="<?= URL ?>/assets/img/<?= $orders[$i]->getJoin(Carousel::class)->getImg() ?>" />
+                                <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $orders[$i]->getJoin(Carousel::class)->getImg() ?>" />
                                 <p><?= $orders[$i]->getQuantity() ?> x <?= $orders[$i]->getJoin(Products::class)->getName() ?></p>
                                 <p><?= $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice() ?> €</p>
                             </a>
@@ -63,7 +63,7 @@
                     <div class="order grid">
                         <div class="order-product-container grid">
                             <a href="<?= URL ?>/product/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="order-product grid">
-                                <img src="<?= URL ?>/assets/img/<?= $orders[$i]->getJoin(Carousel::class)->getImg() ?>" />
+                                <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $orders[$i]->getJoin(Carousel::class)->getImg() ?>" />
                                 <p><?= $orders[$i]->getQuantity() ?> x <?= $orders[$i]->getJoin(Products::class)->getName() ?></p>
                                 <p><?= $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice() ?> €</p>
                             </a>
@@ -90,15 +90,15 @@
             <h2>Produits tendances</h2>
             <div class="line"></div>
             <div class="slider-arrows">
-                <div class="arrow prev"> <img src="<?= URL ?>/assets/icon/arrow_white.svg" alt="arrow left" class="arrow-image left"></div>
-                <div class="arrow next"><img src="<?= URL ?>/assets/icon/arrow_white.svg" alt="arrow right" class="arrow-image right"></div>
+                <div class="arrow prev"> <img src="<?= BASE_PUBLIC ?>/assets/icon/arrow_white.svg" alt="arrow left" class="arrow-image left"></div>
+                <div class="arrow next"><img src="<?= BASE_PUBLIC ?>/assets/icon/arrow_white.svg" alt="arrow right" class="arrow-image right"></div>
             </div>
         </div>
         <div class="slider-container" id="slider_products-trends">
             <div class="slider">
                 <?php foreach ($products_trends as $products_trend) : ?>
                     <a href="<?= URL ?>/product/<?= $products_trend->getId() ?>" class="slider-item product grid">
-                        <img src="<?= URL ?>/assets/img/<?= $products_trend->getJoin(Carousel::class)->getImg() ?>" />
+                        <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $products_trend->getJoin(Carousel::class)->getImg() ?>" />
                         <div class="product-data grid">
                             <h3><?= $products_trend->getName() ?></h3>
                             <p><?= $products_trend->getPrice() ?> €</p>

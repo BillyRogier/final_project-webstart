@@ -29,7 +29,7 @@
                     <td><?= $review->getGrade() ?></td>
                     <td>
                         <?php if (!empty($review->getReview_img())) : ?>
-                            <img src="<?= URL ?>/assets/img/<?= $review->getReview_img() ?>" alt="<?= $review->getReview_title() ?>" />
+                            <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $review->getReview_img() ?>" alt="<?= $review->getReview_title() ?>" />
                         <?php endif ?>
                     </td>
                     <td class="action_table"><a href="<?= URL ?>/admin/reviews/update/<?= $review->getReview_id() ?>" class="btn">modifier</a></td>

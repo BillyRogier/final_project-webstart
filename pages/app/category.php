@@ -8,8 +8,8 @@
                     <a href="#" class="btn">Achetez maintenant</a>
                 </div>
             </div>
-            <img src="<?= URL ?>/assets/img/<?= $category_img ?>" alt="extraction de café avec outils Espresso Tools" class="home-image">
-            <img src="<?= URL ?>/assets/icon/arrow_scroll.svg" alt="scroll down" class="arrow_scroll">
+            <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $category_img ?>" alt="extraction de café avec outils Espresso Tools" class="home-image">
+            <img src="<?= BASE_PUBLIC ?>/assets/icon/arrow_scroll.svg" alt="scroll down" class="arrow_scroll">
         </section>
         <section class="products-container grid">
             <div class="page_path grid">
@@ -27,7 +27,7 @@
 
                 foreach ($products as $product) : ?>
                     <a href="<?= URL ?>/product/<?= $product->getJoin(Products::class)->getId() ?>" class="product grid">
-                        <img src="<?= URL ?>/assets/img/<?= $product->getJoin(Carousel::class)->getImg() ?>" />
+                        <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $product->getJoin(Carousel::class)->getImg() ?>" />
                         <div class="product-data grid">
                             <h3><?= $product->getJoin(Products::class)->getName() ?></h3>
                             <p><?= $product->getJoin(Products::class)->getPrice() ?> €</p>
