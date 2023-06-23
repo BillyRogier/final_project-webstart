@@ -15,8 +15,9 @@
             <img src="<?= BASE_PUBLIC ?>/assets/icon/logo_big.jpg" alt="logo Espresso Tools" class="logo_about">
             <div class="about-data grid">
                 <h2>À propos</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <a href="<?= URL ?>/category/all-products" class="btn">Plus sur Espresso Tools</a>
+                <p>Chez Espresso Tools, nous sommes passionnés par l'art de préparer le café parfait. Nous croyons fermement que chaque tasse de café devrait être une expérience exceptionnelle, et c'est pourquoi nous nous sommes engagés à fournir les meilleurs accessoires conçus pour améliorer la précision et la répartition de la mouture. Notre objectif est de vous aider à atteindre la perfection dans chaque tasse que vous préparez. Nous comprenons que chaque détail compte, et c'est pourquoi nous avons soigneusement sélectionné une gamme d'accessoires de haute qualité, conçus pour répondre aux besoins des amateurs de café exigeants.
+                </p>
+                <a href="<?= URL ?>/about" class="btn">Plus sur Espresso Tools</a>
             </div>
         </section>
     </div>

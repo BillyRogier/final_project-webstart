@@ -99,7 +99,7 @@
         <div class="footer-container grid">
             <p class="footer-title">Informations légales</p>
             <div class="info-container grid">
-                <p>Mentions légales</p>
+                <a href="<?= URL ?>/mentions-legales" class="foot-link">Mentions légales</a>
                 <p>Conditions générales de vente</p>
                 <p>Protection des données</p>
             </div>

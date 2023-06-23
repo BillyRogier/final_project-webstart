@@ -90,6 +90,17 @@ a {
     background-color: #b0712d;
 }
 
+.mentions-data h2 {
+    font: var(--large-size);
+    font-weight: 600;
+}
+
+.mentions-data li {
+    list-style: none;
+    font: var(--small-size);
+    color: var(--text-color);
+}
+
 .arrow {
     display: flex;
     align-items: center;
@@ -335,6 +346,10 @@ footer form > input {
     width: 100%;
     padding: 0 0 0 5px;
     border: none;
+}
+
+.foot-link {
+    color: var(--white-color);
 }
 
 .file {
@@ -924,6 +939,11 @@ main > .category-container {
     font-weight: 500;
 }
 
+.about-container.grid {
+    padding: 100px 20px 80px 20px;
+    gap: 40px;
+}
+
 @media (min-width: 1024px) {
     :root {
         --very-very-small-size: 400 0.625rem/1.4 'Montserrat', sans-serif;
@@ -1198,6 +1218,16 @@ main > .category-container {
         grid-template-columns: max-content max-content;
         justify-content: space-between;
         width: 100%;
+    }
+
+    .about-container.grid {
+        padding: 160px 80px 160px 80px;
+        gap: 80px;
+    }
+
+    .about-container > .about-data {
+        grid-column: 1;
+        grid-row: 2;
     }
 
     .quantity-container {
