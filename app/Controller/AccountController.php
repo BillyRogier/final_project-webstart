@@ -158,7 +158,7 @@ class AccountController extends AbstarctController
                     ->setGrade($data['grade'])
                     ->flush();
 
-                $_SESSION["message"] = $error->success("successfully insert");
+                $_SESSION["message"] = $error->success("Le commentaire a bien été ajouté");
                 $error->location(URL . "/account", "success_location");
             }
             $error->getXmlMessage($this->app->getProperties(Reviews::class));

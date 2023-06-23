@@ -5,7 +5,7 @@ use App\Table\Users;
 
 ?>
 <main class="grid" style="gap: 40px;">
-    <div class="error-container"><?= isset($_SESSION['message']) ?  $_SESSION['message'] : "" ?></div>
+    <div class="error-container" style="<?= !empty($_SESSION['message']) ? "display: block;" : "display: none;"  ?>"><?= isset($_SESSION['message']) ? $_SESSION['message'] : ""  ?></div>
     <?php if (!empty($orders[0]->getJoin(Users::class)->getEmail())) : ?>
         <table class="table  user">
             <thead>

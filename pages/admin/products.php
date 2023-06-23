@@ -1,5 +1,5 @@
 <main class="grid">
-    <div class="error-container"><?= isset($_SESSION['message']) ?  $_SESSION['message'] : "" ?></div>
+    <div class="error-container" style="<?= !empty($_SESSION['message']) ? "display: block;" : "display: none;"  ?>"><?= isset($_SESSION['message']) ? $_SESSION['message'] : ""  ?></div>
     <table class="table my-5">
         <thead>
             <tr>
@@ -22,7 +22,7 @@
             $img = "";
             for ($i = 0; $i < count($products); $i++) :
                 if (isset($products[$i + 1]) && ($products[$i]->getId() == $products[$i + 1]->getId())) {
-                    $img .= " <img src=\"" . URL . "/assets/img/" . $products[$i]->getJoin(Carousel::class)->getImg() . "\" alt=\" " . $products[$i]->getJoin(Carousel::class)->getAlt() . "\" />";
+                    $img .= " <img src=\"" . BASE_PUBLIC . "/assets/img/" . $products[$i]->getJoin(Carousel::class)->getImg() . "\" alt=\" " . $products[$i]->getJoin(Carousel::class)->getAlt() . "\" />";
                     continue;
                 } else { ?>
                     <tr>

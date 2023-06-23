@@ -54,7 +54,7 @@ class CategorysController extends AbstarctController
 
                     $CategorysTable->delete(['category_id' => $data['id']]);
 
-                    $_SESSION["message"] = $error->success("delete successfully");
+                    $_SESSION["message"] = $error->success("Supprimé avec succès");
                     $error->location(URL . "/admin/categorys", "success_location");
                 } else {
                     $error->danger("error occured", "error_container");
@@ -104,7 +104,7 @@ class CategorysController extends AbstarctController
                         ->setAlt($data['alt'])
                         ->flush();
 
-                    $_SESSION["message"] = $error->success("successfully insert");
+                    $_SESSION["message"] = $error->success("Inséré avec succès");
                     $error->location(URL . "/admin/categorys", "success_location");
                 }
             }
@@ -172,7 +172,7 @@ class CategorysController extends AbstarctController
                         ->setAlt($data['alt'])
                         ->flush();
 
-                    $_SESSION["message"] = $error->success("successfully update");
+                    $_SESSION["message"] = $error->success("Modifications enregistrées");
                     $error->location(URL . "/admin/categorys", "success_location");
                 }
             }

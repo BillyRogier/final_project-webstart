@@ -162,6 +162,10 @@ table {
     background-color: rgb(213, 0, 0) !important;
 }
 
+.btn.del_image {
+    background-color: rgb(213, 0, 0) !important;
+}
+
 .btn:hover {
     background-color: inherit;
 }
@@ -273,6 +277,26 @@ nav.bg-body-tertiary {
 
 nav.nav-link {
     color: var(--text-color) !important;
+}
+
+.error-container > .danger {
+    padding: 20px 40px;
+    width: 100%;
+    background-color: #d5000057;
+    color: #d50000;
+    list-style: none;
+    border-radius: 5px;
+    font: var(--medium-size);
+}
+
+.error-container > .success {
+    padding: 20px 40px;
+    width: 100%;
+    background-color: #55af013b;
+    color: #55af01;
+    list-style: none;
+    border-radius: 5px;
+    font: var(--medium-size);
 }
 
 @media (min-width: 1024px) {

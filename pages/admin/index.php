@@ -1,6 +1,6 @@
 <main class="grid" style="gap: 40px;">
     <h1>Admin page</h1>
-    <div class="error-container"><?= isset($_SESSION['message']) ?  $_SESSION['message'] : "" ?></div>
+    <div class="error-container" style="<?= !empty($_SESSION['message']) ? "display: block;" : "display: none;"  ?>"><?= isset($_SESSION['message']) ? $_SESSION['message'] : ""  ?></div>
     <div class="stats-container grid">
         <div class="stat grid">
             <h2>Total utitlisateurs</h2>

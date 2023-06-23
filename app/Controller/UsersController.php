@@ -56,7 +56,7 @@ class UsersController extends AbstarctController
                     }
                     $UsersTable->delete(['id' => $data['id']]);
 
-                    $_SESSION["message"] = $error->success("delete successfully");
+                    $_SESSION["message"] = $error->success("Supprimé avec succès");
                     $error->location(URL . "/admin/users", "success_location");
                 } else {
                     $error->danger("error occured", "error_container");
@@ -106,7 +106,7 @@ class UsersController extends AbstarctController
                             ->setType($data['type'])
                             ->flush();
 
-                        $_SESSION["message"] = $error->success("successfully register");
+                        $_SESSION["message"] = $error->success("Inséré avec succès");
                         $error->location(URL . "/admin/users", "success_location");
                     } else {
                         $error->danger("error occured", "error_container");
@@ -162,7 +162,7 @@ class UsersController extends AbstarctController
                         ->setCreation_date($data['creation_date'])
                         ->flush();
 
-                    $_SESSION["message"] = $error->success("update successfully");
+                    $_SESSION["message"] = $error->success("Modifications enregistrées");
                     $error->location(URL . "/admin/users", "success_location");
                 } else {
                     $error->danger("error occured", "error_container");

@@ -6,8 +6,6 @@ use App\Table\Orders;
 use App\Table\Products;
 use App\Table\Users;
 use Core\Controller\AbstarctController;
-use Core\Form\Type\HiddenType;
-use Core\Form\Type\SubmitType;
 use Core\Route\Route;
 
 class OrdersController extends AbstarctController

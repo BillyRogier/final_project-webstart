@@ -60,12 +60,12 @@ class ProductsController extends AbstarctController
                     $ProductsTable->getJoin(Carousel::class)->delete(['product_id' => $data['id']]);
                     $ProductsTable->delete(['id' => $data['id']]);
 
-                    $_SESSION["message"] = $error->success("success");
+                    $_SESSION["message"] = $error->success("Supprimer avec succès");
                 } else {
                     $product = $ProductsTable->findOneBy(['id' => $data['id']]);
                     $product->setVisibility(2)->flush();
 
-                    $_SESSION["message"] = $error->success("Product order");
+                    $_SESSION["message"] = $error->success("Produit avec commandes donc passé en invisible");
                 }
 
                 $error->location(URL . "/admin/products", "success_location");
@@ -116,7 +116,7 @@ class ProductsController extends AbstarctController
                 $data = $formBuilder->getData();
 
                 if (empty($_POST['visibility']) || !isset($_POST['alt']) || !in_array($_POST['visibility'], [1, 2, 3]) || empty($_POST['category']) || !$CategorysTable->findOneBy(['category_id' => $_POST['category']])) {
-                    $error->danger("error occured", "error_container");
+                    $error->danger("Une erreur est survenue", "error_container");
                 } else {
                     $ProductsTable
                         ->setName($data["name"])
@@ -147,7 +147,7 @@ class ProductsController extends AbstarctController
                             ->flush();
                     }
 
-                    $_SESSION["message"] = $error->success("successfully insert");
+                    $_SESSION["message"] = $error->success("Inséré avec succès");
                     $error->location(URL . "/admin/products", "success_location");
                 }
             }
@@ -268,7 +268,7 @@ class ProductsController extends AbstarctController
                         ->setVisibility($data['visibility'])
                         ->flush();
 
-                    $_SESSION["message"] = $error->success("successfully update");
+                    $_SESSION["message"] = $error->success("Modifications enregistrées");
                     $error->location(URL . "/admin/products", "success_location");
                 }
             }

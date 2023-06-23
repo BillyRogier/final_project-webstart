@@ -27,7 +27,7 @@ class LoginController extends AbstarctController
 
         $formBuilder = $this->createForm("", "post", ['class' => 'login_form grid'])
             ->add("email", EmailType::class, ['label' => "email", 'id' => "email"])
-            ->add("password", PasswordType::class, ['label' => "password", 'id' => "password"])
+            ->add("password", PasswordType::class, ['label' => "Mot de passe", 'id' => "password"])
             ->addHTML("<a href=\"" . URL . "/register\" class=\"register_link\">Vous n'avez pas de compte inscrivez-vous</a>")
             ->add("submit", SubmitType::class, ['value' => 'Se connecter', 'class' => 'btn'])
             ->getForm();
@@ -51,10 +51,10 @@ class LoginController extends AbstarctController
                             $error->location(URL . "/", "success_location");
                         }
                     } else {
-                        $error->danger("Email or password incorrect", 'error_container');
+                        $error->danger("Email ou mot de passe incorrect", 'error_container');
                     }
                 } else {
-                    $error->danger("Email or password incorrect", 'error_container');
+                    $error->danger("Email ou mot de passe incorrect", 'error_container');
                 }
             }
             $error->getXmlMessage($this->app->getProperties(Users::class));
@@ -72,12 +72,12 @@ class LoginController extends AbstarctController
         $UsersTable = new Users();
 
         $formBuilder = $this->createForm("", "post", ['class' => 'login_form grid'])
-            ->add("first_name", TextType::class, ['label' => 'First name', 'id' => 'first_name', 'data-req' => true])
-            ->add("last_name", TextType::class, ['label' => 'Last name', 'id' => 'last_name', 'data-req' => true])
+            ->add("first_name", TextType::class, ['label' => 'Prénom', 'id' => 'first_name', 'data-req' => true])
+            ->add("last_name", TextType::class, ['label' => 'Nom', 'id' => 'last_name', 'data-req' => true])
             ->add("email", EmailType::class, ['label' => 'Email', 'id' => 'email'])
-            ->add("password", PasswordType::class, ['label' => 'Password', 'id' => 'password', 'data-pass' => true])
-            ->add("num", TextType::class, ['label' => 'Phone number', 'id' => 'num', 'data-req' => true])
-            ->add("adress", TextType::class, ['label' => 'Adress', 'id' => 'adress', 'data-req' => true])
+            ->add("password", PasswordType::class, ['label' => 'Mot de passe', 'id' => 'password', 'data-pass' => true])
+            ->add("num", TextType::class, ['label' => 'Numéro de téléphone', 'id' => 'num', 'data-req' => true])
+            ->add("adress", TextType::class, ['label' => 'Adresse', 'id' => 'adress', 'data-req' => true])
             ->addHTML("<a href=\"" . URL . "/login\" class=\"register_link\">Vous avez déjà un compte connectez-vous</a>")
             ->add("submit", SubmitType::class, ['value' => 'Inscrivez-vous', 'class' => 'btn'])
             ->getForm();

@@ -102,7 +102,7 @@ class AdminController extends AbstarctController
                     ->setHost_number($data['host_number'])
                     ->flush();
 
-                $_SESSION["message"] = $error->success("successfully " . ($setting ? "update" : "insert"));
+                $_SESSION["message"] = $error->success(($setting ? "Modifications enregistrées" : "Inséré avec succès"));
                 $error->location(URL . "/admin/settings", "success_location");
             }
             $error->getXmlMessage($this->app->getProperties(Settings::class));

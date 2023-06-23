@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App;
 use App\Table\Carousel;
 use App\Table\Orders;
 use App\Table\Products;

@@ -56,7 +56,7 @@ class ReviewsController extends AbstarctController
                     }
                     $ReviewsTable->delete(['reviews.review_id' => $data['id']]);
 
-                    $_SESSION["message"] = $error->success("successfully delete");
+                    $_SESSION["message"] = $error->success("Supprimé avec succès");
                     $error->location(URL . "/admin/reviews", "success_location");
                 }
             }
@@ -140,7 +140,7 @@ class ReviewsController extends AbstarctController
                     ->setGrade($data['grade'])
                     ->flush();
 
-                $_SESSION["message"] = $error->success("successfully insert");
+                $_SESSION["message"] = $error->success("Inséré avec succès");
                 $error->location(URL . "/admin/reviews", "success_location");
             }
             $error->getXmlMessage($this->app->getProperties(Reviews::class));
@@ -224,7 +224,7 @@ class ReviewsController extends AbstarctController
                         ->setGrade($data['grade'])
                         ->flush();
 
-                    $_SESSION["message"] = $error->success("successfully update");
+                    $_SESSION["message"] = $error->success("Modifications enregistrées");
                     $error->location(URL . "/admin/reviews", "success_location");
                 }
             }

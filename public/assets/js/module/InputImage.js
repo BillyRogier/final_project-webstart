@@ -17,15 +17,16 @@ export class InputImage {
         if (this.input.files) {
             var curFiles = this.input.files
             for (var i = 0; i < curFiles.length; i++) {
-                if (
-                    (this.dt.items.length == 0 &&
-                        i == 0 &&
-                        this.allInputsImage[0].value == '') ||
-                    !/[\[\]\\?]/g.test(this.allInputsImage[0].name)
-                ) {
-                    this.imgContainer.innerHTML = ''
-                }
-                this.imgContainer.innerHTML += `
+                if (curFiles[i].type.match('image.*')) {
+                    if (
+                        (this.dt.items.length == 0 &&
+                            i == 0 &&
+                            this.allInputsImage[0].value == '') ||
+                        !/[\[\]\\?]/g.test(this.allInputsImage[0].name)
+                    ) {
+                        this.imgContainer.innerHTML = ''
+                    }
+                    this.imgContainer.innerHTML += `
                         <div class="img-item">
                             <input name="${
                                 !/[\[\]\\?]/g.test(this.input.name)
@@ -41,14 +42,23 @@ export class InputImage {
                             <span class="del_image btn">delete</span>
                         </div>`
 
-                var image =
-                    this.imgContainer.lastElementChild.querySelector('img')
-                image.src = window.URL.createObjectURL(curFiles[i])
-                this.deleteImage()
-                this.valid.getErrorInput(
-                    this.imgContainer.querySelector('input')
-                )
-                this.dt.items.add(curFiles[i])
+                    var image =
+                        this.imgContainer.lastElementChild.querySelector('img')
+                    image.src = window.URL.createObjectURL(curFiles[i])
+                    this.deleteImage()
+                    this.valid.getErrorInput(
+                        this.imgContainer.querySelector('input')
+                    )
+                    this.dt.items.add(curFiles[i])
+                } else {
+                    const errorMessage =
+                        this.imgContainer.parentNode.querySelector(
+                            '.error-message'
+                        )
+                    errorMessage.innerHTML =
+                        '<li>Veuillez choisir une image (jpeg, jpg, png)</li>'
+                    errorMessage.style.display = 'block'
+                }
             }
             this.input.files = this.dt.files
         }
