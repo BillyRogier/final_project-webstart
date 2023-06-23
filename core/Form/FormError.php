@@ -45,7 +45,7 @@ class FormError extends Form implements FormErrorInterface
                             if ($inputType == SubmitType::class) {
                                 continue;
                             }
-                            $error->danger("error occured", "error_container");
+                            $error->danger("Une erreur est survenue", "error_container");
                         } else if ((isset($_POST[$input]) ? is_array($_POST[$input]) : is_array($_FILES[$input]))) {
                             foreach ((isset($_POST[$input]) ? $_POST[$input] : $_FILES[$input]) as $vals) {
                                 if (empty($vals) && !isset($value['options']['data-req'])) {
@@ -86,7 +86,7 @@ class FormError extends Form implements FormErrorInterface
                 }
             }
         } else {
-            $error->danger("error occured", "error_container");
+            $error->danger("Une erreur est survenue", "error_container");
         }
         return $error;
     }

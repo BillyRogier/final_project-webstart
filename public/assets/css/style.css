@@ -935,6 +935,26 @@ main > .category-container {
     display: none;
 }
 
+.error-container > .danger {
+    padding: 20px 40px;
+    width: 100%;
+    background-color: #d5000057;
+    color: #d50000;
+    list-style: none;
+    border-radius: 5px;
+    font: var(--medium-size);
+}
+
+.error-container > .success {
+    padding: 20px 40px;
+    width: 100%;
+    background-color: #55af013b;
+    color: #55af01;
+    list-style: none;
+    border-radius: 5px;
+    font: var(--medium-size);
+}
+
 .order-head-date > p:first-child {
     font-weight: 500;
 }

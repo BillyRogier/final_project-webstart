@@ -149,10 +149,10 @@ export class ValidForm {
                 const textareaForm = this.form.querySelectorAll('textarea')
                 const selectForm = this.form.querySelectorAll('select')
                 if (!this.successRedirection(data)) {
-                    if (data.errorContainer) {
+                    if (data.error_container) {
                         this.errorContainer.innerHTML = data.error_container
-                        this.errorContainer.style.display = 'block'
                     }
+                    this.errorContainer.style.display = 'block'
                     this.propertie = data
                     this.inputEvent(inputForm)
                     this.inputEvent(textareaForm)

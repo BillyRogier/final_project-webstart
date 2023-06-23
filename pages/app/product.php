@@ -20,6 +20,7 @@ use App\Table\Users;
                     <a href="<?= URL ?>/category/all-products" class="path_link">Tous les produits</a>
                 <?php endif ?>
             </div>
+            <div class="error-container" style="<?= !empty($_SESSION['message']) ? "display: block;" : "display: none;"  ?>"><?= isset($_SESSION['message']) ? $_SESSION['message'] : ""  ?></div>
             <div class="product-container grid">
                 <div class="slider-container grid" id="slider_products-img">
                     <div class="slider">

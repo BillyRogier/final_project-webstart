@@ -71,8 +71,8 @@
                         <?php endforeach; ?>
                     </ul>
                 </li>
-                <li><a href="#" class="big_link">À propos</a></li>
-                <li><a href="#" class="big_link">Contact</a></li>
+                <li><a href="<?= URL  ?>/about" class="big_link">À propos</a></li>
+                <li><a href="<?= URL  ?>/contact" class="big_link">Contact</a></li>
             </div>
         </div>
     </header>

@@ -69,7 +69,7 @@ class AccountController extends AbstarctController
             ->add("last_name", TextType::class, ['value' => $user->getLast_name(), 'data-req' => true, 'label' => 'Nom', 'id' => 'last_name'])
             ->add("first_name", TextType::class, ['value' => $user->getFirst_name(), 'data-req' => true, 'label' => 'Prénom', 'id' => 'first_name'])
             ->add("email", EmailType::class, ['value' => $user->getEmail(), 'label' => 'Email', 'id' => 'email'])
-            ->add("password", PasswordType::class, ['label' => 'New password', 'id' => 'password'])
+            ->add("password", PasswordType::class, ['label' => 'New password', 'data-req' => true, 'id' => 'password'])
             ->add("num", TextType::class, ['value' => $user->getNum(), 'data-req' => true, 'label' => 'Numéro de téléphone', 'id' => 'num'])
             ->add("adress", TextType::class, ['value' => $user->getAdress(), 'data-req' => true, 'label' => 'Adresse', 'id' => 'adress'])
             ->add("submit", SubmitType::class, ['value' => 'Enregistrer', 'class' => 'btn'])
@@ -81,11 +81,15 @@ class AccountController extends AbstarctController
             if ($error->noError()) {
                 $data = $formBuilder->getData();
 
+                if ($data['password'] != "") {
+                    $user
+                        ->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
+                }
+
                 $user
                     ->setFirst_name($data['first_name'])
                     ->setLast_name($data['last_name'])
                     ->setEmail($data['email'])
-                    ->setPassword(password_hash($data['password'], PASSWORD_DEFAULT))
                     ->setNum($data['num'])
                     ->setAdress($data['adress'])
                     ->flush();

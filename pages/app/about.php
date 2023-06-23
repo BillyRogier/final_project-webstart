@@ -1,6 +1,6 @@
 <main class="about-container grid">
     <h1>À propos d'Espresso Tools</h1>
-    <div class="error-container"><?= isset($_SESSION['message']) ? $_SESSION['message'] : ""  ?></div>
+    <div class="error-container" style="<?= !empty($_SESSION['message']) ? "display: block;" : "display: none;"  ?>"><?= isset($_SESSION['message']) ? $_SESSION['message'] : ""  ?></div>
     <div class="about-data grid">
         <p>Chez Espresso Tools, nous sommes passionnés par l'art de préparer le café parfait. Nous croyons fermement que chaque tasse de café devrait être une expérience exceptionnelle, et c'est pourquoi nous nous sommes engagés à fournir les meilleurs accessoires conçus pour améliorer la précision et la répartition de la mouture.</p>
 

@@ -148,6 +148,10 @@ class AppController extends AbstarctController
 
                 $Cart = new Cart();
                 $Cart->addToCart($id, $data['quantity']);
+
+
+                $_SESSION["message"] = $error->success("Le produit a bien été ajouté au panier");
+                $error->location(URL . "/product/$id", "success_location");
             }
             $error->getXmlMessage($this->app->getProperties(Products::class));
         }

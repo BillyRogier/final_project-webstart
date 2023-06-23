@@ -103,22 +103,6 @@ if (quantitys) {
     })
 }
 
-const addToCart = document.querySelector('.add_to_cart')
-
-if (addToCart) {
-    addToCart.addEventListener('submit', () => {
-        const numberInCart = document.querySelector('.number_in_cart')
-        let number_in_cart =
-            parseInt(numberInCart.innerHTML, 10) +
-            parseInt(addToCart.querySelector('#quantity').value, 10)
-        if (number_in_cart > 99) {
-            numberInCart.innerHTML = '99+'
-        } else {
-            numberInCart.innerHTML = number_in_cart
-        }
-    })
-}
-
 const menuBurger = document.querySelector('.menu_burger')
 const closeMenu = document.querySelector('.close-menu')
 const menu = document.querySelector('.menu')
@@ -214,56 +198,6 @@ if (addGrade) {
             gradeInput.value = index + 1
         })
     })
-}
-
-const delPrdtFunction = () => {
-    const delPrdt = document.querySelectorAll('.del_prdt')
-    if (delPrdt) {
-        delPrdt.forEach((btn) => {
-            btn.addEventListener('click', () => {
-                btn.parentNode.remove()
-                delPrdtFunction()
-            })
-        })
-    }
-}
-
-const addProducts = document.querySelectorAll('.add_prdt')
-
-if (addProducts) {
-    const productsContainer = document.querySelectorAll(
-        'form > .product-container'
-    )
-
-    productsContainer.forEach((container, index) => {
-        if (index >= 1) {
-            const delBtn = document.createElement('span')
-            delBtn.innerHTML = 'delete product'
-            delBtn.classList.add('del_prdt')
-            delBtn.classList.add('btn')
-            delBtn.classList.add('del')
-            container.appendChild(delBtn)
-        }
-    })
-
-    addProducts.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const delBtn = document.createElement('span')
-            delBtn.innerHTML = 'delete product'
-            delBtn.classList.add('del_prdt')
-            delBtn.classList.add('btn')
-            delBtn.classList.add('del')
-            let new_element = productsContainer[0].cloneNode(true)
-            new_element.appendChild(delBtn)
-            const allInputs = new_element.querySelectorAll('input')
-            allInputs.forEach((input) => {
-                input.value = '1'
-            })
-            productsContainer[productsContainer.length - 1].after(new_element)
-            delPrdtFunction()
-        })
-    })
-    delPrdtFunction()
 }
 
 var sortableList = document.querySelector('.img-container > .item-container')

@@ -83,23 +83,24 @@ export class Slider {
             this.sliderIndicators.forEach((indicator) => {
                 indicator.classList.remove('active')
             })
-            if (this.index == 0) {
-                this.sliderIndicators[
-                    this.sliderIndicators.length - 2
-                ].classList.add('active')
-            } else if (this.index == 1) {
+            console.log(this.index)
+            if (this.index == -1 && this.sliderIndicators.length == 2) {
                 this.sliderIndicators[
                     this.sliderIndicators.length - 1
                 ].classList.add('active')
+            } else if (this.index <= 1) {
+                this.sliderIndicators[
+                    this.sliderIndicators.length + (this.index - 2)
+                ].classList.add('active')
             } else if (
                 this.index >= 2 &&
-                this.index <= this.sliderItems.length / 2 + 1
+                this.index <= this.sliderIndicators.length
             ) {
                 this.sliderIndicators[this.index - 2].classList.add('active')
             } else {
-                this.sliderIndicators[this.index / 2 - 2].classList.add(
-                    'active'
-                )
+                this.sliderIndicators[
+                    this.index - this.sliderIndicators.length
+                ].classList.add('active')
             }
         }
     }

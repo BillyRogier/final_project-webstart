@@ -5,7 +5,7 @@
                 <h1>Espresso Tools</h1>
                 <div class="grid">
                     <h2>La perfection dans chaque goutte</h2>
-                    <a href="<?= URL ?>/category/all-products" class="btn">Achetez maintenant</a>
+                    <a href="<?= URL ?>/category/all-products" class="btn">Découvrez nos produits</a>
                 </div>
             </div>
             <img src="<?= BASE_PUBLIC ?>/assets/img/home_image.jpg" alt="extraction de café avec outils Espresso Tools" class="home-image">

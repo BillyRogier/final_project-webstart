@@ -27,7 +27,7 @@ class Type
         } else if ($name == "delete_btn") {
             $input = "
             <input name=\"$name\" type=\"$type\" $options> 
-            <img src=\"" . URL . "/assets/icon/bin.svg\"/>
+            <img src=\"" . BASE_PUBLIC . "/assets/icon/bin.svg\"/>
             ";
         }
 

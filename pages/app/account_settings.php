@@ -1,5 +1,6 @@
 <main class="account_settings grid">
     <h1 style="display: none;">Account</h1>
+
     <section class="account_order grid">
         <ul class="account_links grid">
             <h3>Menu</h3>
@@ -15,6 +16,7 @@
             <li><a href="<?= URL ?>/logout">Se déconnecter</a></li>
         </ul>
         <div class="orders-container grid">
+            <div class="error-container" style="<?= !empty($_SESSION['message']) ? "display: block;" : "display: none;"  ?>"><?= isset($_SESSION['message']) ? $_SESSION['message'] : ""  ?></div>
             <div class="order"><?= $form ?></div>
         </div>
     </section>
