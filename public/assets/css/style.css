@@ -20,6 +20,7 @@
 
 html {
     font-size: 100%;
+    transition: 1s;
 }
 
 body {
@@ -964,7 +965,7 @@ main > .category-container {
     gap: 40px;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
     :root {
         --very-very-small-size: 400 0.625rem/1.4 'Montserrat', sans-serif;
         --very-small-size: 400 0.812rem/1.4 'Montserrat', sans-serif;
@@ -1231,7 +1232,7 @@ main > .category-container {
 
     .product_cart {
         justify-items: end;
-        grid-template-columns: minmax(100px, 300px) 1fr;
+        grid-template-columns: 250px 1fr;
     }
 
     .head-product {
@@ -1259,7 +1260,8 @@ main > .category-container {
     .product_cart > img {
         grid-row: 1/5;
         grid-column: 1;
-        height: 100%;
+        height: 300px;
+        object-fit: cover;
     }
     .account_order {
         grid-template-columns: repeat(12, 1fr);

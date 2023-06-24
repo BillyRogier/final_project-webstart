@@ -35,7 +35,9 @@ class CartController extends AbstarctController
 
         foreach ($Cart->getCart() as $key => $value) {
             $product = $ProductsTable->findOneBy(["products.id" => $key, "carousel.type" => 1]);
-            array_push($products_in_cart, ['product' => $product, 'quantity' => $value]);
+            if ($product) {
+                array_push($products_in_cart, ['product' => $product, 'quantity' => $value]);
+            }
         }
 
         $form_builder = $this->createForm()
@@ -162,7 +164,9 @@ class CartController extends AbstarctController
 
         foreach ($Cart->getCart() as $key => $value) {
             $product = $ProductsTable->findOneBy(["products.id" => $key, "carousel.type" => 1]);
-            array_push($products_in_cart, ['product' => $product, 'quantity' => $value]);
+            if ($product) {
+                array_push($products_in_cart, ['product' => $product, 'quantity' => $value]);
+            }
         }
 
 

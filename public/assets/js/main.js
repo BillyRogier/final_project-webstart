@@ -261,3 +261,14 @@ if (sliderContainer) {
     launchSlide(sliderContainer)
     launchSlide(sliderProductsImg, true)
 }
+
+const categoryBtn = document.querySelector('.home-data .btn')
+if (categoryBtn) {
+    categoryBtn.addEventListener('click', () => {
+        window.scroll({
+            top: window.innerHeight - 80,
+            left: 0,
+            behavior: 'smooth',
+        })
+    })
+}

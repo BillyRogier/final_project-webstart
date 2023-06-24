@@ -100,8 +100,7 @@
             <p class="footer-title">Informations légales</p>
             <div class="info-container grid">
                 <a href="<?= URL ?>/mentions-legales" class="foot-link">Mentions légales</a>
-                <p>Conditions générales de vente</p>
-                <p>Protection des données</p>
+                <a href="<?= URL ?>/sell-condition" class="foot-link">Conditions générales de vente</a>
             </div>
         </div>
 

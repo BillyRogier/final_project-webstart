@@ -5,7 +5,7 @@
                 <h1><?= ucfirst($title) ?></h1>
                 <div class="grid">
                     <h2>Découvrez tous nos produits <?= !empty($subtitle) && $subtitle != "all-products" ? "dans la categorie " . $subtitle : "" ?></h2>
-                    <a href="#" class="btn">Achetez maintenant</a>
+                    <button class="btn">Achetez maintenant</button>
                 </div>
             </div>
             <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $category_img ?>" alt="extraction de café avec outils Espresso Tools" class="home-image">
@@ -23,14 +23,13 @@
                 <?php
 
                 use App\Table\Carousel;
-                use App\Table\Products;
 
                 foreach ($products as $product) : ?>
-                    <a href="<?= URL ?>/product/<?= $product->getJoin(Products::class)->getId() ?>" class="product grid">
+                    <a href="<?= URL ?>/product/<?= $product->getId() ?>" class="product grid">
                         <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $product->getJoin(Carousel::class)->getImg() ?>" />
                         <div class="product-data grid">
-                            <h3><?= ucfirst($product->getJoin(Products::class)->getName()) ?></h3>
-                            <p><?= $product->getJoin(Products::class)->getPrice() ?> €</p>
+                            <h3><?= ucfirst($product->getName()) ?></h3>
+                            <p><?= $product->getPrice() ?> €</p>
                         </div>
                     </a>
                 <?php endforeach; ?>

@@ -15,7 +15,9 @@
                     <div class="product_cart grid">
                         <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $product['product']->getJoin(Carousel::class)->getImg() ?>" />
                         <div class="head-product grid">
-                            <h2><?= ucfirst($product['product']->getName()) ?></h2>
+                            <a href="<?= URL ?>/product/<?= $product['product']->getId() ?>">
+                                <h2><?= ucfirst($product['product']->getName()) ?></h2>
+                            </a>
                             <p class="product_price"><?= $product['product']->getPrice() ?> €</p>
                         </div>
                         <div class="quantity-container grid">
@@ -55,7 +57,7 @@
                 <a href="<?= URL . (($loged) ? "/valid-user/" . $_SESSION['valid'] : "/login?cart=true") ?>" class="btn">Passer la commande</a>
             </div>
         <?php } else { ?>
-            <h2>No products in cart</h2>
+            <h2>Aucun produit dans le panier</h2>
         <?php }  ?>
     </section>
     <section class="products-trends grid">

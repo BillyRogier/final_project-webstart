@@ -54,6 +54,14 @@ class AppController extends AbstarctController
         ]);
     }
 
+    #[Route('/sell-condition')]
+    public function sellsConditions()
+    {
+        return $this->render('/app/sells_conditions.php', '/default.php',  [
+            'title' => 'Condition générales de vente',
+        ]);
+    }
+
     #[Route('/mentions-legales')]
     public function mentionsLegales()
     {
@@ -176,17 +184,17 @@ class AppController extends AbstarctController
     #[Route('/category/{category}')]
     public function category($category)
     {
-        $CategorysTable = new Categorys();
-        $CategorysTable
-            ->leftJoin(Products::class)
+        $ProductsTable = new Products();
+        $ProductsTable
+            ->leftJoin(Categorys::class)
             ->on("products.category_id = categorys.category_id")
             ->leftJoin(Carousel::class)
             ->on("carousel.product_id = products.id");
 
         $products =
             $category == "all-products" ?
-            $CategorysTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2 OR carousel.type IS NULL") :
-            $CategorysTable->findAllBy(["carousel.type" => 1, "categorys.category_name" => $category], "AND products.visibility != 2 OR carousel.type IS NULL");
+            $ProductsTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2") :
+            $ProductsTable->findAllBy(["carousel.type" => 1, "categorys.category_name" => $category], "AND products.visibility != 2");
 
         if (!$products) {
             $this->headLocation("/");
@@ -195,7 +203,7 @@ class AppController extends AbstarctController
         return $this->render('/app/category.php', '/default.php',  [
             'title' => str_replace("-", " ", ucfirst(($category != "all-products" ? $category : "Tous les produits"))),
             'subtitle' => $category,
-            'category_img' => $products[0]->getCategory_img(),
+            'category_img' => $products[0]->getJoin(Categorys::class)->getCategory_img(),
             'products' => $products,
         ]);
     }

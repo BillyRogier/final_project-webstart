@@ -83,7 +83,6 @@ export class Slider {
             this.sliderIndicators.forEach((indicator) => {
                 indicator.classList.remove('active')
             })
-            console.log(this.index)
             if (this.index == -1 && this.sliderIndicators.length == 2) {
                 this.sliderIndicators[
                     this.sliderIndicators.length - 1
