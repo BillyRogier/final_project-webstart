@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Table\Carousel;
 use App\Table\Categorys;
+use App\Table\Orders;
 use App\Table\Products;
 use App\Table\Reviews;
 use App\Table\Settings;
@@ -37,7 +38,16 @@ class AppController extends AbstarctController
 
         $categorys = $ProductsTable->getJoin(Categorys::class)->findAll();
 
-        $products = $ProductsTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2 OR carousel.type IS NULL");
+        $ProductsTable
+            ->leftJoin(Orders::class)
+            ->on("products.id = orders.product_id");
+
+        $products = $ProductsTable->find("
+        products.id, products.name, products.price, carousel.img, SUM(orders.quantity) AS total_quantity", "
+        WHERE products.visibility = 1 AND carousel.type = 1
+        GROUP BY products.id, products.name, products.price, carousel.img
+        ORDER BY total_quantity DESC
+        LIMIT 8;");
 
         return $this->render('/app/home.php', '/default.php',  [
             'title' => 'Accueil',
@@ -164,7 +174,17 @@ class AppController extends AbstarctController
             $error->getXmlMessage($this->app->getProperties(Products::class));
         }
 
-        $products_trends = $ProductsTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2 OR carousel.type IS NULL");
+        $ProductsTable
+            ->leftJoin(Orders::class)
+            ->on("products.id = orders.product_id");
+
+        $products_trends = $ProductsTable->find("
+         products.id, products.name, products.price, carousel.img, SUM(orders.quantity) AS total_quantity", "
+         WHERE products.visibility = 1 AND carousel.type = 1
+         GROUP BY products.id, products.name, products.price, carousel.img
+         ORDER BY total_quantity DESC
+         LIMIT 8;");
+
 
         $ReviewsTable = new Reviews();
         $ReviewsTable

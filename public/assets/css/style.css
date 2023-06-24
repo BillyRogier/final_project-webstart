@@ -20,7 +20,6 @@
 
 html {
     font-size: 100%;
-    transition: 1s;
 }
 
 body {
@@ -1138,6 +1137,10 @@ main > .category-container {
         flex-shrink: 0;
         width: calc(25% - 17px);
         gap: 10px;
+    }
+
+    .slider-item.product > img {
+        height: 25vw;
     }
 
     .products-trends {

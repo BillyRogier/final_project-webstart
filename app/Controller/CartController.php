@@ -79,7 +79,16 @@ class CartController extends AbstarctController
         }
         $_SESSION['valid'] =  uniqid();
 
-        $products_trends = $ProductsTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2 OR carousel.type IS NULL");
+        $ProductsTable
+            ->leftJoin(Orders::class)
+            ->on("products.id = orders.product_id");
+
+        $products_trends = $ProductsTable->find("
+        products.id, products.name, products.price, carousel.img, SUM(orders.quantity) AS total_quantity", "
+        WHERE products.visibility = 1 AND carousel.type = 1
+        GROUP BY products.id, products.name, products.price, carousel.img
+        ORDER BY total_quantity DESC
+        LIMIT 8;");
 
         return $this->render('/app/cart.php', '/default.php',  [
             'title' => 'Cart',

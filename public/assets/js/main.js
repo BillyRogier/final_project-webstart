@@ -1,6 +1,6 @@
 import { ValidForm } from './module/ValidForm.js'
 import { InputImage } from './module/InputImage.js'
-import { Slider } from './module/slider.js'
+import { Slider } from './module/Slider.js'
 
 const forms = document.querySelectorAll('form')
 const errorContainer = document.querySelector('.error-container')
