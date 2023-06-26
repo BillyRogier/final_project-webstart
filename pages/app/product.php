@@ -15,7 +15,7 @@ use App\Table\Users;
                     <path d="M2.00098 18.9624L12.001 10.9624L2.00098 2.9624" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="arrow-svg" />
                 </svg>
                 <?php if ($products[0]->getJoin(Categorys::class)->getCategory_name()) : ?>
-                    <a href="<?= URL ?>/category/<?= $products[0]->getJoin(Categorys::class)->getCategory_name() ?>" class="path_link"><?= ucfirst($products[0]->getJoin(Categorys::class)->getCategory_name()) ?></a>
+                    <a href="<?= URL ?>/category/<?= $products[0]->getJoin(Categorys::class)->getUrl() ?>" class="path_link"><?= ucfirst($products[0]->getJoin(Categorys::class)->getCategory_name()) ?></a>
                 <?php else : ?>
                     <a href="<?= URL ?>/category/all-products" class="path_link">Tous les produits</a>
                 <?php endif ?>
