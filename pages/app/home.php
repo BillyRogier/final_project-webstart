@@ -23,7 +23,7 @@
     </div>
     <section class="categorys">
         <?php foreach ($categorys as $category) : ?>
-            <a class="category" href="<?= URL ?>/category/<?= strtolower($category->getCategory_name()) ?>">
+            <a class="category" href="<?= URL ?>/category/<?= $category->getUrl() ?>">
                 <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $category->getCategory_img() ?>" alt="category" class="category-image">
                 <p class="link"><?= ucfirst($category->getCategory_name()) ?></p>
             </a>

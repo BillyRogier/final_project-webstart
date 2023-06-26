@@ -16,7 +16,6 @@
         <a href="<?= URL ?>" class="logo grid"><img src="<?= BASE_PUBLIC ?>/assets/icon/logo.svg" alt="logo"><img src="<?= BASE_PUBLIC ?>/assets/icon/logo_name.svg" alt="Espreso Tools" class="logo_name"></a>
         <nav class="grid">
             <div class="links grid">
-                <div class="icon search"><img src="<?= BASE_PUBLIC ?>/assets/icon/search.svg" alt="search"></div>
                 <a href="<?= URL . ($app->isUser() || $app->isAdmin() ? "/account" : "/login") ?>" class="icon"><img src="<?= BASE_PUBLIC ?>/assets/icon/login.svg" alt="login"></a>
                 <a href="<?= URL ?>/cart" class="icon icon_cart">
                     <span class="number_in_cart grid">
@@ -51,7 +50,7 @@
             <div class="menu-links grid">
                 <li>
                     <div class="products_dropdown grid">
-                        <div href="#" class="big_link">Products</div>
+                        <div href="#" class="big_link">Produits</div>
                         <img src="<?= BASE_PUBLIC ?>/assets/icon/arrow.svg" alt="arrow">
                     </div>
                     <ul class="products_links grid">
@@ -62,12 +61,13 @@
                         <?php
 
                         use App\Table\Categorys;
+                        use App\Table\Settings;
 
                         $CategorysTable = new Categorys();
                         $categorys = $CategorysTable->findAll();
 
                         foreach ($categorys as $category) : ?>
-                            <li><a href="<?= URL ?>/category/<?= strtolower($category->getCategory_name()) ?>" class="link"><?= ucfirst($category->getCategory_name()) ?></a></li>
+                            <li><a href="<?= URL ?>/category/<?= $category->getUrl() ?>" class="link"><?= ucfirst($category->getCategory_name()) ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                 </li>
@@ -103,7 +103,24 @@
                 <a href="<?= URL ?>/sell-condition" class="foot-link">Conditions générales de vente</a>
             </div>
         </div>
+        <div class="footer-bottom grid">
+            <p>© Espresso Tools. Tous droits réservés.</p>
+            <?php
 
+            $SettingsTable = new Settings();
+            $settings = $SettingsTable->findOne();
+
+            if ($settings->getFacebook() || $settings->getInstagram()) : ?>
+                <div class="social_media-container grid">
+                    <?php if ($settings->getInstagram()) : ?>
+                        <a href="<?= $settings->getInstagram() ?>" class="foot-link icon"><img src="<?= BASE_PUBLIC ?>/assets/icon/instagram.svg" alt="instagram"></a>
+                    <?php endif;
+                    if ($settings->getFacebook()) : ?>
+                        <a href="<?= $settings->getFacebook() ?>" class="foot-link icon"><img src="<?= BASE_PUBLIC ?>/assets/icon/facebook.svg" alt="facebook"></a>
+                    <?php endif ?>
+                </div>
+            <?php endif ?>
+        </div>
     </footer>
 </body>
 

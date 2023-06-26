@@ -5,7 +5,7 @@
             <h3>Menu</h3>
             <div class="line"></div>
             <?php if ($app->isAdmin()) : ?>
-                <li><a href="<?= URL ?>/admin">Admin</a></li>
+                <li><a href="<?= URL ?>/admin" target="_blank">Admin</a></li>
                 <div class="line"></div>
             <?php endif ?>
             <li><a href="<?= URL ?>/account">Commandes</a></li>
@@ -21,69 +21,73 @@
             use App\Table\Products;
 
 
-            $total = 0;
-            for ($i = 0; $i < count($orders); $i++) :
-                if (isset($orders[$i + 1]) && ($orders[$i]->getOrder_num() == $orders[$i + 1]->getOrder_num())) {
-                    $total += $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice(); ?>
-                    <div class="order grid">
-                        <div class="order-product-container grid">
-                            <a href="<?= URL ?>/product/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="order-product grid">
-                                <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $orders[$i]->getJoin(Carousel::class)->getImg() ?>" />
-                                <p><?= $orders[$i]->getQuantity() ?> x <?= $orders[$i]->getJoin(Products::class)->getName() ?></p>
-                                <p><?= $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice() ?> €</p>
-                            </a>
-                            <a href="<?= URL ?>/add-comment/<?= $orders[$i]->getOrder_num() ?>/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="btn">Ajouter un commentaire</a>
-                            <div class="line"></div>
-                        </div>
-                    <?php } else if (isset($orders[$i - 1]) && ($orders[$i]->getOrder_num() == $orders[$i - 1]->getOrder_num())) {
-                    $total += $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice(); ?>
-                        <div class="order-product-container grid">
-                            <a href="<?= URL ?>/product/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="order-product grid">
-                                <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $orders[$i]->getJoin(Carousel::class)->getImg() ?>" />
-                                <p><?= $orders[$i]->getQuantity() ?> x <?= $orders[$i]->getJoin(Products::class)->getName() ?></p>
-                                <p><?= $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice() ?> €</p>
-                            </a>
-                            <a href="<?= URL ?>/add-comment/<?= $orders[$i]->getOrder_num() ?>/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="btn">Ajouter un commentaire</a>
-                        </div>
-                        <div class="order-head grid">
-                            <div class="order-head-date">
-                                <p>Commande éffectué le</p>
-                                <p><?= $orders[$i]->getOrder_date() ?></p>
+            if (count($orders) < 1) : ?>
+                <h2>Aucune commandes pour le moment</h2>
+                <?php else :
+                $total = 0;
+                for ($i = 0; $i < count($orders); $i++) :
+                    if (isset($orders[$i + 1]) && ($orders[$i]->getOrder_num() == $orders[$i + 1]->getOrder_num())) {
+                        $total += $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice(); ?>
+                        <div class="order grid">
+                            <div class="order-product-container grid">
+                                <a href="<?= URL ?>/product/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="order-product grid">
+                                    <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $orders[$i]->getJoin(Carousel::class)->getImg() ?>" />
+                                    <p><?= $orders[$i]->getQuantity() ?> x <?= $orders[$i]->getJoin(Products::class)->getName() ?></p>
+                                    <p><?= $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice() ?> €</p>
+                                </a>
+                                <a href="<?= URL ?>/add-comment/<?= $orders[$i]->getOrder_num() ?>/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="btn">Ajouter un commentaire</a>
+                                <div class="line"></div>
                             </div>
-                            <div class="order-head-date">
-                                <p>Total</p>
-                                <p><?= $total ?> €</p>
+                        <?php } else if (isset($orders[$i - 1]) && ($orders[$i]->getOrder_num() == $orders[$i - 1]->getOrder_num())) {
+                        $total += $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice(); ?>
+                            <div class="order-product-container grid">
+                                <a href="<?= URL ?>/product/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="order-product grid">
+                                    <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $orders[$i]->getJoin(Carousel::class)->getImg() ?>" />
+                                    <p><?= $orders[$i]->getQuantity() ?> x <?= $orders[$i]->getJoin(Products::class)->getName() ?></p>
+                                    <p><?= $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice() ?> €</p>
+                                </a>
+                                <a href="<?= URL ?>/add-comment/<?= $orders[$i]->getOrder_num() ?>/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="btn">Ajouter un commentaire</a>
                             </div>
-                            <div class="line"></div>
-                        </div>
-                    </div>
-                <?php $total = 0;
-                } else {
-                    $total = $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice(); ?>
-                    <div class="order grid">
-                        <div class="order-product-container grid">
-                            <a href="<?= URL ?>/product/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="order-product grid">
-                                <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $orders[$i]->getJoin(Carousel::class)->getImg() ?>" />
-                                <p><?= $orders[$i]->getQuantity() ?> x <?= $orders[$i]->getJoin(Products::class)->getName() ?></p>
-                                <p><?= $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice() ?> €</p>
-                            </a>
-                            <a href="<?= URL ?>/add-comment/<?= $orders[$i]->getOrder_num() ?>/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="btn">Ajouter un commentaire</a>
-                        </div>
-                        <div class="order-head grid">
-                            <div class="order-head-date">
-                                <p>Commande éffectué le</p>
-                                <p><?= $orders[$i]->getOrder_date() ?></p>
+                            <div class="order-head grid">
+                                <div class="order-head-date">
+                                    <p>Commande éffectué le</p>
+                                    <p><?= $orders[$i]->getOrder_date() ?></p>
+                                </div>
+                                <div class="order-head-date">
+                                    <p>Total</p>
+                                    <p><?= $total ?> €</p>
+                                </div>
+                                <div class="line"></div>
                             </div>
-                            <div class="order-head-date">
-                                <p>Total</p>
-                                <p><?= $total ?> €</p>
-                            </div>
-                            <div class="line"></div>
                         </div>
-                    </div>
-                <?php $total = 0;
-                } ?>
-            <?php endfor ?>
+                    <?php $total = 0;
+                    } else {
+                        $total = $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice(); ?>
+                        <div class="order grid">
+                            <div class="order-product-container grid">
+                                <a href="<?= URL ?>/product/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="order-product grid">
+                                    <img src="<?= BASE_PUBLIC ?>/assets/img/<?= $orders[$i]->getJoin(Carousel::class)->getImg() ?>" />
+                                    <p><?= $orders[$i]->getQuantity() ?> x <?= $orders[$i]->getJoin(Products::class)->getName() ?></p>
+                                    <p><?= $orders[$i]->getQuantity() * $orders[$i]->getJoin(Products::class)->getPrice() ?> €</p>
+                                </a>
+                                <a href="<?= URL ?>/add-comment/<?= $orders[$i]->getOrder_num() ?>/<?= $orders[$i]->getJoin(Products::class)->getId() ?>" class="btn">Ajouter un commentaire</a>
+                            </div>
+                            <div class="order-head grid">
+                                <div class="order-head-date">
+                                    <p>Commande éffectué le</p>
+                                    <p><?= $orders[$i]->getOrder_date() ?></p>
+                                </div>
+                                <div class="order-head-date">
+                                    <p>Total</p>
+                                    <p><?= $total ?> €</p>
+                                </div>
+                                <div class="line"></div>
+                            </div>
+                        </div>
+                    <?php $total = 0;
+                    } ?>
+            <?php endfor;
+            endif; ?>
     </section>
     <section class="products-trends grid">
         <div class="header-slider grid">

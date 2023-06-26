@@ -6,7 +6,7 @@
             <h3>Menu</h3>
             <div class="line"></div>
             <?php if ($app->isAdmin()) : ?>
-                <li><a href="<?= URL ?>/admin">Admin</a></li>
+                <li><a href="<?= URL ?>/admin" target="_blank">Admin</a></li>
                 <div class="line"></div>
             <?php endif ?>
             <li><a href="<?= URL ?>/account">Commandes</a></li>

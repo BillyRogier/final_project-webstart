@@ -16,6 +16,8 @@ class Categorys extends Table
     private $category_img = null;
     #[Properties(type: 'string', length: 255)]
     private $alt = null;
+    #[Properties(type: 'string', length: 255)]
+    private $url = null;
 
     /**
      * Get the value of category_id
@@ -100,9 +102,29 @@ class Categorys extends Table
     public function flush()
     {
         if (isset($this->category_id)) {
-            parent::update(['category_name', 'category_img', 'alt'], "category_id", [$this->category_name, $this->category_img, $this->alt, $this->category_id]);
+            parent::update(['category_name', 'category_img', 'alt', 'url'], "category_id", [$this->category_name, $this->category_img, $this->alt, $this->url, $this->category_id]);
         } else {
-            parent::insert(['category_name', 'category_img', 'alt'], [$this->category_name, $this->category_img, $this->alt]);
+            parent::insert(['category_name', 'category_img', 'alt', 'url'], [$this->category_name, $this->category_img, $this->alt, $this->url]);
         }
+    }
+
+    /**
+     * Get the value of url
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set the value of url
+     *
+     * @return  self
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
     }
 }

@@ -102,6 +102,7 @@ class CategorysController extends AbstarctController
                         ->setCategory_name($data['name'])
                         ->setCategory_img($name)
                         ->setAlt($data['alt'])
+                        ->setUrl($this->createUrl($data['name']))
                         ->flush();
 
                     $_SESSION["message"] = $error->success("Inséré avec succès");
@@ -170,6 +171,7 @@ class CategorysController extends AbstarctController
                     $category
                         ->setCategory_name($data['name'])
                         ->setAlt($data['alt'])
+                        ->setUrl($this->createUrl($data['name']))
                         ->flush();
 
                     $_SESSION["message"] = $error->success("Modifications enregistrées");

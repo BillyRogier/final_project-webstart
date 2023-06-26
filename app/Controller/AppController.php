@@ -214,15 +214,15 @@ class AppController extends AbstarctController
         $products =
             $category == "all-products" ?
             $ProductsTable->findAllBy(["carousel.type" => 1], "AND products.visibility != 2") :
-            $ProductsTable->findAllBy(["carousel.type" => 1, "categorys.category_name" => $category], "AND products.visibility != 2");
+            $ProductsTable->findAllBy(["carousel.type" => 1, "categorys.url" => $category], "AND products.visibility != 2");
 
         if (!$products) {
             $this->headLocation("/");
         }
 
         return $this->render('/app/category.php', '/default.php',  [
-            'title' => str_replace("-", " ", ucfirst(($category != "all-products" ? $category : "Tous les produits"))),
-            'subtitle' => $category,
+            'title' => str_replace("-", " ", ucfirst(($category != "all-products" ? $products[0]->getJoin(Categorys::class)->getCategory_name() : "Tous les produits"))),
+            'subtitle' => strtolower($products[0]->getJoin(Categorys::class)->getCategory_name()),
             'category_img' => $products[0]->getJoin(Categorys::class)->getCategory_img(),
             'products' => $products,
         ]);

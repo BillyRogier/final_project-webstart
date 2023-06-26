@@ -166,7 +166,7 @@ nav.grid {
 }
 
 nav > .links {
-    grid-template-columns: repeat(3, max-content);
+    grid-template-columns: repeat(2, max-content);
 }
 
 .logo_name {
@@ -499,8 +499,8 @@ main > .home-container {
 
 .product img,
 .product_img {
-    height: 200px;
-    object-fit: cover;
+    height: 35vh;
+    object-fit: contain;
     object-position: 50% 50%;
 }
 
@@ -740,7 +740,7 @@ main > .category-container {
 }
 
 .head-product h2 {
-    word-break: break-all;
+    word-break: normal;
 }
 
 .checkout-container > .line {
@@ -964,6 +964,19 @@ main > .category-container {
     gap: 40px;
 }
 
+.footer-bottom {
+    justify-content: center;
+    justify-items: center;
+}
+
+.social_media-container {
+    order: -1;
+    grid-template-columns: repeat(2, max-content);
+}
+.social_media-container > .icon img {
+    max-height: 40px;
+}
+
 @media (min-width: 1200px) {
     :root {
         --very-very-small-size: 400 0.625rem/1.4 'Montserrat', sans-serif;
@@ -1148,10 +1161,6 @@ main > .category-container {
         overflow: visible;
     }
 
-    .product > img {
-        height: 350px;
-    }
-
     .products-container > .products {
         grid-template-columns: repeat(3, 1fr);
         row-gap: 80px;
@@ -1239,7 +1248,7 @@ main > .category-container {
     }
 
     .head-product {
-        grid-template-columns: max-content max-content;
+        grid-template-columns: 1fr max-content;
         justify-content: space-between;
         width: 100%;
     }
@@ -1264,7 +1273,7 @@ main > .category-container {
         grid-row: 1/5;
         grid-column: 1;
         height: 300px;
-        object-fit: cover;
+        object-fit: contain;
     }
     .account_order {
         grid-template-columns: repeat(12, 1fr);
@@ -1330,5 +1339,15 @@ main > .category-container {
     .login_form {
         align-content: center;
         grid-template-rows: repeat(3, min-content);
+    }
+
+    .footer-bottom {
+        grid-template-columns: max-content max-content;
+        justify-content: space-between;
+        grid-column: 1/4;
+    }
+
+    .social_media-container {
+        order: 1;
     }
 }
