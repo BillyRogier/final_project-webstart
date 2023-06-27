@@ -200,17 +200,6 @@ if (addGrade) {
     })
 }
 
-var sortableList = document.querySelector('.img-container > .item-container')
-if (sortableList) {
-    new Sortable(sortableList, {
-        animation: 150,
-        ghostClass: 'sortable-ghost',
-        chosenClass: 'sortable-chosen',
-        dragClass: 'sortable-drag',
-        handle: 'div',
-    })
-}
-
 const sliderProductsImg = document.querySelector('#slider_products-img')
 const sliderContainer = document.querySelector('#slider_products-trends')
 

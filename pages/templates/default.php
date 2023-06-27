@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Description" />
+    <meta name="description" content="<?= $app->desc ?>" />
     <link rel="stylesheet" href="<?= BASE_PUBLIC ?>/assets/css/reset.css">
     <link rel="stylesheet" href="<?= BASE_PUBLIC ?>/assets/css/style.css">
     <script src="<?= BASE_PUBLIC ?>/assets/js/main.js" defer type="module"></script>
@@ -81,7 +81,7 @@
         <div class="footer-container grid">
             <p class="footer-title">Newsletter</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <form action="" method="post" class="grid">
+            <form action="<?= URL ?>/send_newsletters" method="post" class="grid">
                 <input type="email" name="email_newsletter" placeholder="email">
                 <button class="btn">S'inscrire</button>
             </form>

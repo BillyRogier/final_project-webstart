@@ -51,6 +51,7 @@ class AppController extends AbstarctController
 
         return $this->render('/app/home.php', '/default.php',  [
             'title' => 'Accueil',
+            'desc' => 'Découvrez une sélection exclusive d\'outils essentiels pour les amateurs et les professionnels de l\'espresso. Trouvez tout ce dont vous avez besoin pour préparer le café parfait, des machines haut de gamme aux accessoires indispensables. Profitez de notre expertise en SEO pour vous offrir une expérience d\'achat en ligne exceptionnelle. Commandez dès maintenant chez Espresso Tools et délectez-vous d\'une tasse d\'espresso exquis à chaque gorgée.',
             'products' => $products,
             'categorys' => $categorys,
         ]);
@@ -61,6 +62,7 @@ class AppController extends AbstarctController
     {
         return $this->render('/app/about.php', '/default.php',  [
             'title' => 'À propos',
+            'desc' => 'Chez Espresso Tools, nous sommes passionnés par l\'art de l\'espresso. Notre équipe d\'experts est dédiée à fournir les meilleurs outils et accessoires pour vous aider à préparer le café parfait. Que vous soyez un amateur passionné ou un barista professionnel, nous avons ce qu\'il vous faut. Notre engagement envers la qualité, l\'innovation et le service client exceptionnel nous distingue. Explorez notre gamme soigneusement sélectionnée de machines à espresso, de moulins à café, de tasses et bien plus encore. Rejoignez-nous dans notre quête pour une expérience caféine inoubliable. Bienvenue chez Espresso Tools !',
         ]);
     }
 
@@ -69,6 +71,7 @@ class AppController extends AbstarctController
     {
         return $this->render('/app/sells_conditions.php', '/default.php',  [
             'title' => 'Condition générales de vente',
+            'desc' => 'Découvrez nos conditions générales de ventes directement sur cette page ou contactez notre service client !',
         ]);
     }
 
@@ -81,6 +84,7 @@ class AppController extends AbstarctController
         return $this->render('/app/mentions_legales.php', '/default.php',  [
             'title' => 'Mentions Légales',
             'settings' => $settings,
+            'desc' => ' Toutes les informations légales au sujet de Espresso Tools sont disponibles sur cette page. Mentions légales, données personnelles, cookies, sites frauduleux.',
         ]);
     }
 
@@ -134,7 +138,8 @@ class AppController extends AbstarctController
         return $this->render('/app/contact.php', '/default.php',  [
             'title' => 'Contact',
             'settings' => $settings,
-            'form' => $form_builder->createView()
+            'form' => $form_builder->createView(),
+            'desc' => 'N\'hésitez pas à nous contacter pour toute question, suggestion ou demande d\'assistance. Chez Espresso Tools, nous sommes là pour vous aider à trouver les solutions les plus adaptées à vos besoins en matière d\'espresso. ',
         ]);
     }
 
@@ -194,6 +199,7 @@ class AppController extends AbstarctController
 
         return $this->render('/app/product.php', '/default.php',  [
             'title' => 'Product',
+            'desc' => $products[0]->getDescription(),
             'products' => $products,
             'products_trends' => $products_trends,
             'reviews' => $reviews,
@@ -222,6 +228,7 @@ class AppController extends AbstarctController
 
         return $this->render('/app/category.php', '/default.php',  [
             'title' => str_replace("-", " ", ucfirst(($category != "all-products" ? $products[0]->getJoin(Categorys::class)->getCategory_name() : "Tous les produits"))),
+            'desc' => 'Décrouvez tous les produits Espresso Tools dans la catégorie ' . str_replace("-", " ", ucfirst(($category != "all-products" ? $products[0]->getJoin(Categorys::class)->getCategory_name() : "Tous les produits"))),
             'subtitle' => strtolower($products[0]->getJoin(Categorys::class)->getCategory_name()),
             'category_img' => $products[0]->getJoin(Categorys::class)->getCategory_img(),
             'products' => $products,
